@@ -1,6 +1,7 @@
 "use client";
 
-import NoteList from "@/components/note-list";
+import { NotesDataTable } from "@/components/notes-data-table";
+import { Button } from "@/components/ui/button";
 import { Note } from "@/types/notes";
 import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
@@ -40,18 +41,33 @@ export default function NotesPage() {
     }
   }
 
+  async function handleBulkDelete(ids: number[]) {
+    try {
+      const { error } = await supabase.from("notes").delete().in("id", ids);
+
+      if (error) {
+        console.error("Error deleting notes:", error.message);
+        return;
+      }
+      await fetchNotes();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Notes</h1>
-        <Link
-          href="/protected/notes/create"
-          className="px-4 py-2 bg-green-500 text-white rounded"
-        >
-          Create New Note
+    <div className="container max-w-4xl py-10">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Notes</h1>
+        <Link href="/protected/notes/create">
+          <Button>Create New Note</Button>
         </Link>
       </div>
-      <NoteList notes={notes} onDelete={handleDelete} />
+      <NotesDataTable
+        data={notes}
+        onDelete={handleDelete}
+        onBulkDelete={handleBulkDelete}
+      />
     </div>
   );
 }
