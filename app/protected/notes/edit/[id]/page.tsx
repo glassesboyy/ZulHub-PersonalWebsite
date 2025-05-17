@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/utils/supabase/client";
+import { useNotes } from "@/hooks/notes-hooks";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 
@@ -13,47 +13,24 @@ export default function EditNotePage({
 }) {
   const [noteText, setNoteText] = useState("");
   const router = useRouter();
-  const supabase = createClient();
+  const { updateNote, fetchNoteById } = useNotes();
   const resolvedParams = use(params);
 
   useEffect(() => {
-    async function fetchNote() {
-      const { data, error } = await supabase
-        .from("notes")
-        .select()
-        .eq("id", resolvedParams.id)
-        .single();
-
-      if (error) {
-        console.error("Error fetching note:", error.message);
-        return;
-      }
-
-      if (data) {
-        setNoteText(data.title);
+    async function loadNote() {
+      const note = await fetchNoteById(resolvedParams.id);
+      if (note) {
+        setNoteText(note.title);
       }
     }
-
-    fetchNote();
+    loadNote();
   }, [resolvedParams.id]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
-    try {
-      const { error } = await supabase
-        .from("notes")
-        .update({ title: noteText })
-        .eq("id", resolvedParams.id);
-
-      if (error) {
-        console.error("Error updating note:", error.message);
-        return;
-      }
-
+    const success = await updateNote(resolvedParams.id, noteText);
+    if (success) {
       router.push("/protected/notes");
-    } catch (error) {
-      console.error("Error:", error);
     }
   }
 

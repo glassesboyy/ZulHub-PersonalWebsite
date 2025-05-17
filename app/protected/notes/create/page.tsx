@@ -2,31 +2,20 @@
 
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/utils/supabase/client";
+import { useNotes } from "@/hooks/notes-hooks";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function CreateNotePage() {
   const [noteText, setNoteText] = useState("");
   const router = useRouter();
-  const supabase = createClient();
+  const { createNote } = useNotes();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
-    try {
-      const { error } = await supabase
-        .from("notes")
-        .insert([{ title: noteText }]);
-
-      if (error) {
-        console.error("Error creating note:", error.message);
-        return;
-      }
-
+    const success = await createNote(noteText);
+    if (success) {
       router.push("/protected/notes");
-    } catch (error) {
-      console.error("Error:", error);
     }
   }
 
