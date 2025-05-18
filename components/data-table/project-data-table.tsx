@@ -24,9 +24,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
-import Image from "next/image";
 
 interface ProjectDataTableProps {
   data: Project[];
@@ -54,15 +54,15 @@ export function ProjectDataTable({
   const getStatusColor = (status: string) => {
     switch (status) {
       case "planned":
-        return "bg-gray-700";
+        return "bg-gray-600";
       case "on process":
-        return "bg-blue-700";
+        return "bg-blue-600";
       case "on hold":
-        return "bg-yellow-700";
+        return "bg-yellow-600";
       case "done":
-        return "bg-green-700";
+        return "bg-green-600";
       default:
-        return "bg-gray-700";
+        return "bg-gray-600";
     }
   };
 
@@ -122,7 +122,7 @@ export function ProjectDataTable({
       },
       cell: ({ row }) => (
         <div
-          className={`px-2 py-1 rounded-full text-center ${getStatusColor(row.original.status)}`}
+          className={`py-1 rounded-full text-center ${getStatusColor(row.original.status)}`}
         >
           {row.original.status}
         </div>
@@ -154,6 +154,7 @@ export function ProjectDataTable({
             src={row.original.project_image}
             alt={row.original.name}
             fill
+            className="rounded-md"
             style={{ objectFit: "cover" }}
           />
         </div>

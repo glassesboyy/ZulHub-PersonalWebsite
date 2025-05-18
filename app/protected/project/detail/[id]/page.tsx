@@ -50,12 +50,12 @@ export default function ProjectDetailPage({
           <div
             className={`inline-block px-3 py-1 rounded-full text-sm ${
               project.status === "planned"
-                ? "bg-gray-700"
+                ? "bg-gray-600"
                 : project.status === "on process"
-                  ? "bg-blue-700"
+                  ? "bg-blue-600"
                   : project.status === "on hold"
-                    ? "bg-yellow-700"
-                    : "bg-green-700"
+                    ? "bg-yellow-600"
+                    : "bg-green-600"
             }`}
           >
             {project.status}
@@ -64,14 +64,16 @@ export default function ProjectDetailPage({
 
         <div className="mt-6">
           <h3 className="text-lg font-medium mb-2">Project Image</h3>
-          <div className="relative w-full h-[300px]">
-            <Image
-              src={project.project_image}
-              alt={project.name}
-              fill
-              style={{ objectFit: "contain" }}
-              className="rounded-lg"
-            />
+          <div className="border border-white  rounded-md py-1 px-2">
+            <div className="relative w-full h-[120px] ">
+              <Image
+                src={project.project_image}
+                alt={project.name}
+                fill
+                style={{ objectFit: "contain" }}
+                className="rounded-md"
+              />
+            </div>
           </div>
         </div>
 
@@ -82,7 +84,7 @@ export default function ProjectDetailPage({
               {project.technologies.map((tech: Technology) => (
                 <span
                   key={tech.id}
-                  className="px-3 py-1 bg-gray-100 rounded-full text-sm"
+                  className="px-3 py-1 bg-black border border-white/70 rounded-full text-sm"
                 >
                   {tech.name}
                 </span>

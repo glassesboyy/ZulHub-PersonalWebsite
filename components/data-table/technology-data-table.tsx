@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -10,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Certificate } from "@/types/certificate";
+import { Technology } from "@/types/technology";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -25,20 +26,18 @@ import {
 import { ArrowUpDown } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
-import Image from "next/image";
-import { Checkbox } from "@/components/ui/checkbox";
 
-interface CertificateDataTableProps {
-  data: Certificate[];
+interface TechnologyDataTableProps {
+  data: Technology[];
   onDelete: (id: number) => void;
   onBulkDelete: (ids: number[]) => void;
 }
 
-export function CertificateDataTable({
+export function TechnologyDataTable({
   data,
   onDelete,
   onBulkDelete,
-}: CertificateDataTableProps) {
+}: TechnologyDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -51,15 +50,12 @@ export function CertificateDataTable({
     onBulkDelete(selectedIds);
   };
 
-  const columns: ColumnDef<Certificate>[] = [
+  const columns: ColumnDef<Technology>[] = [
     {
       id: "select",
       header: ({ table }) => (
         <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
+          checked={table.getIsAllPageRowsSelected()}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
         />
@@ -75,62 +71,44 @@ export function CertificateDataTable({
       enableHiding: false,
     },
     {
-      accessorKey: "title",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Title
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      accessorKey: "name",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
     },
     {
-      accessorKey: "certificate_image",
-      header: "Certificate Image",
+      accessorKey: "icon",
+      header: "Icon URL",
       cell: ({ row }) => (
-        <div className="w-20 h-20 relative">
-          <Image
-            src={row.original.certificate_image}
-            alt={row.original.title}
-            fill
-            style={{ objectFit: "cover" }}
-          />
-        </div>
+        <div className="max-w-[300px] truncate">{row.original.icon}</div>
       ),
     },
     {
       accessorKey: "created_at",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Created At
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => {
-        return new Date(row.original.created_at).toLocaleDateString();
-      },
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created At
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => new Date(row.original.created_at).toLocaleDateString(),
     },
     {
       id: "actions",
       cell: ({ row }) => {
-        const certificate = row.original;
+        const tech = row.original;
         return (
           <div className="flex justify-end gap-2">
-            <Link href={`/protected/certificate/detail/${certificate.id}`}>
-              <Button variant="outline" size="sm">
-                View
-              </Button>
-            </Link>
-            <Link href={`/protected/certificate/edit/${certificate.id}`}>
+            <Link href={`/protected/technology/edit/${tech.id}`}>
               <Button variant="outline" size="sm">
                 Edit
               </Button>
@@ -138,7 +116,7 @@ export function CertificateDataTable({
             <Button
               variant="destructive"
               size="sm"
-              onClick={() => onDelete(certificate.id)}
+              onClick={() => onDelete(tech.id)}
             >
               Delete
             </Button>
@@ -169,10 +147,10 @@ export function CertificateDataTable({
     <div>
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Filter titles..."
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter names..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
+            table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -223,7 +201,7 @@ export function CertificateDataTable({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No certificates found.
+                  No technologies found.
                 </TableCell>
               </TableRow>
             )}

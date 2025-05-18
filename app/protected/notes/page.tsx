@@ -1,6 +1,6 @@
 "use client";
 
-import { NotesDataTable } from "@/components/notes-data-table";
+import { NotesDataTable } from "@/components/data-table/notes-data-table";
 import { Button } from "@/components/ui/button";
 import { useNotes } from "@/hooks/notes-hooks";
 import Link from "next/link";

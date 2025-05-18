@@ -36,13 +36,16 @@ export default function CertificateDetailPage({
       <div className="space-y-6">
         <div>
           <h2 className="text-xl font-semibold mb-2">{certificate.title}</h2>
-          <div className="relative w-full h-[400px]">
-            <Image
-              src={certificate.certificate_image}
-              alt={certificate.title}
-              fill
-              style={{ objectFit: "contain" }}
-            />
+          <div className="border border-white  rounded-md py-1 px-2">
+            <div className="relative w-full h-[250px]">
+              <Image
+                src={certificate.certificate_image}
+                alt={certificate.title}
+                className="rounded-md"
+                fill
+                style={{ objectFit: "contain" }}
+              />
+            </div>
           </div>
         </div>
         <div className="flex gap-4">
