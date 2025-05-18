@@ -1,50 +1,69 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useCertificates } from "@/hooks/certificate-hooks";
+import {
+  certificateFormSchema,
+  type CertificateFormValues,
+} from "@/lib/validations/certificate-validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
-import Image from "next/image";
+import { useForm } from "react-hook-form";
 
 export default function EditCertificatePage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const [title, setTitle] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const router = useRouter();
   const { updateCertificate, fetchCertificateById } = useCertificates();
   const resolvedParams = use(params);
 
+  const form = useForm<CertificateFormValues>({
+    resolver: zodResolver(certificateFormSchema),
+    defaultValues: {
+      title: "",
+    },
+  });
+
   useEffect(() => {
     async function loadCertificate() {
       const certificate = await fetchCertificateById(resolvedParams.id);
       if (certificate) {
-        setTitle(certificate.title);
+        form.reset({
+          title: certificate.title,
+        });
         setPreviewUrl(certificate.certificate_image);
       }
     }
     loadCertificate();
-  }, [resolvedParams.id]);
+  }, [resolvedParams.id, form]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setImageFile(file);
+      form.setValue("certificateImage", file);
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function onSubmit(data: CertificateFormValues) {
     const success = await updateCertificate(
       resolvedParams.id,
-      title,
-      imageFile
+      data.title,
+      data.certificateImage || null
     );
     if (success) {
       router.push("/protected/certificate");
@@ -56,46 +75,63 @@ export default function EditCertificatePage({
       <h1 className="text-3xl font-bold tracking-tight mb-8">
         Edit Certificate
       </h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="title">Title</Label>
-          <Input
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Certificate title" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="image">Certificate Image</Label>
-          <Input
-            id="image"
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="cursor-pointer"
+
+          <FormField
+            control={form.control}
+            name="certificateImage"
+            render={({ field: { value, ...fieldProps } }) => (
+              <FormItem>
+                <FormLabel>Certificate Image</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="cursor-pointer"
+                  />
+                </FormControl>
+                <FormMessage />
+                {previewUrl && (
+                  <div className="mt-4 relative w-full h-[200px]">
+                    <Image
+                      src={previewUrl}
+                      alt="Preview"
+                      fill
+                      style={{ objectFit: "contain" }}
+                    />
+                  </div>
+                )}
+              </FormItem>
+            )}
           />
-          {previewUrl && (
-            <div className="mt-4 relative w-full h-[200px]">
-              <Image
-                src={previewUrl}
-                alt="Preview"
-                fill
-                style={{ objectFit: "contain" }}
-              />
-            </div>
-          )}
-        </div>
-        <div className="flex gap-4">
-          <Button type="submit">Update Certificate</Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push("/protected/certificate")}
-          >
-            Cancel
-          </Button>
-        </div>
-      </form>
+
+          <div className="flex gap-4">
+            <Button type="submit">Update Certificate</Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.push("/protected/certificate")}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }
