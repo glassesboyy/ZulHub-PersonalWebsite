@@ -1,9 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -11,158 +17,200 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useTestimonials } from "@/hooks/testimonial-hooks";
-import { TestimonialRelation } from "@/types/testimonials";
+import { useToast } from "@/hooks/use-toast";
+import {
+  testimonialFormSchema,
+  TestimonialFormValues,
+} from "@/lib/validations/testimonial-validation";
+import { relationOptions } from "@/types/testimonials";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
-
-const relationOptions: TestimonialRelation[] = [
-  "client",
-  "coworker",
-  "manager",
-  "team member",
-  "project partners",
-  "lecturer",
-  "industry peer",
-  "workshop attende",
-  "prospective client",
-  "other",
-];
+import { use, useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 export default function EditTestimonialPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [relation, setRelation] = useState<TestimonialRelation | "">("");
-  const [customRelation, setCustomRelation] = useState("");
-  const [message, setMessage] = useState("");
-  const [isApproved, setIsApproved] = useState(false);
-
   const router = useRouter();
   const { updateTestimonial, fetchTestimonialById } = useTestimonials();
+  const { toast } = useToast();
   const resolvedParams = use(params);
+
+  const form = useForm<TestimonialFormValues>({
+    mode: "onBlur",
+    resolver: zodResolver(testimonialFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      relation: "client",
+      customRelation: null,
+      message: "",
+      isApproved: false,
+    } as TestimonialFormValues,
+  });
 
   useEffect(() => {
     async function loadTestimonial() {
       const testimonial = await fetchTestimonialById(resolvedParams.id);
       if (testimonial) {
-        setName(testimonial.name);
-        setEmail(testimonial.email);
-        setRelation(testimonial.relation);
-        setCustomRelation(testimonial.custom_relation || "");
-        setMessage(testimonial.message);
-        setIsApproved(testimonial.is_approved);
+        form.reset({
+          name: testimonial.name,
+          email: testimonial.email,
+          relation: testimonial.relation,
+          message: testimonial.message,
+          isApproved: testimonial.is_approved,
+        });
       }
     }
     loadTestimonial();
-  }, [resolvedParams.id]);
+  }, [resolvedParams.id, form]);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!relation) return;
+  const onSubmit = async (data: TestimonialFormValues) => {
+    try {
+      const success = await updateTestimonial(
+        resolvedParams.id,
+        data.name,
+        data.email,
+        data.relation,
+        data.message,
+        data.isApproved
+      );
 
-    const success = await updateTestimonial(
-      resolvedParams.id,
-      name,
-      email,
-      relation,
-      message,
-      isApproved,
-      relation === "other" ? customRelation : undefined
-    );
-
-    if (success) {
-      router.push("/protected/testimonial");
+      if (success) {
+        toast({
+          title: "Success",
+          description: "Testimonial updated successfully",
+        });
+        router.push("/protected/testimonial");
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to update testimonial",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
     }
-  }
+  };
 
   return (
     <div className="container max-w-2xl py-10">
       <h1 className="text-3xl font-bold tracking-tight mb-8">
         Edit Testimonial
       </h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Your name" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} type="email" placeholder="Your email" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="relation">Relation</Label>
-          <Select
-            onValueChange={(val) => setRelation(val as TestimonialRelation)}
-            defaultValue={relation}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select relation" />
-            </SelectTrigger>
-            <SelectContent>
-              {relationOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        {relation === "other" && (
-          <div className="space-y-2">
-            <Label htmlFor="customRelation">Specify Relation</Label>
-            <Input
-              id="customRelation"
-              value={customRelation}
-              onChange={(e) => setCustomRelation(e.target.value)}
-              required
-            />
+
+          <FormField
+            control={form.control}
+            name="relation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Relation</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select relation" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {relationOptions.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="message"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Message</FormLabel>
+                <FormControl>
+                  <Textarea {...field} rows={4} placeholder="Your message" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="isApproved"
+            render={({ field }) => (
+              <FormItem className="flex items-center space-x-2">
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>Approve Testimonial</FormLabel>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="flex gap-4">
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? "Saving..." : "Update Testimonial"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.push("/protected/testimonial")}
+            >
+              Cancel
+            </Button>
           </div>
-        )}
-        <div className="space-y-2">
-          <Label htmlFor="message">Message</Label>
-          <Textarea
-            id="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            rows={4}
-            required
-          />
-        </div>
-        <div className="flex items-center space-x-2">
-          <Switch
-            checked={isApproved}
-            onCheckedChange={setIsApproved}
-            id="approved"
-          />
-          <Label htmlFor="approved">Approve Testimonial</Label>
-        </div>
-        <div className="flex gap-4">
-          <Button type="submit">Update Testimonial</Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push("/protected/testimonial")}
-          >
-            Cancel
-          </Button>
-        </div>
-      </form>
+        </form>
+      </Form>
     </div>
   );
 }

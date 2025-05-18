@@ -16,7 +16,7 @@ export const certificateFormSchema = z.object({
       "Only .jpg, .jpeg, and .png formats are supported"
     )
     .optional()
-    .or(z.literal(undefined)), // Make it optional for edit form
+    .or(z.literal(undefined)),
 });
 
 export type CertificateFormValues = z.infer<typeof certificateFormSchema>;

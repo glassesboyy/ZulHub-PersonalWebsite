@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -11,6 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
 import { Testimonial } from "@/types/testimonials";
 import {
   ColumnDef,
@@ -29,9 +41,9 @@ import * as React from "react";
 
 interface TestimonialDataTableProps {
   data: Testimonial[];
-  onDelete: (id: number) => void;
-  onBulkDelete: (ids: number[]) => void;
-  onToggleApproval: (id: number, currentStatus: boolean) => void;
+  onDelete: (id: number) => Promise<boolean>; // Update tipe return menjadi Promise<boolean>
+  onBulkDelete: (ids: number[]) => Promise<boolean>; // Update tipe return menjadi Promise<boolean>
+  onToggleApproval: (id: number, currentStatus: boolean) => Promise<boolean>;
 }
 
 export function TestimonialDataTable({
@@ -40,16 +52,103 @@ export function TestimonialDataTable({
   onBulkDelete,
   onToggleApproval,
 }: TestimonialDataTableProps) {
+  const { toast } = useToast();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [rowSelection, setRowSelection] = React.useState({});
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const [selectedRows, setSelectedRows] = React.useState<number[]>([]);
+  const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
+    null
+  );
 
-  const handleBulkDelete = () => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows;
-    const selectedIds = selectedRows.map((row) => row.original.id);
-    onBulkDelete(selectedIds);
+  const handleDelete = async (id: number) => {
+    if (window.confirm("Are you sure you want to delete this testimonial?")) {
+      try {
+        const success = await onDelete(id);
+        if (success) {
+          toast({
+            title: "Success",
+            description: "Testimonial deleted successfully",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: "Failed to delete testimonial",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "An error occurred while deleting testimonial",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const handleSingleDelete = async () => {
+    if (singleDeleteId) {
+      try {
+        const success = await onDelete(singleDeleteId);
+        if (success) {
+          toast({
+            title: "Success",
+            description: "Testimonial deleted successfully",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: "Failed to delete testimonial",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "An error occurred while deleting testimonial",
+          variant: "destructive",
+        });
+      }
+      setSingleDeleteId(null);
+    }
+  };
+
+  const handleBulkDeleteClick = () => {
+    const rows = table.getFilteredSelectedRowModel().rows;
+    const ids = rows.map((row) => row.original.id);
+    setSelectedRows(ids);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      const success = await onBulkDelete(selectedRows);
+
+      if (success) {
+        toast({
+          title: "Success",
+          description: `${selectedRows.length} testimonial(s) deleted successfully`,
+        });
+        setRowSelection({});
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to delete testimonials",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An error occurred while deleting testimonials",
+        variant: "destructive",
+      });
+    }
+    setIsDeleteDialogOpen(false);
   };
 
   const columns: ColumnDef<Testimonial>[] = [
@@ -94,13 +193,7 @@ export function TestimonialDataTable({
     {
       accessorKey: "relation",
       header: "Relation",
-      cell: ({ row }) => (
-        <div>
-          {row.original.relation === "other"
-            ? row.original.custom_relation
-            : row.original.relation}
-        </div>
-      ),
+      cell: ({ row }) => <div>{row.original.relation}</div>,
     },
     {
       accessorKey: "message",
@@ -141,7 +234,7 @@ export function TestimonialDataTable({
             <Button
               variant="destructive"
               size="sm"
-              onClick={() => onDelete(testimonial.id)}
+              onClick={() => setSingleDeleteId(testimonial.id)}
             >
               Delete
             </Button>
@@ -170,24 +263,90 @@ export function TestimonialDataTable({
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-4 py-4">
-        <Input
-          placeholder="Filter by name..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={handleBulkDelete}
-          disabled={table.getFilteredSelectedRowModel().rows.length === 0}
-        >
-          Delete Selected
-        </Button>
-      </div>
+      <AlertDialog>
+        <div className="flex items-center justify-between gap-4 py-4">
+          <Input
+            placeholder="Filter by name..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="destructive"
+              size="sm"
+              disabled={table.getFilteredSelectedRowModel().rows.length === 0}
+            >
+              Delete Selected
+            </Button>
+          </AlertDialogTrigger>
+        </div>
+
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action will permanently delete{" "}
+              {table.getFilteredSelectedRowModel().rows.length} selected
+              testimonial(s). This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                const selectedRows = table.getFilteredSelectedRowModel().rows;
+                const selectedIds = selectedRows.map((row) => row.original.id);
+                const success = await onBulkDelete(selectedIds);
+
+                if (success) {
+                  toast({
+                    title: "Success",
+                    description: `${selectedIds.length} testimonial(s) deleted successfully`,
+                  });
+                  setRowSelection({});
+                } else {
+                  toast({
+                    title: "Error",
+                    description: "Failed to delete testimonials",
+                    variant: "destructive",
+                  });
+                }
+              }}
+              className="bg-destructive text-destructive-foreground"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={!!singleDeleteId}
+        onOpenChange={() => setSingleDeleteId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this
+              testimonial.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleSingleDelete}
+              className="bg-destructive text-destructive-foreground"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>

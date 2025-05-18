@@ -1,8 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -12,125 +19,157 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useTestimonials } from "@/hooks/testimonial-hooks";
-import { TestimonialRelation } from "@/types/testimonials";
+import { useToast } from "@/hooks/use-toast";
+import {
+  testimonialFormSchema,
+  TestimonialFormValues,
+} from "@/lib/validations/testimonial-validation";
+import { relationOptions } from "@/types/testimonials";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-
-const relationOptions: TestimonialRelation[] = [
-  "client",
-  "coworker",
-  "manager",
-  "team member",
-  "project partners",
-  "lecturer",
-  "industry peer",
-  "workshop attende",
-  "prospective client",
-  "other",
-];
+import { useForm } from "react-hook-form";
 
 export default function CreateTestimonialPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [relation, setRelation] = useState<TestimonialRelation | "">("");
-  const [customRelation, setCustomRelation] = useState("");
-  const [message, setMessage] = useState("");
-
   const router = useRouter();
   const { createTestimonial } = useTestimonials();
+  const { toast } = useToast();
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!relation) return;
+  const form = useForm<TestimonialFormValues>({
+    mode: "onBlur",
+    resolver: zodResolver(testimonialFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      relation: "client",
+      customRelation: null,
+      message: "",
+      isApproved: false,
+    } as TestimonialFormValues,
+  });
 
-    const success = await createTestimonial(
-      name,
-      email,
-      relation,
-      message,
-      relation === "other" ? customRelation : undefined
-    );
+  const onSubmit = async (data: TestimonialFormValues) => {
+    try {
+      const success = await createTestimonial(
+        data.name,
+        data.email,
+        data.relation,
+        data.message
+      );
 
-    if (success) {
-      router.push("/protected/testimonial");
+      if (success) {
+        toast({
+          title: "Success",
+          description: "Testimonial created successfully",
+        });
+        router.push("/protected/testimonial");
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to create testimonial",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
     }
-  }
+  };
 
   return (
     <div className="container max-w-2xl py-10">
       <h1 className="text-3xl font-bold tracking-tight mb-8">
         Create New Testimonial
       </h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} type="email" placeholder="Your email" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="relation">Relation</Label>
-          <Select
-            onValueChange={(val) => setRelation(val as TestimonialRelation)}
-            required
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select relation" />
-            </SelectTrigger>
-            <SelectContent>
-              {relationOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        {relation === "other" && (
-          <div className="space-y-2">
-            <Label htmlFor="customRelation">Specify Relation</Label>
-            <Input
-              id="customRelation"
-              value={customRelation}
-              onChange={(e) => setCustomRelation(e.target.value)}
-              required
-            />
+
+          <FormField
+            control={form.control}
+            name="relation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Relation</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select relation" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {relationOptions.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="message"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Message</FormLabel>
+                <FormControl>
+                  <Textarea {...field} rows={4} placeholder="Your message" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="flex gap-4">
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? "Saving..." : "Save Testimonial"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.push("/protected/testimonial")}
+            >
+              Cancel
+            </Button>
           </div>
-        )}
-        <div className="space-y-2">
-          <Label htmlFor="message">Message</Label>
-          <Textarea
-            id="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            rows={4}
-            required
-          />
-        </div>
-        <div className="flex gap-4">
-          <Button type="submit">Save Testimonial</Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push("/protected/testimonial")}
-          >
-            Cancel
-          </Button>
-        </div>
-      </form>
+        </form>
+      </Form>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Testimonial } from "@/types/testimonials";
+import { Testimonial, TestimonialRelation } from "@/types/testimonials";
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
 
@@ -25,30 +25,36 @@ export function useTestimonials() {
   const createTestimonial = async (
     name: string,
     email: string,
-    relation: string,
-    message: string,
-    customRelation?: string
+    relation: TestimonialRelation,
+    message: string
   ) => {
     try {
-      const { error } = await supabase
+      const testimonialData = {
+        name,
+        email,
+        relation,
+        message,
+        is_approved: false,
+      };
+
+      console.log("Creating testimonial with:", testimonialData);
+
+      const { data, error } = await supabase
         .from("testimonials")
-        .insert([{ 
-          name,
-          email,
-          relation,
-          custom_relation: relation === 'other' ? customRelation : null,
-          message,
-          is_approved: false // Default to false when created
-        }]);
+        .insert([testimonialData])
+        .select()
+        .single();
 
       if (error) {
-        console.error("Error creating testimonial:", error.message);
+        console.error("Supabase Error:", error);
         return false;
       }
+
+      console.log("Created testimonial:", data);
       await fetchTestimonials();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error in createTestimonial:", error);
       return false;
     }
   };
@@ -59,17 +65,15 @@ export function useTestimonials() {
     email: string,
     relation: string,
     message: string,
-    isApproved: boolean,
-    customRelation?: string
+    isApproved: boolean
   ) => {
     try {
       const updateData = {
         name,
         email,
         relation,
-        custom_relation: relation === 'other' ? customRelation : null,
         message,
-        is_approved: isApproved
+        is_approved: isApproved,
       };
 
       const { error } = await supabase
