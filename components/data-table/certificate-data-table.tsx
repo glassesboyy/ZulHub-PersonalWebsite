@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -23,10 +24,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
-import Image from "next/image";
-import { Checkbox } from "@/components/ui/checkbox";
 
 interface CertificateDataTableProps {
   data: Certificate[];
@@ -168,7 +168,7 @@ export function CertificateDataTable({
 
   return (
     <div>
-      <div className="flex items-center justify-between py-4">
+      <div className="flex items-center justify-between gap-4 py-4">
         <Input
           placeholder="Filter titles..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}

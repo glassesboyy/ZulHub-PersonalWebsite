@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -10,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Profile } from "@/types/profiles";
+import { Testimonial } from "@/types/testimonials";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -23,22 +24,22 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
-import { Checkbox } from "@/components/ui/checkbox";
 
-interface ProfileDataTableProps {
-  data: Profile[];
+interface TestimonialDataTableProps {
+  data: Testimonial[];
   onDelete: (id: number) => void;
   onBulkDelete: (ids: number[]) => void;
+  onToggleApproval: (id: number, currentStatus: boolean) => void;
 }
 
-export function ProfileDataTable({
+export function TestimonialDataTable({
   data,
   onDelete,
   onBulkDelete,
-}: ProfileDataTableProps) {
+  onToggleApproval,
+}: TestimonialDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -51,7 +52,7 @@ export function ProfileDataTable({
     onBulkDelete(selectedIds);
   };
 
-  const columns: ColumnDef<Profile>[] = [
+  const columns: ColumnDef<Testimonial>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -84,52 +85,55 @@ export function ProfileDataTable({
       ),
     },
     {
-      accessorKey: "tagline",
-      header: "Tagline",
+      accessorKey: "email",
+      header: "Email",
       cell: ({ row }) => (
-        <div className="max-w-[300px] truncate">{row.original.tagline}</div>
+        <div className="max-w-[200px] truncate">{row.original.email}</div>
       ),
     },
     {
-      accessorKey: "avatar",
-      header: "Avatar",
+      accessorKey: "relation",
+      header: "Relation",
       cell: ({ row }) => (
-        <div className="w-12 h-12 relative">
-          <Image
-            src={row.original.avatar}
-            alt={row.original.name}
-            fill
-            className="rounded-full"
-            style={{ objectFit: "cover" }}
-          />
+        <div>
+          {row.original.relation === "other"
+            ? row.original.custom_relation
+            : row.original.relation}
         </div>
       ),
     },
     {
-      accessorKey: "is_active",
+      accessorKey: "message",
+      header: "Message",
+      cell: ({ row }) => (
+        <div className="max-w-[300px] truncate">{row.original.message}</div>
+      ),
+    },
+    {
+      accessorKey: "is_approved",
       header: "Status",
       cell: ({ row }) => (
         <div
           className={`px-2 py-1 rounded-full text-center ${
-            row.original.is_active ? "bg-green-600" : "bg-gray-600"
+            row.original.is_approved ? "bg-green-600" : "bg-gray-600"
           }`}
         >
-          {row.original.is_active ? "Active" : "Inactive"}
+          {row.original.is_approved ? "Approved" : "Pending"}
         </div>
       ),
     },
     {
       id: "actions",
       cell: ({ row }) => {
-        const profile = row.original;
+        const testimonial = row.original;
         return (
           <div className="flex justify-end gap-2">
-            <Link href={`/protected/profile/detail/${profile.id}`}>
+            <Link href={`/protected/testimonial/detail/${testimonial.id}`}>
               <Button variant="outline" size="sm">
                 View
               </Button>
             </Link>
-            <Link href={`/protected/profile/edit/${profile.id}`}>
+            <Link href={`/protected/testimonial/edit/${testimonial.id}`}>
               <Button variant="outline" size="sm">
                 Edit
               </Button>
@@ -137,7 +141,7 @@ export function ProfileDataTable({
             <Button
               variant="destructive"
               size="sm"
-              onClick={() => onDelete(profile.id)}
+              onClick={() => onDelete(testimonial.id)}
             >
               Delete
             </Button>
@@ -168,7 +172,7 @@ export function ProfileDataTable({
     <div>
       <div className="flex items-center justify-between gap-4 py-4">
         <Input
-          placeholder="Filter names..."
+          placeholder="Filter by name..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
@@ -222,7 +226,7 @@ export function ProfileDataTable({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No profiles found.
+                  No testimonials found.
                 </TableCell>
               </TableRow>
             )}
