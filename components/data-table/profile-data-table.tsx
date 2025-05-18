@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -11,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Social } from "@/types/socials";
+import { Profile } from "@/types/profiles";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -24,20 +23,22 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 
-interface SocialDataTableProps {
-  data: Social[];
+interface ProfileDataTableProps {
+  data: Profile[];
   onDelete: (id: number) => void;
   onBulkDelete: (ids: number[]) => void;
 }
 
-export function SocialDataTable({
+export function ProfileDataTable({
   data,
   onDelete,
   onBulkDelete,
-}: SocialDataTableProps) {
+}: ProfileDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -50,7 +51,7 @@ export function SocialDataTable({
     onBulkDelete(selectedIds);
   };
 
-  const columns: ColumnDef<Social>[] = [
+  const columns: ColumnDef<Profile>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -83,58 +84,52 @@ export function SocialDataTable({
       ),
     },
     {
-      accessorKey: "description",
-      header: "Description",
+      accessorKey: "tagline",
+      header: "Tagline",
       cell: ({ row }) => (
-        <div className="max-w-[300px] truncate">{row.original.description}</div>
+        <div className="max-w-[300px] truncate">{row.original.tagline}</div>
       ),
     },
     {
-      accessorKey: "link",
-      header: "Link",
+      accessorKey: "avatar",
+      header: "Avatar",
       cell: ({ row }) => (
-        <a
-          href={row.original.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 hover:underline truncate block max-w-[200px]"
+        <div className="w-12 h-12 relative">
+          <Image
+            src={row.original.avatar}
+            alt={row.original.name}
+            fill
+            className="rounded-full"
+            style={{ objectFit: "cover" }}
+          />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "is_active",
+      header: "Status",
+      cell: ({ row }) => (
+        <div
+          className={`px-2 py-1 rounded-full text-center ${
+            row.original.is_active ? "bg-green-600" : "bg-gray-600"
+          }`}
         >
-          {row.original.link}
-        </a>
+          {row.original.is_active ? "Active" : "Inactive"}
+        </div>
       ),
-    },
-    {
-      accessorKey: "icon",
-      header: "Icon",
-      cell: ({ row }) => (
-        <div className="max-w-[200px] truncate">{row.original.icon}</div>
-      ),
-    },
-    {
-      accessorKey: "created_at",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Created At
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => new Date(row.original.created_at).toLocaleDateString(),
     },
     {
       id: "actions",
       cell: ({ row }) => {
-        const social = row.original;
+        const profile = row.original;
         return (
           <div className="flex justify-end gap-2">
-            <Link href={`/protected/social/detail/${social.id}`}>
+            <Link href={`/protected/profile/detail/${profile.id}`}>
               <Button variant="outline" size="sm">
                 View
               </Button>
             </Link>
-            <Link href={`/protected/social/edit/${social.id}`}>
+            <Link href={`/protected/profile/edit/${profile.id}`}>
               <Button variant="outline" size="sm">
                 Edit
               </Button>
@@ -142,7 +137,7 @@ export function SocialDataTable({
             <Button
               variant="destructive"
               size="sm"
-              onClick={() => onDelete(social.id)}
+              onClick={() => onDelete(profile.id)}
             >
               Delete
             </Button>
@@ -227,7 +222,7 @@ export function SocialDataTable({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No socials found.
+                  No profiles found.
                 </TableCell>
               </TableRow>
             )}

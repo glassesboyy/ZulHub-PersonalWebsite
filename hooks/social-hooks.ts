@@ -1,4 +1,4 @@
-import { Social } from "@/types/social";
+import { Social } from "@/types/socials";
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
 
