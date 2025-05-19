@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useTestimonials } from "@/hooks/testimonial-hooks";
+import { Testimonial } from "@/types/testimonials";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 
@@ -10,7 +11,7 @@ export default function TestimonialDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const [testimonial, setTestimonial] = useState<any>(null);
+  const [testimonial, setTestimonial] = useState<Testimonial | null>(null);
   const router = useRouter();
   const { fetchTestimonialById, toggleApproval } = useTestimonials();
   const resolvedParams = use(params);
@@ -23,12 +24,14 @@ export default function TestimonialDetailPage({
       }
     }
     loadTestimonial();
-  }, [resolvedParams.id]);
+  }, [resolvedParams.id, fetchTestimonialById]);
 
   const handleToggleApproval = async () => {
+    if (!testimonial) return;
+
     const success = await toggleApproval(
       testimonial.id,
-      testimonial.is_approved
+      testimonial.is_approved,
     );
     if (success) {
       router.push("/protected/testimonial");
@@ -47,9 +50,7 @@ export default function TestimonialDetailPage({
           <h2 className="text-2xl font-semibold mb-2">{testimonial.name}</h2>
           <p className="text-gray-500">{testimonial.email}</p>
           <div className="mt-2 inline-block px-3 py-1 rounded-full text-sm border border-gray-300">
-            {testimonial.relation === "other"
-              ? testimonial.custom_relation
-              : testimonial.relation}
+            {testimonial.relation}
           </div>
           <div
             className={`ml-2 inline-block px-3 py-1 rounded-full text-sm ${

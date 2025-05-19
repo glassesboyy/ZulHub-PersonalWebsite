@@ -10,10 +10,13 @@ export const certificateFormSchema = z.object({
     .max(100, "Title must not exceed 100 characters"),
   certificateImage: z
     .instanceof(File)
-    .refine((file) => file.size <= MAX_FILE_SIZE, "File size must be less than 5MB")
+    .refine(
+      (file) => file.size <= MAX_FILE_SIZE,
+      "File size must be less than 5MB",
+    )
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
-      "Only .jpg, .jpeg, and .png formats are supported"
+      "Only .jpg, .jpeg, and .png formats are supported",
     )
     .optional()
     .or(z.literal(undefined)),

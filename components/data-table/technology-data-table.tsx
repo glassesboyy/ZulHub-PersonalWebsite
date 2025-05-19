@@ -50,11 +50,11 @@ export function TechnologyDataTable({
   onBulkDelete,
 }: TechnologyDataTableProps) {
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
-    null
+    null,
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [rowSelection, setRowSelection] = React.useState({});
 
@@ -244,7 +244,7 @@ export function TechnologyDataTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -259,7 +259,7 @@ export function TechnologyDataTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

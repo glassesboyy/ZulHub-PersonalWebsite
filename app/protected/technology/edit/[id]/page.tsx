@@ -48,13 +48,13 @@ export default function EditTechnologyPage({
       }
     }
     loadTechnology();
-  }, [resolvedParams.id, form]);
+  }, [resolvedParams.id, form, fetchTechnologyById]);
 
   async function onSubmit(data: TechnologyFormValues) {
     const success = await updateTechnology(
       resolvedParams.id,
       data.name,
-      data.icon
+      data.icon,
     );
     if (success) {
       router.push("/protected/technology");

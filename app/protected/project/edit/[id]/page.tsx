@@ -1,5 +1,6 @@
 "use client";
 
+import { ComboboxTechnologies } from "@/components/combobox-technologies";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,11 +13,10 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useProjects } from "@/hooks/project-hooks";
+import { Technology } from "@/types/technology";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
-import { ComboboxTechnologies } from "@/components/combobox-technologies";
-import { Technology } from "@/types/technology";
 
 export default function EditProjectPage({
   params,
@@ -55,7 +55,7 @@ export default function EditProjectPage({
       setTechnologies(techs);
     };
     loadData();
-  }, [resolvedParams.id]);
+  }, [resolvedParams.id, fetchProjectById, fetchTechnologies]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -83,7 +83,7 @@ export default function EditProjectPage({
       description,
       status,
       imageFile,
-      selectedTechs.map((t) => t.id)
+      selectedTechs.map((t) => t.id),
     );
     if (success) {
       router.push("/protected/project");

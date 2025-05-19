@@ -41,7 +41,7 @@ export default function EditProfilePage({
       }
     }
     loadProfile();
-  }, [resolvedParams.id]);
+  }, [resolvedParams.id, fetchProfileById]);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -66,7 +66,7 @@ export default function EditProfilePage({
       bio,
       cvFile,
       avatarFile,
-      isActive
+      isActive,
     );
     if (success) {
       router.push("/protected/profile");

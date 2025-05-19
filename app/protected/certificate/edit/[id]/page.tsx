@@ -49,7 +49,7 @@ export default function EditCertificatePage({
       }
     }
     loadCertificate();
-  }, [resolvedParams.id, form]);
+  }, [resolvedParams.id, form, fetchCertificateById]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -63,7 +63,7 @@ export default function EditCertificatePage({
     const success = await updateCertificate(
       resolvedParams.id,
       data.title,
-      data.certificateImage || null
+      data.certificateImage || null,
     );
     if (success) {
       router.push("/protected/certificate");
@@ -94,7 +94,7 @@ export default function EditCertificatePage({
           <FormField
             control={form.control}
             name="certificateImage"
-            render={({ field: { value, ...fieldProps } }) => (
+            render={() => (
               <FormItem>
                 <FormLabel>Certificate Image</FormLabel>
                 <FormControl>

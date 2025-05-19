@@ -11,7 +11,7 @@ export function useProfiles() {
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
-        .order('created_at', { ascending: false });
+        .order("created_at", { ascending: false });
       if (error) {
         console.error("Error fetching profiles:", error.message);
         return;
@@ -24,52 +24,52 @@ export function useProfiles() {
 
   const uploadCV = async (file: File) => {
     try {
-      const fileExt = file.name.split('.').pop();
+      const fileExt = file.name.split(".").pop();
       const fileName = `${Math.random()}.${fileExt}`;
       const filePath = `cvs/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('cv-file')
+        .from("cv-file")
         .upload(filePath, file);
 
       if (uploadError) {
-        console.error('Error uploading CV:', uploadError.message);
+        console.error("Error uploading CV:", uploadError.message);
         return null;
       }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('cv-file')
-        .getPublicUrl(filePath);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("cv-file").getPublicUrl(filePath);
 
       return publicUrl;
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       return null;
     }
   };
 
   const uploadAvatar = async (file: File) => {
     try {
-      const fileExt = file.name.split('.').pop();
+      const fileExt = file.name.split(".").pop();
       const fileName = `${Math.random()}.${fileExt}`;
       const filePath = `avatars/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('avatar-image')
+        .from("avatar-image")
         .upload(filePath, file);
 
       if (uploadError) {
-        console.error('Error uploading avatar:', uploadError.message);
+        console.error("Error uploading avatar:", uploadError.message);
         return null;
       }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('avatar-image')
-        .getPublicUrl(filePath);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("avatar-image").getPublicUrl(filePath);
 
       return publicUrl;
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       return null;
     }
   };
@@ -80,7 +80,7 @@ export function useProfiles() {
     bio: string,
     cvFile: File,
     avatarFile: File,
-    isActive: boolean
+    isActive: boolean,
   ) => {
     try {
       // If setting this profile as active, deactivate all others first
@@ -93,21 +93,21 @@ export function useProfiles() {
 
       const [cvUrl, avatarUrl] = await Promise.all([
         uploadCV(cvFile),
-        uploadAvatar(avatarFile)
+        uploadAvatar(avatarFile),
       ]);
 
       if (!cvUrl || !avatarUrl) return false;
 
-      const { error } = await supabase
-        .from("profiles")
-        .insert([{ 
-          name, 
-          tagline, 
-          bio, 
-          cv: cvUrl, 
+      const { error } = await supabase.from("profiles").insert([
+        {
+          name,
+          tagline,
+          bio,
+          cv: cvUrl,
           avatar: avatarUrl,
-          is_active: isActive 
-        }]);
+          is_active: isActive,
+        },
+      ]);
 
       if (error) {
         console.error("Error creating profile:", error.message);
@@ -128,7 +128,7 @@ export function useProfiles() {
     bio: string,
     cvFile: File | null,
     avatarFile: File | null,
-    isActive: boolean
+    isActive: boolean,
   ) => {
     try {
       // If setting this profile as active, deactivate all others first
@@ -175,18 +175,17 @@ export function useProfiles() {
       if (!profile) return false;
 
       // Delete files from storage
-      const cvFileName = profile.cv.split('/').pop();
-      const avatarFileName = profile.avatar.split('/').pop();
+      const cvFileName = profile.cv.split("/").pop();
+      const avatarFileName = profile.avatar.split("/").pop();
 
       await Promise.all([
-        supabase.storage.from('cv-file').remove([`cvs/${cvFileName}`]),
-        supabase.storage.from('avatar-image').remove([`avatars/${avatarFileName}`])
+        supabase.storage.from("cv-file").remove([`cvs/${cvFileName}`]),
+        supabase.storage
+          .from("avatar-image")
+          .remove([`avatars/${avatarFileName}`]),
       ]);
 
-      const { error } = await supabase
-        .from("profiles")
-        .delete()
-        .eq("id", id);
+      const { error } = await supabase.from("profiles").delete().eq("id", id);
 
       if (error) {
         console.error("Error deleting profile:", error.message);
@@ -212,21 +211,20 @@ export function useProfiles() {
       if (profiles) {
         // Delete all files from storage
         for (const profile of profiles) {
-          const cvFileName = profile.cv.split('/').pop();
-          const avatarFileName = profile.avatar.split('/').pop();
+          const cvFileName = profile.cv.split("/").pop();
+          const avatarFileName = profile.avatar.split("/").pop();
 
           await Promise.all([
-            supabase.storage.from('cv-file').remove([`cvs/${cvFileName}`]),
-            supabase.storage.from('avatar-image').remove([`avatars/${avatarFileName}`])
+            supabase.storage.from("cv-file").remove([`cvs/${cvFileName}`]),
+            supabase.storage
+              .from("avatar-image")
+              .remove([`avatars/${avatarFileName}`]),
           ]);
         }
       }
 
       // Delete profiles from database
-      const { error } = await supabase
-        .from("profiles")
-        .delete()
-        .in("id", ids);
+      const { error } = await supabase.from("profiles").delete().in("id", ids);
 
       if (error) {
         console.error("Error deleting profiles:", error.message);

@@ -8,7 +8,10 @@ const technologySchema = z.object({
   icon: z
     .string()
     .min(1, "Icon class is required")
-    .regex(/^[a-zA-Z0-9\-\s]+$/, "Invalid icon class format. Use only letters, numbers, spaces and hyphens")
+    .regex(
+      /^[a-zA-Z0-9\-\s]+$/,
+      "Invalid icon class format. Use only letters, numbers, spaces and hyphens",
+    )
     .max(100, "Icon class must not exceed 100 characters"),
 });
 

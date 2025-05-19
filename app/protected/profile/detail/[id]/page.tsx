@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useProfiles } from "@/hooks/profile-hooks";
+import { Profile } from "@/types/profiles";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
@@ -11,7 +12,7 @@ export default function ProfileDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const router = useRouter();
   const { fetchProfileById } = useProfiles();
   const resolvedParams = use(params);
@@ -24,7 +25,7 @@ export default function ProfileDetailPage({
       }
     }
     loadProfile();
-  }, [resolvedParams.id]);
+  }, [resolvedParams.id, fetchProfileById]);
 
   if (!profile) return <div>Loading...</div>;
 

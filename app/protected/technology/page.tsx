@@ -16,7 +16,7 @@ export default function TechnologyPage() {
 
   useEffect(() => {
     fetchTechnologies();
-  }, []);
+  }, [fetchTechnologies]);
 
   return (
     <div className="container max-w-4xl py-10">

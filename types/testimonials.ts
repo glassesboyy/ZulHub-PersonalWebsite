@@ -10,7 +10,7 @@ export const relationOptions = [
   "prospective client",
 ] as const;
 
-export type TestimonialRelation = typeof relationOptions[number];
+export type TestimonialRelation = (typeof relationOptions)[number];
 
 export type Testimonial = {
   id: number;

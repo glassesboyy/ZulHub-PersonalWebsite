@@ -49,7 +49,7 @@ export default function CreateProfilePage() {
       bio,
       cvFile,
       avatarFile,
-      isActive
+      isActive,
     );
 
     if (success) {

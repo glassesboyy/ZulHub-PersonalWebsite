@@ -11,7 +11,7 @@ export function useSocials() {
       const { data, error } = await supabase
         .from("socials")
         .select("*")
-        .order('created_at', { ascending: false });
+        .order("created_at", { ascending: false });
       if (error) {
         console.error("Error fetching socials:", error.message);
         return;
@@ -22,7 +22,12 @@ export function useSocials() {
     }
   };
 
-  const createSocial = async (name: string, description: string, link: string, icon: string) => {
+  const createSocial = async (
+    name: string,
+    description: string,
+    link: string,
+    icon: string,
+  ) => {
     try {
       const { error } = await supabase
         .from("socials")
@@ -40,7 +45,13 @@ export function useSocials() {
     }
   };
 
-  const updateSocial = async (id: string, name: string, description: string, link: string, icon: string) => {
+  const updateSocial = async (
+    id: string,
+    name: string,
+    description: string,
+    link: string,
+    icon: string,
+  ) => {
     try {
       const { error } = await supabase
         .from("socials")
@@ -60,10 +71,7 @@ export function useSocials() {
 
   const deleteSocial = async (id: number) => {
     try {
-      const { error } = await supabase
-        .from("socials")
-        .delete()
-        .eq("id", id);
+      const { error } = await supabase.from("socials").delete().eq("id", id);
 
       if (error) {
         console.error("Error deleting social:", error.message);
@@ -98,10 +106,7 @@ export function useSocials() {
 
   const bulkDeleteSocials = async (ids: number[]) => {
     try {
-      const { error } = await supabase
-        .from("socials")
-        .delete()
-        .in("id", ids);
+      const { error } = await supabase.from("socials").delete().in("id", ids);
 
       if (error) {
         console.error("Error deleting socials:", error.message);

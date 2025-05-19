@@ -16,7 +16,7 @@ export default function CertificatePage() {
 
   useEffect(() => {
     fetchCertificates();
-  }, []);
+  }, [fetchCertificates]);
 
   return (
     <div className="container max-w-4xl py-10">

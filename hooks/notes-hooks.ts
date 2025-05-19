@@ -21,7 +21,9 @@ export function useNotes() {
 
   const createNote = async (noteText: string) => {
     try {
-      const { error } = await supabase.from("notes").insert([{ title: noteText }]);
+      const { error } = await supabase
+        .from("notes")
+        .insert([{ title: noteText }]);
       if (error) {
         console.error("Error creating note:", error.message);
         return false;

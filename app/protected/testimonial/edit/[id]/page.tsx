@@ -66,7 +66,7 @@ export default function EditTestimonialPage({
       }
     }
     loadTestimonial();
-  }, [resolvedParams.id, form]);
+  }, [resolvedParams.id, form, fetchTestimonialById]);
 
   const onSubmit = async (data: TestimonialFormValues) => {
     const success = await updateTestimonial(
@@ -75,7 +75,7 @@ export default function EditTestimonialPage({
       data.email,
       data.relation,
       data.message,
-      data.isApproved
+      data.isApproved,
     );
     if (success) {
       router.push("/protected/testimonial");

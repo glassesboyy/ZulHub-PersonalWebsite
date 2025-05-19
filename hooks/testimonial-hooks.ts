@@ -13,7 +13,7 @@ export function useTestimonials() {
       const { data, error } = await supabase
         .from("testimonials")
         .select("*")
-        .order('created_at', { ascending: false });
+        .order("created_at", { ascending: false });
       if (error) {
         console.error("Error fetching testimonials:", error.message);
         return;
@@ -28,7 +28,7 @@ export function useTestimonials() {
     name: string,
     email: string,
     relation: TestimonialRelation,
-    message: string
+    message: string,
   ) => {
     try {
       const { error } = await supabase
@@ -66,7 +66,7 @@ export function useTestimonials() {
     email: string,
     relation: string,
     message: string,
-    isApproved: boolean
+    isApproved: boolean,
   ) => {
     try {
       const { error } = await supabase
@@ -82,7 +82,7 @@ export function useTestimonials() {
         });
         return false;
       }
-      
+
       toast({
         title: "Success",
         description: "Testimonial updated successfully",
@@ -181,7 +181,7 @@ export function useTestimonials() {
 
       toast({
         title: "Success",
-        description: `Testimonial ${!currentStatus ? 'approved' : 'unapproved'} successfully`,
+        description: `Testimonial ${!currentStatus ? "approved" : "unapproved"} successfully`,
       });
       await fetchTestimonials();
       return true;

@@ -13,7 +13,7 @@ export function useCertificates() {
       const { data, error } = await supabase
         .from("certificates")
         .select("*")
-        .order('created_at', { ascending: false });
+        .order("created_at", { ascending: false });
       if (error) {
         console.error("Error fetching certificates:", error.message);
         return;
@@ -26,26 +26,28 @@ export function useCertificates() {
 
   const uploadImage = async (file: File) => {
     try {
-      const fileExt = file.name.split('.').pop();
+      const fileExt = file.name.split(".").pop();
       const fileName = `${Math.random()}.${fileExt}`;
       const filePath = `certificates/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('certificate-image')  // Mengubah nama bucket sesuai dengan yang ada di Supabase
+        .from("certificate-image") // Mengubah nama bucket sesuai dengan yang ada di Supabase
         .upload(filePath, file);
 
       if (uploadError) {
-        console.error('Error uploading image:', uploadError.message);
+        console.error("Error uploading image:", uploadError.message);
         return null;
       }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('certificate-image')  // Mengubah nama bucket sesuai dengan yang ada di Supabase
+      const {
+        data: { publicUrl },
+      } = supabase.storage
+        .from("certificate-image") // Mengubah nama bucket sesuai dengan yang ada di Supabase
         .getPublicUrl(filePath);
 
       return publicUrl;
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       return null;
     }
   };
@@ -90,10 +92,14 @@ export function useCertificates() {
     }
   };
 
-  const updateCertificate = async (id: string, title: string, imageFile: File | null) => {
+  const updateCertificate = async (
+    id: string,
+    title: string,
+    imageFile: File | null,
+  ) => {
     try {
       let imageUrl = null;
-      
+
       if (imageFile) {
         imageUrl = await uploadImage(imageFile);
         if (!imageUrl) {
@@ -148,16 +154,19 @@ export function useCertificates() {
 
       // Extract filename dari URL
       const imageUrl = certificate.certificate_image;
-      const fileName = imageUrl.split('/').pop();
+      const fileName = imageUrl.split("/").pop();
       const filePath = `certificates/${fileName}`;
 
       // Hapus file dari storage
       const { error: storageError } = await supabase.storage
-        .from('certificate-image')
+        .from("certificate-image")
         .remove([filePath]);
 
       if (storageError) {
-        console.error("Error deleting image from storage:", storageError.message);
+        console.error(
+          "Error deleting image from storage:",
+          storageError.message,
+        );
         toast({
           title: "Error",
           description: "Failed to delete certificate",
@@ -209,12 +218,10 @@ export function useCertificates() {
       if (certificates) {
         // Hapus semua file dari storage
         for (const cert of certificates) {
-          const fileName = cert.certificate_image.split('/').pop();
+          const fileName = cert.certificate_image.split("/").pop();
           const filePath = `certificates/${fileName}`;
-          
-          await supabase.storage
-            .from('certificate-image')
-            .remove([filePath]);
+
+          await supabase.storage.from("certificate-image").remove([filePath]);
         }
       }
 
@@ -232,7 +239,7 @@ export function useCertificates() {
         });
         return false;
       }
-      
+
       await fetchCertificates();
       toast({
         title: "Success",

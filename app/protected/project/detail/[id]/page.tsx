@@ -34,7 +34,7 @@ export default function ProjectDetailPage({
       }
     }
     loadProject();
-  }, [resolvedParams.id]);
+  }, [resolvedParams.id, fetchProjectById]);
 
   if (!project) return <div>Loading...</div>;
 

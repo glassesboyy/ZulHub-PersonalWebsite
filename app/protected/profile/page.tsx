@@ -12,7 +12,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     fetchProfiles();
-  }, []);
+  }, [fetchProfiles]);
 
   return (
     <div className="container max-w-4xl py-10">

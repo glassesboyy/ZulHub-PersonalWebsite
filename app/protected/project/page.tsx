@@ -12,7 +12,7 @@ export default function ProjectPage() {
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [fetchProjects]);
 
   return (
     <div className="container max-w-4xl py-10">

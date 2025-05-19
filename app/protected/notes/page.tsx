@@ -11,7 +11,7 @@ export default function NotesPage() {
 
   useEffect(() => {
     fetchNotes();
-  }, []);
+  }, [fetchNotes]);
 
   return (
     <div className="container max-w-4xl py-10">

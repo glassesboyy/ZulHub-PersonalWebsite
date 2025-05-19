@@ -24,7 +24,7 @@ export default function EditNotePage({
       }
     }
     loadNote();
-  }, [resolvedParams.id]);
+  }, [resolvedParams.id, fetchNoteById]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

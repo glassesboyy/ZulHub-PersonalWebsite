@@ -80,7 +80,7 @@ export default function CreateCertificatePage() {
           <FormField
             control={form.control}
             name="certificateImage"
-            render={({ field: { value, ...fieldProps } }) => (
+            render={() => (
               <FormItem>
                 <FormLabel>Certificate Image</FormLabel>
                 <FormControl>

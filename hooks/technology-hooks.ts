@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
 
 export function useTechnologies() {
-  const { toast } = useToast();  // Add this
+  const { toast } = useToast(); // Add this
   const [technologies, setTechnologies] = useState<Technology[]>([]);
   const supabase = createClient();
 
@@ -13,7 +13,7 @@ export function useTechnologies() {
       const { data, error } = await supabase
         .from("technologies")
         .select("*")
-        .order('created_at', { ascending: false });
+        .order("created_at", { ascending: false });
       if (error) {
         console.error("Error fetching technologies:", error.message);
         return;
@@ -156,7 +156,7 @@ export function useTechnologies() {
         });
         return false;
       }
-      
+
       await fetchTechnologies();
       toast({
         title: "Success",

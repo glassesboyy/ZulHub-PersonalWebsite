@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useCertificates } from "@/hooks/certificate-hooks";
+import { Certificate } from "@/types/certificate";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
@@ -11,7 +12,7 @@ export default function CertificateDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const [certificate, setCertificate] = useState<any>(null);
+  const [certificate, setCertificate] = useState<Certificate | null>(null);
   const router = useRouter();
   const { fetchCertificateById } = useCertificates();
   const resolvedParams = use(params);
@@ -24,7 +25,7 @@ export default function CertificateDetailPage({
       }
     }
     loadCertificate();
-  }, [resolvedParams.id]);
+  }, [resolvedParams.id, fetchCertificateById]);
 
   if (!certificate) return <div>Loading...</div>;
 

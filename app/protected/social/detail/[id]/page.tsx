@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useSocials } from "@/hooks/social-hooks";
-import Link from "next/link";
+import { Social } from "@/types/socials";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 
@@ -11,7 +11,7 @@ export default function SocialDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const [social, setSocial] = useState<any>(null);
+  const [social, setSocial] = useState<Social | null>(null);
   const router = useRouter();
   const { fetchSocialById } = useSocials();
   const resolvedParams = use(params);
@@ -24,7 +24,7 @@ export default function SocialDetailPage({
       }
     }
     loadSocial();
-  }, [resolvedParams.id]);
+  }, [resolvedParams.id, fetchSocialById]);
 
   if (!social) return <div>Loading...</div>;
 

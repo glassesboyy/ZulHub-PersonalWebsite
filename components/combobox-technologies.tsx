@@ -70,7 +70,7 @@ export function ComboboxTechnologies({
                         "ml-auto h-4 w-4",
                         selectedTechnologies.some((t) => t.id === tech.id)
                           ? "opacity-100"
-                          : "opacity-0"
+                          : "opacity-0",
                       )}
                     />
                   </CommandItem>

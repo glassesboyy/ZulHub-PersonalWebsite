@@ -32,7 +32,7 @@ export default function EditSocialPage({
       }
     }
     loadSocial();
-  }, [resolvedParams.id]);
+  }, [resolvedParams.id, fetchSocialById]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -41,7 +41,7 @@ export default function EditSocialPage({
       name,
       description,
       link,
-      icon
+      icon,
     );
     if (success) {
       router.push("/protected/social");

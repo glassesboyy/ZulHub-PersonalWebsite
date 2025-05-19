@@ -17,7 +17,7 @@ export default function TestimonialPage() {
 
   useEffect(() => {
     fetchTestimonials();
-  }, []);
+  }, [fetchTestimonials]);
 
   return (
     <div className="container max-w-7xl py-10">

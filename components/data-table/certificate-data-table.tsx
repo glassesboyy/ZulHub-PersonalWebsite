@@ -51,19 +51,13 @@ export function CertificateDataTable({
   onBulkDelete,
 }: CertificateDataTableProps) {
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
-    null
+    null,
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [rowSelection, setRowSelection] = React.useState({});
-
-  const handleBulkDelete = () => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows;
-    const selectedIds = selectedRows.map((row) => row.original.id);
-    onBulkDelete(selectedIds);
-  };
 
   const handleSingleDelete = async () => {
     if (singleDeleteId) {
@@ -277,7 +271,7 @@ export function CertificateDataTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -292,7 +286,7 @@ export function CertificateDataTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
