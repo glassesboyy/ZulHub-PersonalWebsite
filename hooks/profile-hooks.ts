@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import { Profile } from "@/types/profiles";
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
@@ -5,6 +6,7 @@ import { useState } from "react";
 export function useProfiles() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const supabase = createClient();
+  const { toast } = useToast();
 
   const fetchProfiles = async () => {
     try {
@@ -96,7 +98,14 @@ export function useProfiles() {
         uploadAvatar(avatarFile),
       ]);
 
-      if (!cvUrl || !avatarUrl) return false;
+      if (!cvUrl || !avatarUrl) {
+        toast({
+          title: "Error",
+          description: "Failed to upload files",
+          variant: "destructive",
+        });
+        return false;
+      }
 
       const { error } = await supabase.from("profiles").insert([
         {
@@ -110,13 +119,26 @@ export function useProfiles() {
       ]);
 
       if (error) {
-        console.error("Error creating profile:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to create profile",
+          variant: "destructive",
+        });
         return false;
       }
+
+      toast({
+        title: "Success",
+        description: "Profile created successfully",
+      });
       await fetchProfiles();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -159,12 +181,25 @@ export function useProfiles() {
         .eq("id", id);
 
       if (error) {
-        console.error("Error updating profile:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to update profile",
+          variant: "destructive",
+        });
         return false;
       }
+
+      toast({
+        title: "Success",
+        description: "Profile updated successfully",
+      });
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -188,14 +223,26 @@ export function useProfiles() {
       const { error } = await supabase.from("profiles").delete().eq("id", id);
 
       if (error) {
-        console.error("Error deleting profile:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete profile",
+          variant: "destructive",
+        });
         return false;
       }
 
+      toast({
+        title: "Success",
+        description: "Profile deleted successfully",
+      });
       await fetchProfiles();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -227,14 +274,26 @@ export function useProfiles() {
       const { error } = await supabase.from("profiles").delete().in("id", ids);
 
       if (error) {
-        console.error("Error deleting profiles:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete profiles",
+          variant: "destructive",
+        });
         return false;
       }
 
+      toast({
+        title: "Success",
+        description: `${ids.length} profile(s) deleted successfully`,
+      });
       await fetchProfiles();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };

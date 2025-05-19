@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { FileInput } from "@/components/ui/file-input";
 import {
   Form,
   FormControl,
@@ -80,15 +81,18 @@ export default function CreateCertificatePage() {
           <FormField
             control={form.control}
             name="certificateImage"
-            render={() => (
+            render={({ field: { onChange } }) => (
               <FormItem>
                 <FormLabel>Certificate Image</FormLabel>
                 <FormControl>
-                  <Input
-                    type="file"
+                  <FileInput
                     accept="image/*"
-                    onChange={handleImageChange}
-                    className="cursor-pointer"
+                    onChange={(file) => {
+                      onChange(file);
+                      if (file) {
+                        setPreviewUrl(URL.createObjectURL(file));
+                      }
+                    }}
                   />
                 </FormControl>
                 <FormMessage />

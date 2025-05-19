@@ -55,7 +55,8 @@ export default function EditProjectPage({
       setTechnologies(techs);
     };
     loadData();
-  }, [resolvedParams.id, fetchProjectById, fetchTechnologies]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resolvedParams.id]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -83,7 +84,7 @@ export default function EditProjectPage({
       description,
       status,
       imageFile,
-      selectedTechs.map((t) => t.id),
+      selectedTechs.map((t) => t.id)
     );
     if (success) {
       router.push("/protected/project");

@@ -58,9 +58,11 @@ export default function ProfileDetailPage({
           </div>
         </div>
 
+        <h3 className="text-lg font-medium mb-3">Bio</h3>
         <div>
-          <h3 className="text-lg font-medium mb-2">Bio</h3>
-          <p className="text-gray-600 whitespace-pre-wrap">{profile.bio}</p>
+          <p className="text-gray-300 break-words whitespace-pre-wrap">
+            {profile.bio}
+          </p>
         </div>
 
         <div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { FileInput } from "@/components/ui/file-input";
 import {
   Form,
   FormControl,
@@ -49,7 +50,8 @@ export default function EditCertificatePage({
       }
     }
     loadCertificate();
-  }, [resolvedParams.id, form, fetchCertificateById]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resolvedParams.id, form]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -63,7 +65,7 @@ export default function EditCertificatePage({
     const success = await updateCertificate(
       resolvedParams.id,
       data.title,
-      data.certificateImage || null,
+      data.certificateImage || null
     );
     if (success) {
       router.push("/protected/certificate");
@@ -94,15 +96,18 @@ export default function EditCertificatePage({
           <FormField
             control={form.control}
             name="certificateImage"
-            render={() => (
+            render={({ field: { onChange } }) => (
               <FormItem>
                 <FormLabel>Certificate Image</FormLabel>
                 <FormControl>
-                  <Input
-                    type="file"
+                  <FileInput
                     accept="image/*"
-                    onChange={handleImageChange}
-                    className="cursor-pointer"
+                    onChange={(file) => {
+                      onChange(file);
+                      if (file) {
+                        setPreviewUrl(URL.createObjectURL(file));
+                      }
+                    }}
                   />
                 </FormControl>
                 <FormMessage />

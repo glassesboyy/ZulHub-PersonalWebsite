@@ -17,7 +17,8 @@ export default function TestimonialPage() {
 
   useEffect(() => {
     fetchTestimonials();
-  }, [fetchTestimonials]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="container max-w-7xl py-10">

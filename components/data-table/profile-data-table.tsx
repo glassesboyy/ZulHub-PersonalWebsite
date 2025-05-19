@@ -1,6 +1,18 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -26,7 +38,6 @@ import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
-import { Checkbox } from "@/components/ui/checkbox";
 
 interface ProfileDataTableProps {
   data: Profile[];
@@ -41,7 +52,7 @@ export function ProfileDataTable({
 }: ProfileDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
   const [rowSelection, setRowSelection] = React.useState({});
 
@@ -134,13 +145,28 @@ export function ProfileDataTable({
                 Edit
               </Button>
             </Link>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => onDelete(profile.id)}
-            >
-              Delete
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm">
+                  Delete
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    the profile and associated files.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => onDelete(profile.id)}>
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         );
       },
@@ -175,14 +201,33 @@ export function ProfileDataTable({
           }
           className="max-w-sm"
         />
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={handleBulkDelete}
-          disabled={table.getFilteredSelectedRowModel().rows.length === 0}
-        >
-          Delete Selected
-        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="destructive"
+              size="sm"
+              disabled={table.getFilteredSelectedRowModel().rows.length === 0}
+            >
+              Delete Selected
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action will permanently delete{" "}
+                {table.getFilteredSelectedRowModel().rows.length} selected
+                profile(s). This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleBulkDelete}>
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -195,7 +240,7 @@ export function ProfileDataTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 ))}
@@ -210,7 +255,7 @@ export function ProfileDataTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

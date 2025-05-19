@@ -12,7 +12,8 @@ export default function ProjectPage() {
 
   useEffect(() => {
     fetchProjects();
-  }, [fetchProjects]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="container max-w-4xl py-10">

@@ -1,151 +1,205 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useProfiles } from "@/hooks/profile-hooks";
+import {
+  profileFormSchema,
+  ProfileFormValues,
+} from "@/lib/validations/profile-validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { FileInput } from "@/components/ui/file-input";
 
 export default function CreateProfilePage() {
-  const [name, setName] = useState("");
-  const [tagline, setTagline] = useState("");
-  const [bio, setBio] = useState("");
-  const [isActive, setIsActive] = useState(false);
-  const [cvFile, setCvFile] = useState<File | null>(null);
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-
   const router = useRouter();
   const { createProfile } = useProfiles();
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setAvatarFile(file);
-      setAvatarPreview(URL.createObjectURL(file));
-    }
-  };
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      name: "",
+      tagline: "",
+      bio: "",
+      isActive: false,
+      avatarFile: null,
+      cvFile: null,
+    },
+  });
 
-  const handleCVChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setCvFile(e.target.files[0]);
-    }
-  };
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!avatarFile || !cvFile) {
-      alert("Please select both an avatar and a CV file");
+  const onSubmit = async (data: ProfileFormValues) => {
+    if (!data.avatarFile || !data.cvFile) {
+      form.setError("avatarFile", {
+        type: "manual",
+        message: "Avatar image is required",
+      });
+      form.setError("cvFile", {
+        type: "manual",
+        message: "CV file is required",
+      });
       return;
     }
 
     const success = await createProfile(
-      name,
-      tagline,
-      bio,
-      cvFile,
-      avatarFile,
-      isActive,
+      data.name,
+      data.tagline,
+      data.bio,
+      data.cvFile,
+      data.avatarFile,
+      data.isActive
     );
 
     if (success) {
       router.push("/protected/profile");
     }
-  }
+  };
 
   return (
     <div className="container max-w-2xl py-10">
       <h1 className="text-3xl font-bold tracking-tight mb-8">
         Create New Profile
       </h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="tagline">Tagline</Label>
-          <Input
-            id="tagline"
-            value={tagline}
-            onChange={(e) => setTagline(e.target.value)}
-            required
+
+          <FormField
+            control={form.control}
+            name="tagline"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tagline</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="bio">Bio</Label>
-          <Textarea
-            id="bio"
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            rows={4}
-            required
+
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bio</FormLabel>
+                <FormControl>
+                  <Textarea {...field} rows={4} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="avatar">Avatar Image</Label>
-          <Input
-            id="avatar"
-            type="file"
-            accept="image/*"
-            onChange={handleAvatarChange}
-            required
+
+          <FormField
+            control={form.control}
+            name="avatarFile"
+            render={({ field: { value, onChange, ...field } }) => (
+              <FormItem>
+                <FormLabel>Avatar Image</FormLabel>
+                <FormControl>
+                  <FileInput
+                    accept="image/*"
+                    onChange={(file) => {
+                      onChange(file);
+                      if (file) {
+                        setAvatarPreview(URL.createObjectURL(file));
+                      }
+                    }}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+                {avatarPreview && (
+                  <div className="mt-2 relative w-32 h-32">
+                    <Image
+                      src={avatarPreview}
+                      alt="Avatar preview"
+                      fill
+                      className="rounded-full"
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                )}
+              </FormItem>
+            )}
           />
-          {avatarPreview && (
-            <div className="mt-2 relative w-32 h-32">
-              <Image
-                src={avatarPreview}
-                alt="Avatar preview"
-                fill
-                className="rounded-full"
-                style={{ objectFit: "cover" }}
-              />
-            </div>
-          )}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="cv">CV File</Label>
-          <Input
-            id="cv"
-            type="file"
-            accept=".pdf,.doc,.docx"
-            onChange={handleCVChange}
-            required
+
+          <FormField
+            control={form.control}
+            name="cvFile"
+            render={({ field: { value, onChange, ...field } }) => (
+              <FormItem>
+                <FormLabel>CV File</FormLabel>
+                <FormControl>
+                  <FileInput
+                    accept=".pdf,.doc,.docx"
+                    onChange={(file) => onChange(file)}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          {cvFile && (
-            <p className="text-sm text-muted-foreground">
-              Selected: {cvFile.name}
-            </p>
-          )}
-        </div>
-        <div className="flex items-center space-x-2">
-          <Switch
-            checked={isActive}
-            onCheckedChange={setIsActive}
-            id="active"
+
+          <FormField
+            control={form.control}
+            name="isActive"
+            render={({ field }) => (
+              <FormItem className="flex items-center space-x-2">
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>Set as Active Profile</FormLabel>
+              </FormItem>
+            )}
           />
-          <Label htmlFor="active">Set as Active Profile</Label>
-        </div>
-        <div className="flex gap-4">
-          <Button type="submit">Save Profile</Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push("/protected/profile")}
-          >
-            Cancel
-          </Button>
-        </div>
-      </form>
+
+          <div className="flex gap-4">
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? "Saving..." : "Save Profile"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.push("/protected/profile")}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }

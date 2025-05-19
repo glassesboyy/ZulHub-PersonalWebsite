@@ -54,7 +54,8 @@ export default function EditSocialPage({
       }
     }
     loadSocial();
-  }, [resolvedParams.id, form, fetchSocialById]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resolvedParams.id, form]);
 
   const onSubmit = async (data: SocialFormValues) => {
     const success = await updateSocial(
