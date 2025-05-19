@@ -22,7 +22,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useToast } from "@/hooks/use-toast";
 import { Testimonial } from "@/types/testimonials";
 import {
   ColumnDef,
@@ -50,105 +49,23 @@ export function TestimonialDataTable({
   data,
   onDelete,
   onBulkDelete,
-  onToggleApproval,
 }: TestimonialDataTableProps) {
-  const { toast } = useToast();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [rowSelection, setRowSelection] = React.useState({});
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
-  const [selectedRows, setSelectedRows] = React.useState<number[]>([]);
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
     null
   );
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm("Are you sure you want to delete this testimonial?")) {
-      try {
-        const success = await onDelete(id);
-        if (success) {
-          toast({
-            title: "Success",
-            description: "Testimonial deleted successfully",
-          });
-        } else {
-          toast({
-            title: "Error",
-            description: "Failed to delete testimonial",
-            variant: "destructive",
-          });
-        }
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "An error occurred while deleting testimonial",
-          variant: "destructive",
-        });
-      }
-    }
-  };
-
   const handleSingleDelete = async () => {
     if (singleDeleteId) {
-      try {
-        const success = await onDelete(singleDeleteId);
-        if (success) {
-          toast({
-            title: "Success",
-            description: "Testimonial deleted successfully",
-          });
-        } else {
-          toast({
-            title: "Error",
-            description: "Failed to delete testimonial",
-            variant: "destructive",
-          });
-        }
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "An error occurred while deleting testimonial",
-          variant: "destructive",
-        });
-      }
-      setSingleDeleteId(null);
-    }
-  };
-
-  const handleBulkDeleteClick = () => {
-    const rows = table.getFilteredSelectedRowModel().rows;
-    const ids = rows.map((row) => row.original.id);
-    setSelectedRows(ids);
-    setIsDeleteDialogOpen(true);
-  };
-
-  const handleConfirmDelete = async () => {
-    try {
-      const success = await onBulkDelete(selectedRows);
-
+      const success = await onDelete(singleDeleteId);
       if (success) {
-        toast({
-          title: "Success",
-          description: `${selectedRows.length} testimonial(s) deleted successfully`,
-        });
-        setRowSelection({});
-      } else {
-        toast({
-          title: "Error",
-          description: "Failed to delete testimonials",
-          variant: "destructive",
-        });
+        setSingleDeleteId(null);
       }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "An error occurred while deleting testimonials",
-        variant: "destructive",
-      });
     }
-    setIsDeleteDialogOpen(false);
   };
 
   const columns: ColumnDef<Testimonial>[] = [
@@ -300,19 +217,8 @@ export function TestimonialDataTable({
                 const selectedRows = table.getFilteredSelectedRowModel().rows;
                 const selectedIds = selectedRows.map((row) => row.original.id);
                 const success = await onBulkDelete(selectedIds);
-
                 if (success) {
-                  toast({
-                    title: "Success",
-                    description: `${selectedIds.length} testimonial(s) deleted successfully`,
-                  });
                   setRowSelection({});
-                } else {
-                  toast({
-                    title: "Error",
-                    description: "Failed to delete testimonials",
-                    variant: "destructive",
-                  });
                 }
               }}
               className="bg-destructive text-destructive-foreground"

@@ -20,7 +20,6 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useTestimonials } from "@/hooks/testimonial-hooks";
-import { useToast } from "@/hooks/use-toast";
 import {
   testimonialFormSchema,
   TestimonialFormValues,
@@ -38,7 +37,6 @@ export default function EditTestimonialPage({
 }) {
   const router = useRouter();
   const { updateTestimonial, fetchTestimonialById } = useTestimonials();
-  const { toast } = useToast();
   const resolvedParams = use(params);
 
   const form = useForm<TestimonialFormValues>({
@@ -71,35 +69,16 @@ export default function EditTestimonialPage({
   }, [resolvedParams.id, form]);
 
   const onSubmit = async (data: TestimonialFormValues) => {
-    try {
-      const success = await updateTestimonial(
-        resolvedParams.id,
-        data.name,
-        data.email,
-        data.relation,
-        data.message,
-        data.isApproved
-      );
-
-      if (success) {
-        toast({
-          title: "Success",
-          description: "Testimonial updated successfully",
-        });
-        router.push("/protected/testimonial");
-      } else {
-        toast({
-          title: "Error",
-          description: "Failed to update testimonial",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred",
-        variant: "destructive",
-      });
+    const success = await updateTestimonial(
+      resolvedParams.id,
+      data.name,
+      data.email,
+      data.relation,
+      data.message,
+      data.isApproved
+    );
+    if (success) {
+      router.push("/protected/testimonial");
     }
   };
 

@@ -1,21 +1,38 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useTechnologies } from "@/hooks/technology-hooks";
+import {
+  technologyFormSchema,
+  TechnologyFormValues,
+} from "@/lib/validations/technology-validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function CreateTechnologyPage() {
-  const [name, setName] = useState("");
-  const [icon, setIcon] = useState("");
   const router = useRouter();
   const { createTechnology } = useTechnologies();
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const success = await createTechnology(name, icon);
+  const form = useForm<TechnologyFormValues>({
+    resolver: zodResolver(technologyFormSchema),
+    defaultValues: {
+      name: "",
+      icon: "",
+    },
+  });
+
+  async function onSubmit(data: TechnologyFormValues) {
+    const success = await createTechnology(data.name, data.icon);
     if (success) {
       router.push("/protected/technology");
     }
@@ -26,36 +43,54 @@ export default function CreateTechnologyPage() {
       <h1 className="text-3xl font-bold tracking-tight mb-8">
         Create New Technology
       </h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Technology name"
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Technology name" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="icon">Icon URL</Label>
-          <Input
-            id="icon"
-            value={icon}
-            onChange={(e) => setIcon(e.target.value)}
-            placeholder="Icon URL"
+
+          <FormField
+            control={form.control}
+            name="icon"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Icon Class</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="e.g. devicon-react-original" />
+                </FormControl>
+                <FormMessage />
+                <p className="text-sm text-muted-foreground">
+                  Enter the icon class from the icon library (e.g., Devicon,
+                  Font Awesome)
+                </p>
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="flex gap-4">
-          <Button type="submit">Save Technology</Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push("/protected/technology")}
-          >
-            Cancel
-          </Button>
-        </div>
-      </form>
+
+          <div className="flex gap-4">
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? "Saving..." : "Save Technology"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.push("/protected/technology")}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }

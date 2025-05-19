@@ -20,14 +20,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useToast } from "@/hooks/use-toast";
 
 export default function EditCertificatePage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { toast } = useToast();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const router = useRouter();
   const { updateCertificate, fetchCertificateById } = useCertificates();
@@ -68,17 +66,7 @@ export default function EditCertificatePage({
       data.certificateImage || null
     );
     if (success) {
-      toast({
-        title: "Success",
-        description: "Certificate updated successfully",
-      });
       router.push("/protected/certificate");
-    } else {
-      toast({
-        title: "Error",
-        description: "Failed to update certificate",
-        variant: "destructive",
-      });
     }
   }
 

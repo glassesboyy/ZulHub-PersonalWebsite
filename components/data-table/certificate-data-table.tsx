@@ -22,7 +22,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useToast } from "@/hooks/use-toast";
 import { Certificate } from "@/types/certificate";
 import {
   ColumnDef,
@@ -51,7 +50,6 @@ export function CertificateDataTable({
   onDelete,
   onBulkDelete,
 }: CertificateDataTableProps) {
-  const { toast } = useToast();
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
     null
   );
@@ -69,28 +67,10 @@ export function CertificateDataTable({
 
   const handleSingleDelete = async () => {
     if (singleDeleteId) {
-      try {
-        const success = await onDelete(singleDeleteId);
-        if (success) {
-          toast({
-            title: "Success",
-            description: "Certificate deleted successfully",
-          });
-        } else {
-          toast({
-            title: "Error",
-            description: "Failed to delete certificate",
-            variant: "destructive",
-          });
-        }
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "An error occurred while deleting certificate",
-          variant: "destructive",
-        });
+      const success = await onDelete(singleDeleteId);
+      if (success) {
+        setSingleDeleteId(null);
       }
-      setSingleDeleteId(null);
     }
   };
 
@@ -249,19 +229,8 @@ export function CertificateDataTable({
                 const selectedRows = table.getFilteredSelectedRowModel().rows;
                 const selectedIds = selectedRows.map((row) => row.original.id);
                 const success = await onBulkDelete(selectedIds);
-
                 if (success) {
-                  toast({
-                    title: "Success",
-                    description: `${selectedIds.length} certificate(s) deleted successfully`,
-                  });
                   setRowSelection({});
-                } else {
-                  toast({
-                    title: "Error",
-                    description: "Failed to delete certificates",
-                    variant: "destructive",
-                  });
                 }
               }}
               className="bg-destructive text-destructive-foreground"

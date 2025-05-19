@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useTestimonials } from "@/hooks/testimonial-hooks";
-import { useToast } from "@/hooks/use-toast";
 import {
   testimonialFormSchema,
   TestimonialFormValues,
@@ -32,7 +31,6 @@ import { useForm } from "react-hook-form";
 export default function CreateTestimonialPage() {
   const router = useRouter();
   const { createTestimonial } = useTestimonials();
-  const { toast } = useToast();
 
   const form = useForm<TestimonialFormValues>({
     mode: "onBlur",
@@ -48,34 +46,14 @@ export default function CreateTestimonialPage() {
   });
 
   const onSubmit = async (data: TestimonialFormValues) => {
-    try {
-      const success = await createTestimonial(
-        data.name,
-        data.email,
-        data.relation,
-        data.message
-      );
-
-      if (success) {
-        toast({
-          title: "Success",
-          description: "Testimonial created successfully",
-        });
-        router.push("/protected/testimonial");
-      } else {
-        toast({
-          title: "Error",
-          description: "Failed to create testimonial",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred",
-        variant: "destructive",
-      });
+    const success = await createTestimonial(
+      data.name,
+      data.email,
+      data.relation,
+      data.message
+    );
+    if (success) {
+      router.push("/protected/testimonial");
     }
   };
 

@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -29,8 +40,8 @@ import * as React from "react";
 
 interface TechnologyDataTableProps {
   data: Technology[];
-  onDelete: (id: number) => void;
-  onBulkDelete: (ids: number[]) => void;
+  onDelete: (id: number) => Promise<boolean>;
+  onBulkDelete: (ids: number[]) => Promise<boolean>;
 }
 
 export function TechnologyDataTable({
@@ -38,16 +49,20 @@ export function TechnologyDataTable({
   onDelete,
   onBulkDelete,
 }: TechnologyDataTableProps) {
+  const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
+    null
+  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const handleBulkDelete = () => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows;
-    const selectedIds = selectedRows.map((row) => row.original.id);
-    onBulkDelete(selectedIds);
+  const handleSingleDelete = async () => {
+    if (singleDeleteId) {
+      await onDelete(singleDeleteId);
+      setSingleDeleteId(null);
+    }
   };
 
   const columns: ColumnDef<Technology>[] = [
@@ -116,7 +131,7 @@ export function TechnologyDataTable({
             <Button
               variant="destructive"
               size="sm"
-              onClick={() => onDelete(tech.id)}
+              onClick={() => setSingleDeleteId(tech.id)}
             >
               Delete
             </Button>
@@ -145,24 +160,79 @@ export function TechnologyDataTable({
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-4 py-4">
-        <Input
-          placeholder="Filter names..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={handleBulkDelete}
-          disabled={table.getFilteredSelectedRowModel().rows.length === 0}
-        >
-          Delete Selected
-        </Button>
-      </div>
+      <AlertDialog>
+        <div className="flex items-center justify-between gap-4 py-4">
+          <Input
+            placeholder="Filter names..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="destructive"
+              size="sm"
+              disabled={table.getFilteredSelectedRowModel().rows.length === 0}
+            >
+              Delete Selected
+            </Button>
+          </AlertDialogTrigger>
+        </div>
+
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action will permanently delete{" "}
+              {table.getFilteredSelectedRowModel().rows.length} selected
+              technology(ies). This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                const selectedRows = table.getFilteredSelectedRowModel().rows;
+                const selectedIds = selectedRows.map((row) => row.original.id);
+                const success = await onBulkDelete(selectedIds);
+                if (success) {
+                  setRowSelection({});
+                }
+              }}
+              className="bg-destructive text-destructive-foreground"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={!!singleDeleteId}
+        onOpenChange={() => setSingleDeleteId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this
+              technology.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleSingleDelete}
+              className="bg-destructive text-destructive-foreground"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>

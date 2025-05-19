@@ -1,8 +1,10 @@
+import { useToast } from "@/hooks/use-toast";
 import { Certificate } from "@/types/certificate";
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
 
 export function useCertificates() {
+  const { toast } = useToast();
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const supabase = createClient();
 
@@ -51,19 +53,39 @@ export function useCertificates() {
   const createCertificate = async (title: string, imageFile: File) => {
     try {
       const imageUrl = await uploadImage(imageFile);
-      if (!imageUrl) return false;
+      if (!imageUrl) {
+        toast({
+          title: "Error",
+          description: "Failed to upload image",
+          variant: "destructive",
+        });
+        return false;
+      }
 
       const { error } = await supabase
         .from("certificates")
         .insert([{ title, certificate_image: imageUrl }]);
 
       if (error) {
-        console.error("Error creating certificate:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to create certificate",
+          variant: "destructive",
+        });
         return false;
       }
+
+      toast({
+        title: "Success",
+        description: "Certificate created successfully",
+      });
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -74,7 +96,14 @@ export function useCertificates() {
       
       if (imageFile) {
         imageUrl = await uploadImage(imageFile);
-        if (!imageUrl) return false;
+        if (!imageUrl) {
+          toast({
+            title: "Error",
+            description: "Failed to upload image",
+            variant: "destructive",
+          });
+          return false;
+        }
       }
 
       const updateData = {
@@ -88,12 +117,25 @@ export function useCertificates() {
         .eq("id", id);
 
       if (error) {
-        console.error("Error updating certificate:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to update certificate",
+          variant: "destructive",
+        });
         return false;
       }
+
+      toast({
+        title: "Success",
+        description: "Certificate updated successfully",
+      });
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -116,6 +158,11 @@ export function useCertificates() {
 
       if (storageError) {
         console.error("Error deleting image from storage:", storageError.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete certificate",
+          variant: "destructive",
+        });
         return false;
       }
 
@@ -127,13 +174,26 @@ export function useCertificates() {
 
       if (dbError) {
         console.error("Error deleting certificate:", dbError.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete certificate",
+          variant: "destructive",
+        });
         return false;
       }
 
       await fetchCertificates();
+      toast({
+        title: "Success",
+        description: "Certificate deleted successfully",
+      });
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -165,14 +225,26 @@ export function useCertificates() {
         .in("id", ids);
 
       if (error) {
-        console.error("Error deleting certificates:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete certificates",
+          variant: "destructive",
+        });
         return false;
       }
       
       await fetchCertificates();
+      toast({
+        title: "Success",
+        description: `${ids.length} certificate(s) deleted successfully`,
+      });
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };

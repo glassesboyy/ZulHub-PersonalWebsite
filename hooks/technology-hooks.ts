@@ -1,8 +1,10 @@
+import { useToast } from "@/hooks/use-toast";
 import { Technology } from "@/types/technology";
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
 
 export function useTechnologies() {
+  const { toast } = useToast();  // Add this
   const [technologies, setTechnologies] = useState<Technology[]>([]);
   const supabase = createClient();
 
@@ -30,12 +32,26 @@ export function useTechnologies() {
 
       if (error) {
         console.error("Error creating technology:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to create technology",
+          variant: "destructive",
+        });
         return false;
       }
       await fetchTechnologies();
+      toast({
+        title: "Success",
+        description: "Technology created successfully",
+      });
       return true;
     } catch (error) {
       console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -49,11 +65,26 @@ export function useTechnologies() {
 
       if (error) {
         console.error("Error updating technology:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to update technology",
+          variant: "destructive",
+        });
         return false;
       }
+      await fetchTechnologies();
+      toast({
+        title: "Success",
+        description: "Technology updated successfully",
+      });
       return true;
     } catch (error) {
       console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -66,12 +97,26 @@ export function useTechnologies() {
         .eq("id", id);
       if (error) {
         console.error("Error deleting technology:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete technology",
+          variant: "destructive",
+        });
         return false;
       }
       await fetchTechnologies();
+      toast({
+        title: "Success",
+        description: "Technology deleted successfully",
+      });
       return true;
     } catch (error) {
       console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -104,13 +149,27 @@ export function useTechnologies() {
 
       if (error) {
         console.error("Error deleting technologies:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete technologies",
+          variant: "destructive",
+        });
         return false;
       }
       
       await fetchTechnologies();
+      toast({
+        title: "Success",
+        description: `${ids.length} technology(ies) deleted successfully`,
+      });
       return true;
     } catch (error) {
       console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };

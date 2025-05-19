@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import { Testimonial, TestimonialRelation } from "@/types/testimonials";
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
@@ -5,6 +6,7 @@ import { useState } from "react";
 export function useTestimonials() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const supabase = createClient();
+  const { toast } = useToast();
 
   const fetchTestimonials = async () => {
     try {
@@ -29,32 +31,31 @@ export function useTestimonials() {
     message: string
   ) => {
     try {
-      const testimonialData = {
-        name,
-        email,
-        relation,
-        message,
-        is_approved: false,
-      };
-
-      console.log("Creating testimonial with:", testimonialData);
-
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("testimonials")
-        .insert([testimonialData])
-        .select()
-        .single();
+        .insert([{ name, email, relation, message, is_approved: false }]);
 
       if (error) {
-        console.error("Supabase Error:", error);
+        toast({
+          title: "Error",
+          description: "Failed to create testimonial",
+          variant: "destructive",
+        });
         return false;
       }
 
-      console.log("Created testimonial:", data);
+      toast({
+        title: "Success",
+        description: "Testimonial created successfully",
+      });
       await fetchTestimonials();
       return true;
     } catch (error) {
-      console.error("Error in createTestimonial:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -68,27 +69,32 @@ export function useTestimonials() {
     isApproved: boolean
   ) => {
     try {
-      const updateData = {
-        name,
-        email,
-        relation,
-        message,
-        is_approved: isApproved,
-      };
-
       const { error } = await supabase
         .from("testimonials")
-        .update(updateData)
+        .update({ name, email, relation, message, is_approved: isApproved })
         .eq("id", id);
 
       if (error) {
-        console.error("Error updating testimonial:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to update testimonial",
+          variant: "destructive",
+        });
         return false;
       }
+      
+      toast({
+        title: "Success",
+        description: "Testimonial updated successfully",
+      });
       await fetchTestimonials();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -101,13 +107,26 @@ export function useTestimonials() {
         .eq("id", id);
 
       if (error) {
-        console.error("Error deleting testimonial:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete testimonial",
+          variant: "destructive",
+        });
         return false;
       }
+
+      toast({
+        title: "Success",
+        description: "Testimonial deleted successfully",
+      });
       await fetchTestimonials();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -120,13 +139,26 @@ export function useTestimonials() {
         .in("id", ids);
 
       if (error) {
-        console.error("Error deleting testimonials:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete testimonials",
+          variant: "destructive",
+        });
         return false;
       }
+
+      toast({
+        title: "Success",
+        description: `${ids.length} testimonial(s) deleted successfully`,
+      });
       await fetchTestimonials();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -139,13 +171,26 @@ export function useTestimonials() {
         .eq("id", id);
 
       if (error) {
-        console.error("Error toggling approval:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to toggle approval status",
+          variant: "destructive",
+        });
         return false;
       }
+
+      toast({
+        title: "Success",
+        description: `Testimonial ${!currentStatus ? 'approved' : 'unapproved'} successfully`,
+      });
       await fetchTestimonials();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
