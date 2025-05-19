@@ -53,14 +53,6 @@ export default function EditCertificatePage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resolvedParams.id, form]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      form.setValue("certificateImage", file);
-      setPreviewUrl(URL.createObjectURL(file));
-    }
-  };
-
   async function onSubmit(data: CertificateFormValues) {
     const success = await updateCertificate(
       resolvedParams.id,

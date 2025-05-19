@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { FileInput } from "@/components/ui/file-input";
 import {
   Form,
   FormControl,
@@ -22,7 +23,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FileInput } from "@/components/ui/file-input";
 
 export default function CreateProfilePage() {
   const router = useRouter();
@@ -121,7 +121,7 @@ export default function CreateProfilePage() {
           <FormField
             control={form.control}
             name="avatarFile"
-            render={({ field: { value, onChange, ...field } }) => (
+            render={({ field: { onChange, ...field } }) => (
               <FormItem>
                 <FormLabel>Avatar Image</FormLabel>
                 <FormControl>
@@ -155,7 +155,7 @@ export default function CreateProfilePage() {
           <FormField
             control={form.control}
             name="cvFile"
-            render={({ field: { value, onChange, ...field } }) => (
+            render={({ field: { onChange, ...field } }) => (
               <FormItem>
                 <FormLabel>CV File</FormLabel>
                 <FormControl>

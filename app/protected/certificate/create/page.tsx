@@ -34,14 +34,6 @@ export default function CreateCertificatePage() {
     },
   });
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      form.setValue("certificateImage", file);
-      setPreviewUrl(URL.createObjectURL(file));
-    }
-  };
-
   async function onSubmit(data: CertificateFormValues) {
     if (!data.certificateImage) {
       form.setError("certificateImage", {
