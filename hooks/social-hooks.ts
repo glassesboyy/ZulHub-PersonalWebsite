@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import { Social } from "@/types/socials";
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
@@ -5,6 +6,7 @@ import { useState } from "react";
 export function useSocials() {
   const [socials, setSocials] = useState<Social[]>([]);
   const supabase = createClient();
+  const { toast } = useToast();
 
   const fetchSocials = async () => {
     try {
@@ -34,13 +36,26 @@ export function useSocials() {
         .insert([{ name, description, link, icon }]);
 
       if (error) {
-        console.error("Error creating social:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to create social media",
+          variant: "destructive",
+        });
         return false;
       }
+
+      toast({
+        title: "Success",
+        description: "Social media created successfully",
+      });
       await fetchSocials();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -59,12 +74,25 @@ export function useSocials() {
         .eq("id", id);
 
       if (error) {
-        console.error("Error updating social:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to update social media",
+          variant: "destructive",
+        });
         return false;
       }
+
+      toast({
+        title: "Success",
+        description: "Social media updated successfully",
+      });
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -74,13 +102,26 @@ export function useSocials() {
       const { error } = await supabase.from("socials").delete().eq("id", id);
 
       if (error) {
-        console.error("Error deleting social:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete social media",
+          variant: "destructive",
+        });
         return false;
       }
+
+      toast({
+        title: "Success",
+        description: "Social media deleted successfully",
+      });
       await fetchSocials();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -109,13 +150,26 @@ export function useSocials() {
       const { error } = await supabase.from("socials").delete().in("id", ids);
 
       if (error) {
-        console.error("Error deleting socials:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete social media items",
+          variant: "destructive",
+        });
         return false;
       }
+
+      toast({
+        title: "Success",
+        description: `${ids.length} social media item(s) deleted successfully`,
+      });
       await fetchSocials();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
       return false;
     }
   };

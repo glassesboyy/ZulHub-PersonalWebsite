@@ -1,104 +1,149 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useSocials } from "@/hooks/social-hooks";
+import {
+  socialFormSchema,
+  SocialFormValues,
+} from "@/lib/validations/social-validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { use, useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 export default function EditSocialPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [link, setLink] = useState("");
-  const [icon, setIcon] = useState("");
   const router = useRouter();
   const { updateSocial, fetchSocialById } = useSocials();
   const resolvedParams = use(params);
+
+  const form = useForm<SocialFormValues>({
+    mode: "onBlur",
+    resolver: zodResolver(socialFormSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      link: "",
+      icon: "",
+    },
+  });
 
   useEffect(() => {
     async function loadSocial() {
       const social = await fetchSocialById(resolvedParams.id);
       if (social) {
-        setName(social.name);
-        setDescription(social.description);
-        setLink(social.link);
-        setIcon(social.icon);
+        form.reset({
+          name: social.name,
+          description: social.description,
+          link: social.link,
+          icon: social.icon,
+        });
       }
     }
     loadSocial();
-  }, [resolvedParams.id, fetchSocialById]);
+  }, [resolvedParams.id, form, fetchSocialById]);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const onSubmit = async (data: SocialFormValues) => {
     const success = await updateSocial(
       resolvedParams.id,
-      name,
-      description,
-      link,
-      icon,
+      data.name,
+      data.description,
+      data.link,
+      data.icon
     );
     if (success) {
       router.push("/protected/social");
     }
-  }
+  };
 
   return (
     <div className="container max-w-2xl py-10">
       <h1 className="text-3xl font-bold tracking-tight mb-8">
         Edit Social Media
       </h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Similar form fields as create page */}
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={4}
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea {...field} rows={4} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="link">Link</Label>
-          <Input
-            id="link"
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
+          <FormField
+            control={form.control}
+            name="link"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Link</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="icon">Icon</Label>
-          <Input
-            id="icon"
-            value={icon}
-            onChange={(e) => setIcon(e.target.value)}
+          <FormField
+            control={form.control}
+            name="icon"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Icon Class</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="e.g. fab fa-github" />
+                </FormControl>
+                <FormMessage />
+                <p className="text-sm text-muted-foreground">
+                  Enter the icon class from Font Awesome or similar icon library
+                  (e.g., fab fa-github, fab fa-linkedin)
+                </p>
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="flex gap-4">
-          <Button type="submit">Update Social Media</Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push("/protected/social")}
-          >
-            Cancel
-          </Button>
-        </div>
-      </form>
+          <div className="flex gap-4">
+            <Button type="submit">Update Social Media</Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.push("/protected/social")}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }

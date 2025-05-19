@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -40,7 +51,7 @@ export function SocialDataTable({
 }: SocialDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
   const [rowSelection, setRowSelection] = React.useState({});
 
@@ -139,13 +150,28 @@ export function SocialDataTable({
                 Edit
               </Button>
             </Link>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => onDelete(social.id)}
-            >
-              Delete
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm">
+                  Delete
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    the social media item.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => onDelete(social.id)}>
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         );
       },
@@ -180,14 +206,33 @@ export function SocialDataTable({
           }
           className="max-w-sm"
         />
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={handleBulkDelete}
-          disabled={table.getFilteredSelectedRowModel().rows.length === 0}
-        >
-          Delete Selected
-        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="destructive"
+              size="sm"
+              disabled={table.getFilteredSelectedRowModel().rows.length === 0}
+            >
+              Delete Selected
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action will permanently delete{" "}
+                {table.getFilteredSelectedRowModel().rows.length} selected
+                social(s). This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleBulkDelete}>
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -200,7 +245,7 @@ export function SocialDataTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 ))}
@@ -215,7 +260,7 @@ export function SocialDataTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}
