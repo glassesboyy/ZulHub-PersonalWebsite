@@ -121,7 +121,7 @@ export default function CreateProfilePage() {
           <FormField
             control={form.control}
             name="avatarFile"
-            render={({ field: { onChange, ...field } }) => (
+            render={({ field: { onChange } }) => (
               <FormItem>
                 <FormLabel>Avatar Image</FormLabel>
                 <FormControl>
@@ -133,7 +133,6 @@ export default function CreateProfilePage() {
                         setAvatarPreview(URL.createObjectURL(file));
                       }
                     }}
-                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -155,14 +154,13 @@ export default function CreateProfilePage() {
           <FormField
             control={form.control}
             name="cvFile"
-            render={({ field: { onChange, ...field } }) => (
+            render={({ field: { onChange } }) => (
               <FormItem>
                 <FormLabel>CV File</FormLabel>
                 <FormControl>
                   <FileInput
                     accept=".pdf,.doc,.docx"
                     onChange={(file) => onChange(file)}
-                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
