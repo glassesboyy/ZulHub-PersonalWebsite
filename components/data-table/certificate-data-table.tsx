@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -11,6 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
 import { Certificate } from "@/types/certificate";
 import {
   ColumnDef,
@@ -30,8 +42,8 @@ import * as React from "react";
 
 interface CertificateDataTableProps {
   data: Certificate[];
-  onDelete: (id: number) => void;
-  onBulkDelete: (ids: number[]) => void;
+  onDelete: (id: number) => Promise<boolean>; // Update return type
+  onBulkDelete: (ids: number[]) => Promise<boolean>; // Update return type
 }
 
 export function CertificateDataTable({
@@ -39,6 +51,10 @@ export function CertificateDataTable({
   onDelete,
   onBulkDelete,
 }: CertificateDataTableProps) {
+  const { toast } = useToast();
+  const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
+    null
+  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -49,6 +65,33 @@ export function CertificateDataTable({
     const selectedRows = table.getFilteredSelectedRowModel().rows;
     const selectedIds = selectedRows.map((row) => row.original.id);
     onBulkDelete(selectedIds);
+  };
+
+  const handleSingleDelete = async () => {
+    if (singleDeleteId) {
+      try {
+        const success = await onDelete(singleDeleteId);
+        if (success) {
+          toast({
+            title: "Success",
+            description: "Certificate deleted successfully",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: "Failed to delete certificate",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "An error occurred while deleting certificate",
+          variant: "destructive",
+        });
+      }
+      setSingleDeleteId(null);
+    }
   };
 
   const columns: ColumnDef<Certificate>[] = [
@@ -139,7 +182,7 @@ export function CertificateDataTable({
             <Button
               variant="destructive"
               size="sm"
-              onClick={() => onDelete(certificate.id)}
+              onClick={() => setSingleDeleteId(certificate.id)}
             >
               Delete
             </Button>
@@ -168,24 +211,92 @@ export function CertificateDataTable({
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-4 py-4">
-        <Input
-          placeholder="Filter titles..."
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={handleBulkDelete}
-          disabled={table.getFilteredSelectedRowModel().rows.length === 0}
-        >
-          Delete Selected
-        </Button>
-      </div>
+      {/* AlertDialog untuk bulk delete */}
+      <AlertDialog>
+        <div className="flex items-center justify-between gap-4 py-4">
+          <Input
+            placeholder="Filter titles..."
+            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("title")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="destructive"
+              size="sm"
+              disabled={table.getFilteredSelectedRowModel().rows.length === 0}
+            >
+              Delete Selected
+            </Button>
+          </AlertDialogTrigger>
+        </div>
+
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action will permanently delete{" "}
+              {table.getFilteredSelectedRowModel().rows.length} selected
+              certificate(s). This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                const selectedRows = table.getFilteredSelectedRowModel().rows;
+                const selectedIds = selectedRows.map((row) => row.original.id);
+                const success = await onBulkDelete(selectedIds);
+
+                if (success) {
+                  toast({
+                    title: "Success",
+                    description: `${selectedIds.length} certificate(s) deleted successfully`,
+                  });
+                  setRowSelection({});
+                } else {
+                  toast({
+                    title: "Error",
+                    description: "Failed to delete certificates",
+                    variant: "destructive",
+                  });
+                }
+              }}
+              className="bg-destructive text-destructive-foreground"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* AlertDialog untuk single delete */}
+      <AlertDialog
+        open={!!singleDeleteId}
+        onOpenChange={() => setSingleDeleteId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this
+              certificate.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleSingleDelete}
+              className="bg-destructive text-destructive-foreground"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>

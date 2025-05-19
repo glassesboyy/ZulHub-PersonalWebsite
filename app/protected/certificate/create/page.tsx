@@ -20,8 +20,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useToast } from "@/hooks/use-toast";
 
 export default function CreateCertificatePage() {
+  const { toast } = useToast();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const router = useRouter();
   const { createCertificate } = useCertificates();
@@ -52,7 +54,17 @@ export default function CreateCertificatePage() {
 
     const success = await createCertificate(data.title, data.certificateImage);
     if (success) {
+      toast({
+        title: "Success",
+        description: "Certificate created successfully",
+      });
       router.push("/protected/certificate");
+    } else {
+      toast({
+        title: "Error",
+        description: "Failed to create certificate",
+        variant: "destructive",
+      });
     }
   }
 
