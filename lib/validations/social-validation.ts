@@ -15,12 +15,11 @@ const socialSchema = z.object({
     .max(255, "Link must not exceed 255 characters"),
   icon: z
     .string()
-    .min(1, "Icon class is required")
+    .min(1, "Icon name is required")
     .regex(
-      /^[a-zA-Z0-9\-\s]+$/,
-      "Invalid icon class format. Use only letters, numbers, spaces and hyphens",
-    )
-    .max(100, "Icon class must not exceed 100 characters"),
+      /^Icon[A-Za-z]+$/,
+      "Invalid icon name format. Must start with 'Icon' followed by letters (e.g., IconBrandGithub)"
+    ),
 });
 
 export type SocialFormValues = z.infer<typeof socialSchema>;

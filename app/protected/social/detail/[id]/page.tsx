@@ -3,8 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { useSocials } from "@/hooks/social-hooks";
 import { Social } from "@/types/socials";
+import * as TablerIcons from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
+
+// Add this type helper
+type IconKey = keyof typeof TablerIcons;
 
 export default function SocialDetailPage({
   params,
@@ -28,6 +32,13 @@ export default function SocialDetailPage({
 
   if (!social) return <div>Loading...</div>;
 
+  // Get the icon component
+  const IconComponent = TablerIcons[
+    social.icon as IconKey
+  ] as React.ComponentType<{
+    size: number;
+  }>;
+
   return (
     <div className="container max-w-2xl py-10">
       <h1 className="text-3xl font-bold tracking-tight mb-8">
@@ -37,7 +48,7 @@ export default function SocialDetailPage({
         <div>
           <h2 className="text-xl font-semibold mb-2">{social.name}</h2>
           <p className="text-gray-600 mb-4">{social.description}</p>
-          <div className="space-y-2">
+          <div className="space-y-4">
             <p>
               <span className="font-medium">Link: </span>
               <a
@@ -49,10 +60,15 @@ export default function SocialDetailPage({
                 {social.link}
               </a>
             </p>
-            <p>
+            <div className="flex items-center gap-2">
               <span className="font-medium">Icon: </span>
-              {social.icon}
-            </p>
+              {IconComponent && (
+                <div className="flex items-center gap-2">
+                  <IconComponent size={24} />
+                  <span className="text-gray-600">{social.icon}</span>
+                </div>
+              )}
+            </div>
             <p>
               <span className="font-medium">Created: </span>
               {new Date(social.created_at).toLocaleDateString()}

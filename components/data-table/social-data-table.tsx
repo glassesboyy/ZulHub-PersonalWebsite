@@ -23,6 +23,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Social } from "@/types/socials";
+import * as TablerIcons from "@tabler/icons-react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -37,6 +38,10 @@ import {
 import { ArrowUpDown } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
+
+// Add this type helper
+type TablerIconComponent = keyof typeof TablerIcons;
+type IconKey = keyof typeof TablerIcons;
 
 interface SocialDataTableProps {
   data: Social[];
@@ -127,9 +132,16 @@ export function SocialDataTable({
     {
       accessorKey: "icon",
       header: "Icon",
-      cell: ({ row }) => (
-        <div className="max-w-[200px] truncate">{row.original.icon}</div>
-      ),
+      cell: ({ row }) => {
+        const IconComponent = TablerIcons[
+          row.original.icon as IconKey
+        ] as React.ComponentType<{ size: number }>;
+        return (
+          <div className="flex items-center">
+            {IconComponent && <IconComponent size={24} />}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "created_at",

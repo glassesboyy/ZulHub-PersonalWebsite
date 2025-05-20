@@ -37,6 +37,7 @@ import {
 import { ArrowUpDown } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
+import * as Si from "react-icons/si";
 
 interface TechnologyDataTableProps {
   data: Technology[];
@@ -99,10 +100,15 @@ export function TechnologyDataTable({
     },
     {
       accessorKey: "icon",
-      header: "Icon URL",
-      cell: ({ row }) => (
-        <div className="max-w-[300px] truncate">{row.original.icon}</div>
-      ),
+      header: "Icon",
+      cell: ({ row }) => {
+        const IconComponent = Si[row.original.icon as keyof typeof Si];
+        return (
+          <div className="flex items-center">
+            {IconComponent ? <IconComponent size={20} /> : null}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "created_at",

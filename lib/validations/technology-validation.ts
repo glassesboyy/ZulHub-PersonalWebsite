@@ -7,12 +7,11 @@ const technologySchema = z.object({
     .max(50, "Name must not exceed 50 characters"),
   icon: z
     .string()
-    .min(1, "Icon class is required")
+    .min(1, "Icon name is required")
     .regex(
-      /^[a-zA-Z0-9\-\s]+$/,
-      "Invalid icon class format. Use only letters, numbers, spaces and hyphens",
-    )
-    .max(100, "Icon class must not exceed 100 characters"),
+      /^Si[A-Za-z]+$/,
+      "Invalid icon name format. Must start with 'Si' followed by letters (e.g., SiJavascript)"
+    ),
 });
 
 export type TechnologyFormValues = z.infer<typeof technologySchema>;

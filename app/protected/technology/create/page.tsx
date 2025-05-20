@@ -64,14 +64,15 @@ export default function CreateTechnologyPage() {
             name="icon"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Icon Class</FormLabel>
+                <FormLabel>Icon Name</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="e.g. devicon-react-original" />
+                  <Input {...field} placeholder="e.g. SiJavascript" />
                 </FormControl>
                 <FormMessage />
                 <p className="text-sm text-muted-foreground">
-                  Enter the icon class from the icon library (e.g., Devicon,
-                  Font Awesome)
+                  Enter the icon name from react-icons/si (e.g., SiJavascript,
+                  SiReact, SiNextdotjs). The name must start with 'Si' followed
+                  by the technology name.
                 </p>
               </FormItem>
             )}

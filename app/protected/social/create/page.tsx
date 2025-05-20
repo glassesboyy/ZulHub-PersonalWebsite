@@ -105,14 +105,15 @@ export default function CreateSocialPage() {
             name="icon"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Icon Class</FormLabel>
+                <FormLabel>Icon Name</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="e.g. fab fa-github" />
+                  <Input {...field} placeholder="e.g. IconBrandGithub" />
                 </FormControl>
                 <FormMessage />
                 <p className="text-sm text-muted-foreground">
-                  Enter the icon class from Font Awesome or similar icon library
-                  (e.g., fab fa-github, fab fa-linkedin)
+                  Enter the icon name from @tabler/icons-react (e.g.,
+                  IconBrandGithub, IconBrandLinkedin, IconBrandInstagram). The
+                  name must start with 'Icon' followed by the icon name.
                 </p>
               </FormItem>
             )}
