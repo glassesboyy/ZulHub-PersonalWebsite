@@ -41,8 +41,8 @@ import * as React from "react";
 
 interface CertificateDataTableProps {
   data: Certificate[];
-  onDelete: (id: number) => Promise<boolean>; // Update return type
-  onBulkDelete: (ids: number[]) => Promise<boolean>; // Update return type
+  onDelete: (id: number) => Promise<boolean>;
+  onBulkDelete: (ids: number[]) => Promise<boolean>;
 }
 
 export function CertificateDataTable({
@@ -51,11 +51,11 @@ export function CertificateDataTable({
   onBulkDelete,
 }: CertificateDataTableProps) {
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
-    null,
+    null
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
   const [rowSelection, setRowSelection] = React.useState({});
 
@@ -209,11 +209,12 @@ export function CertificateDataTable({
 
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>Delete Selected Certificates</AlertDialogTitle>
             <AlertDialogDescription>
-              This action will permanently delete{" "}
+              You are about to permanently delete{" "}
               {table.getFilteredSelectedRowModel().rows.length} selected
-              certificate(s). This action cannot be undone.
+              certificate(s). This action is irreversible. Please confirm to
+              proceed.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -242,10 +243,10 @@ export function CertificateDataTable({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>Delete Certificate</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this
-              certificate.
+              Are you sure you want to delete this certificate? This action is
+              permanent and cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -271,7 +272,7 @@ export function CertificateDataTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 ))}
@@ -286,7 +287,7 @@ export function CertificateDataTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

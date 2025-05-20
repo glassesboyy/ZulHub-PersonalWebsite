@@ -1,11 +1,12 @@
+import { useToast } from "@/hooks/use-toast";
 import { Project } from "@/types/projects";
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
-import { Technology } from "@/types/technology";
 
 export function useProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const supabase = createClient();
+  const { toast } = useToast();
 
   const fetchProjects = async () => {
     try {
@@ -133,6 +134,11 @@ export function useProjects() {
           "Error deleting image from storage:",
           storageError.message,
         );
+        toast({
+          title: "Error",
+          description: "Failed to delete project",
+          variant: "destructive",
+        });
         return false;
       }
 
@@ -143,13 +149,27 @@ export function useProjects() {
 
       if (dbError) {
         console.error("Error deleting project:", dbError.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete project",
+          variant: "destructive",
+        });
         return false;
       }
 
+      toast({
+        title: "Success",
+        description: "Project deleted successfully",
+      });
       await fetchProjects();
       return true;
     } catch (error) {
       console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete project",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -174,13 +194,27 @@ export function useProjects() {
 
       if (error) {
         console.error("Error deleting projects:", error.message);
+        toast({
+          title: "Error",
+          description: "Failed to delete projects",
+          variant: "destructive",
+        });
         return false;
       }
 
+      toast({
+        title: "Success",
+        description: `${ids.length} project(s) deleted successfully`,
+      });
       await fetchProjects();
       return true;
     } catch (error) {
       console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete projects",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -241,7 +275,14 @@ export function useProjects() {
   ) => {
     try {
       const imageUrl = await uploadImage(imageFile);
-      if (!imageUrl) return false;
+      if (!imageUrl) {
+        toast({
+          title: "Error",
+          description: "Failed to upload image",
+          variant: "destructive",
+        });
+        return false;
+      }
 
       // Insert project
       const { data: project, error: projectError } = await supabase
@@ -266,10 +307,18 @@ export function useProjects() {
         if (techError) throw techError;
       }
 
+      toast({
+        title: "Success",
+        description: "Project created successfully",
+      });
       await fetchProjects();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create project",
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -287,7 +336,14 @@ export function useProjects() {
 
       if (imageFile) {
         const imageUrl = await uploadImage(imageFile);
-        if (!imageUrl) return false;
+        if (!imageUrl) {
+          toast({
+            title: "Error",
+            description: "Failed to upload image",
+            variant: "destructive",
+          });
+          return false;
+        }
         updateData.project_image = imageUrl;
       }
 
@@ -321,9 +377,17 @@ export function useProjects() {
         if (techError) throw techError;
       }
 
+      toast({
+        title: "Success",
+        description: "Project updated successfully",
+      });
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update project",
+        variant: "destructive",
+      });
       return false;
     }
   };

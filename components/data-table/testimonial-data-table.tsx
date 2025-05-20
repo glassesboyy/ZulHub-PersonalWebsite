@@ -40,8 +40,8 @@ import * as React from "react";
 
 interface TestimonialDataTableProps {
   data: Testimonial[];
-  onDelete: (id: number) => Promise<boolean>; // Update tipe return menjadi Promise<boolean>
-  onBulkDelete: (ids: number[]) => Promise<boolean>; // Update tipe return menjadi Promise<boolean>
+  onDelete: (id: number) => Promise<boolean>;
+  onBulkDelete: (ids: number[]) => Promise<boolean>;
   onToggleApproval: (id: number, currentStatus: boolean) => Promise<boolean>;
 }
 
@@ -52,11 +52,11 @@ export function TestimonialDataTable({
 }: TestimonialDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
   const [rowSelection, setRowSelection] = React.useState({});
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
-    null,
+    null
   );
 
   const handleSingleDelete = async () => {
@@ -203,11 +203,11 @@ export function TestimonialDataTable({
 
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>Delete Multiple Testimonials</AlertDialogTitle>
             <AlertDialogDescription>
-              This action will permanently delete{" "}
+              Are you sure you want to delete{" "}
               {table.getFilteredSelectedRowModel().rows.length} selected
-              testimonial(s). This action cannot be undone.
+              testimonial(s)? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -235,10 +235,10 @@ export function TestimonialDataTable({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>Delete Testimonial</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this
-              testimonial.
+              Are you sure you want to delete this testimonial? This action
+              cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -264,7 +264,7 @@ export function TestimonialDataTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 ))}
@@ -279,7 +279,7 @@ export function TestimonialDataTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

@@ -54,11 +54,21 @@ export function SocialDataTable({
     []
   );
   const [rowSelection, setRowSelection] = React.useState({});
+  const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
+    null
+  );
 
   const handleBulkDelete = () => {
     const selectedRows = table.getFilteredSelectedRowModel().rows;
     const selectedIds = selectedRows.map((row) => row.original.id);
     onBulkDelete(selectedIds);
+  };
+
+  const handleSingleDelete = () => {
+    if (singleDeleteId !== null) {
+      onDelete(singleDeleteId);
+      setSingleDeleteId(null);
+    }
   };
 
   const columns: ColumnDef<Social>[] = [
@@ -150,28 +160,13 @@ export function SocialDataTable({
                 Edit
               </Button>
             </Link>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm">
-                  Delete
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    the social media item.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => onDelete(social.id)}>
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setSingleDeleteId(social.id)}
+            >
+              Delete
+            </Button>
           </div>
         );
       },
@@ -301,6 +296,51 @@ export function SocialDataTable({
           Next
         </Button>
       </div>
+      <AlertDialog>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Multiple Social Links</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete{" "}
+              {table.getFilteredSelectedRowModel().rows.length} selected social
+              link(s)? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleBulkDelete}
+              className="bg-destructive text-destructive-foreground"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={!!singleDeleteId}
+        onOpenChange={() => setSingleDeleteId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Social Link</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this social link? This action
+              cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleSingleDelete}
+              className="bg-destructive text-destructive-foreground"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

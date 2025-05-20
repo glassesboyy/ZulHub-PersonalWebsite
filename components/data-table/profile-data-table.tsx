@@ -153,15 +153,18 @@ export function ProfileDataTable({
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogTitle>Delete Profile</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    the profile and associated files.
+                    Are you sure you want to delete this profile? This action
+                    cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => onDelete(profile.id)}>
+                  <AlertDialogAction
+                    onClick={() => onDelete(profile.id)}
+                    className="bg-destructive text-destructive-foreground"
+                  >
                     Delete
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -213,16 +216,19 @@ export function ProfileDataTable({
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogTitle>Delete Multiple Profiles</AlertDialogTitle>
               <AlertDialogDescription>
-                This action will permanently delete{" "}
+                Are you sure you want to delete{" "}
                 {table.getFilteredSelectedRowModel().rows.length} selected
-                profile(s). This action cannot be undone.
+                profile(s)? This action cannot be undone.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleBulkDelete}>
+              <AlertDialogAction
+                onClick={handleBulkDelete}
+                className="bg-destructive text-destructive-foreground"
+              >
                 Delete
               </AlertDialogAction>
             </AlertDialogFooter>

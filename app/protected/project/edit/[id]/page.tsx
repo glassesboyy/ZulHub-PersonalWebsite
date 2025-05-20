@@ -2,8 +2,16 @@
 
 import { ComboboxTechnologies } from "@/components/combobox-technologies";
 import { Button } from "@/components/ui/button";
+import { FileInput } from "@/components/ui/file-input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -13,27 +21,39 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useProjects } from "@/hooks/project-hooks";
+import {
+  ProjectFormValues,
+  projectSchema,
+} from "@/lib/validations/project-validation";
 import { Technology } from "@/types/technology";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function EditProjectPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [technologies, setTechnologies] = useState<Technology[]>([]);
-  const [selectedTechs, setSelectedTechs] = useState<Technology[]>([]);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const router = useRouter();
   const { updateProjectWithTechnologies, fetchProjectById, fetchTechnologies } =
     useProjects();
   const resolvedParams = use(params);
+
+  const form = useForm<ProjectFormValues>({
+    resolver: zodResolver(projectSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      status: "planned",
+      imageFile: null,
+      technologies: [],
+    },
+  });
 
   useEffect(() => {
     const loadData = async () => {
@@ -43,129 +63,175 @@ export default function EditProjectPage({
       ]);
 
       if (project) {
-        setName(project.name);
-        setDescription(project.description);
-        setStatus(project.status);
+        form.reset({
+          name: project.name,
+          description: project.description,
+          status: project.status,
+          technologies:
+            project.technologies?.map((t: Technology) => t.id) || [],
+        });
         setPreviewUrl(project.project_image);
-        if (project.technologies) {
-          setSelectedTechs(project.technologies);
-        }
       }
-
       setTechnologies(techs);
     };
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resolvedParams.id]);
+  }, [resolvedParams.id, form]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setImageFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
-    }
-  };
-
-  const handleTechSelect = (tech: Technology) => {
-    if (!selectedTechs.some((t) => t.id === tech.id)) {
-      setSelectedTechs([...selectedTechs, tech]);
-    }
-  };
-
-  const handleTechRemove = (techId: number) => {
-    setSelectedTechs(selectedTechs.filter((t) => t.id !== techId));
-  };
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const onSubmit = async (data: ProjectFormValues) => {
     const success = await updateProjectWithTechnologies(
       resolvedParams.id,
-      name,
-      description,
-      status,
-      imageFile,
-      selectedTechs.map((t) => t.id)
+      data.name,
+      data.description,
+      data.status,
+      data.imageFile as File | null,
+      data.technologies || []
     );
+
     if (success) {
       router.push("/protected/project");
     }
-  }
+  };
 
   return (
     <div className="container max-w-2xl py-10">
       <h1 className="text-3xl font-bold tracking-tight mb-8">Edit Project</h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="name">Project Name</Label>
-          <Input
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Project Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter project name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={4}
+
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Project description"
+                    rows={4}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="status">Status</Label>
-          <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="planned">Planned</SelectItem>
-              <SelectItem value="on process">On Process</SelectItem>
-              <SelectItem value="on hold">On Hold</SelectItem>
-              <SelectItem value="done">Done</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="image">Project Image</Label>
-          <Input
-            id="image"
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="cursor-pointer"
+
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="planned">Planned</SelectItem>
+                    <SelectItem value="on process">On Process</SelectItem>
+                    <SelectItem value="on hold">On Hold</SelectItem>
+                    <SelectItem value="done">Done</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          {previewUrl && (
-            <div className="mt-4 relative w-full h-[200px]">
-              <Image
-                src={previewUrl}
-                alt="Preview"
-                fill
-                style={{ objectFit: "contain" }}
-              />
-            </div>
-          )}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="technologies">Technologies</Label>
-          <ComboboxTechnologies
-            technologies={technologies}
-            selectedTechnologies={selectedTechs}
-            onSelect={handleTechSelect}
-            onRemove={handleTechRemove}
+
+          <FormField
+            control={form.control}
+            name="imageFile"
+            render={({ field: { onChange } }) => (
+              <FormItem>
+                <FormLabel>Project Image</FormLabel>
+                <FormControl>
+                  <FileInput
+                    accept="image/*"
+                    onChange={(file) => {
+                      onChange(file);
+                      if (file) {
+                        setPreviewUrl(URL.createObjectURL(file));
+                      }
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+                {previewUrl && (
+                  <div className="mt-2 relative w-full h-[200px]">
+                    <Image
+                      src={previewUrl}
+                      alt="Preview"
+                      fill
+                      style={{ objectFit: "contain" }}
+                    />
+                  </div>
+                )}
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="flex gap-4">
-          <Button type="submit">Update Project</Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push("/protected/project")}
-          >
-            Cancel
-          </Button>
-        </div>
-      </form>
+
+          <FormField
+            control={form.control}
+            name="technologies"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Technologies</FormLabel>
+                <FormControl>
+                  <ComboboxTechnologies
+                    technologies={technologies}
+                    selectedTechnologies={technologies.filter((tech) =>
+                      field.value?.includes(tech.id)
+                    )}
+                    onSelect={(tech) => {
+                      const currentIds = field.value || [];
+                      if (!currentIds.includes(tech.id)) {
+                        field.onChange([...currentIds, tech.id]);
+                      }
+                    }}
+                    onRemove={(techId) => {
+                      const currentIds = field.value || [];
+                      field.onChange(currentIds.filter((id) => id !== techId));
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="flex gap-4">
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? "Updating..." : "Update Project"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.push("/protected/project")}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }
