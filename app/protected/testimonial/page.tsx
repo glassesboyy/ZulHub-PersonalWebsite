@@ -21,7 +21,7 @@ export default function TestimonialPage() {
   }, []);
 
   return (
-    <div className="container max-w-7xl py-10">
+    <div className="container">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold tracking-tight">Testimonials</h1>
         <Link href="/protected/testimonial/create">
