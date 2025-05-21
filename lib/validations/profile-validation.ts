@@ -17,7 +17,6 @@ const profileSchema = z.object({
     .string()
     .min(50, "Bio must be at least 50 characters")
     .max(2000, "Bio must not exceed 2000 characters"),
-  isActive: z.boolean(),
   avatarFile: z.any()
     .refine(file => !file || (file instanceof File && file.size <= MAX_FILE_SIZE),
       'Avatar file size must be less than 5MB')

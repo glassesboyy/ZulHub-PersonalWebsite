@@ -1,7 +1,7 @@
 "use server";
 
-import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
+import { encodedRedirect } from "@/utils/utils";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -90,7 +90,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
   );
 };
 
-export const resetPasswordAction = async (formData: FormData) => {
+export async function resetPasswordAction(formData: FormData) {
   const supabase = await createClient();
 
   const password = formData.get("password") as string;
@@ -124,8 +124,8 @@ export const resetPasswordAction = async (formData: FormData) => {
     );
   }
 
-  encodedRedirect("success", "/protected/reset-password", "Password updated");
-};
+  return redirect("/protected/profile/reset-password?success=Password+updated");
+}
 
 export const signOutAction = async () => {
   const supabase = await createClient();

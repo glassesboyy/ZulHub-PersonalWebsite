@@ -78,15 +78,20 @@ export function ProtectedSidebar() {
   const [openSubmenu, setOpenSubmenu] = useState<string | null>("Manage");
 
   return (
-    <Sidebar>
-      <SidebarHeader className="border-b">
-        <h2 className="px-2 text-lg font-semibold tracking-tight">
-          Admin Panel
-        </h2>
+    <Sidebar className="border-r bg-gradient-to-b from-background to-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <SidebarHeader className="border-b px-6 py-4">
+        <div className="flex items-center gap-2">
+          <div className="h-7 w-7 rounded-lg p-1 bg-background border border-primary flex items-center justify-center">
+            <Star className="h-full w-full text-primary" />
+          </div>
+          <h2 className="text-xl font-bold tracking-tight">Admin Panel</h2>
+        </div>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="px-4">
         <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Menu
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -101,22 +106,27 @@ export function ProtectedSidebar() {
                         }
                         isActive={openSubmenu === item.title}
                         tooltip={item.title}
+                        className="group transition-colors hover:bg-accent"
                       >
-                        <item.icon />
+                        <item.icon className="transition-transform duration-200 group-hover:scale-110" />
                         <span>{item.title}</span>
                       </SidebarMenuButton>
                       {openSubmenu === item.title && (
-                        <SidebarMenuSub>
+                        <SidebarMenuSub className="animate-in slide-in-from-left-8">
                           {item.items.map((subItem) => (
                             <SidebarMenuItem key={subItem.href}>
                               <SidebarMenuButton
                                 asChild
                                 isActive={pathname === subItem.href}
                                 tooltip={subItem.title}
+                                className="group relative overflow-hidden transition-colors hover:bg-accent"
                               >
                                 <Link href={subItem.href}>
-                                  <subItem.icon />
+                                  <subItem.icon className="transition-transform duration-200 group-hover:scale-110" />
                                   <span>{subItem.title}</span>
+                                  {pathname === subItem.href && (
+                                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-primary/10 via-primary/20 to-transparent" />
+                                  )}
                                 </Link>
                               </SidebarMenuButton>
                             </SidebarMenuItem>
@@ -129,10 +139,14 @@ export function ProtectedSidebar() {
                       asChild
                       isActive={pathname === item.href}
                       tooltip={item.title}
+                      className="group relative overflow-hidden transition-colors hover:bg-accent"
                     >
                       <Link href={item.href!}>
-                        <item.icon />
+                        <item.icon className="transition-transform duration-200 group-hover:scale-110" />
                         <span>{item.title}</span>
+                        {pathname === item.href && (
+                          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-primary/10 via-primary/20 to-transparent" />
+                        )}
                       </Link>
                     </SidebarMenuButton>
                   )}
@@ -142,12 +156,16 @@ export function ProtectedSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t">
+      <SidebarFooter className="border-t p-4">
         <form action={signOutAction}>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton type="submit" tooltip="Sign Out">
-                <LogOut />
+              <SidebarMenuButton
+                type="submit"
+                tooltip="Sign Out"
+                className="group gap-4 bg-destructive text-destructive-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+              >
+                <LogOut className="transition-transform duration-200 group-hover:scale-110" />
                 <span>Sign Out</span>
               </SidebarMenuButton>
             </SidebarMenuItem>

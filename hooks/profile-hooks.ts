@@ -13,14 +13,17 @@ export function useProfiles() {
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
-        .order("created_at", { ascending: false });
+        .limit(1);
+      
       if (error) {
-        console.error("Error fetching profiles:", error.message);
-        return;
+        console.error("Error fetching profile:", error.message);
+        return [];
       }
       setProfiles(data || []);
+      return data;
     } catch (error) {
       console.error("Error:", error);
+      return [];
     }
   };
 
@@ -76,69 +79,23 @@ export function useProfiles() {
     }
   };
 
-  const createProfile = async (
-    name: string,
-    tagline: string,
-    bio: string,
-    cvFile: File,
-    avatarFile: File,
-    isActive: boolean,
-  ) => {
+  const deleteFile = async (url: string, bucket: 'cv-file' | 'avatar-image') => {
     try {
-      // If setting this profile as active, deactivate all others first
-      if (isActive) {
-        await supabase
-          .from("profiles")
-          .update({ is_active: false })
-          .eq("is_active", true);
-      }
-
-      const [cvUrl, avatarUrl] = await Promise.all([
-        uploadCV(cvFile),
-        uploadAvatar(avatarFile),
-      ]);
-
-      if (!cvUrl || !avatarUrl) {
-        toast({
-          title: "Error",
-          description: "Failed to upload files",
-          variant: "destructive",
-        });
-        return false;
-      }
-
-      const { error } = await supabase.from("profiles").insert([
-        {
-          name,
-          tagline,
-          bio,
-          cv: cvUrl,
-          avatar: avatarUrl,
-          is_active: isActive,
-        },
-      ]);
+      const filePath = url.split('/').pop();
+      const folder = bucket === 'cv-file' ? 'cvs' : 'avatars';
+      const path = `${folder}/${filePath}`;
+      
+      const { error } = await supabase.storage
+        .from(bucket)
+        .remove([path]);
 
       if (error) {
-        toast({
-          title: "Error",
-          description: "Failed to create profile",
-          variant: "destructive",
-        });
+        console.error(`Error deleting file from ${bucket}:`, error.message);
         return false;
       }
-
-      toast({
-        title: "Success",
-        description: "Profile created successfully",
-      });
-      await fetchProfiles();
       return true;
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred",
-        variant: "destructive",
-      });
+      console.error("Error deleting file:", error);
       return false;
     }
   };
@@ -150,26 +107,27 @@ export function useProfiles() {
     bio: string,
     cvFile: File | null,
     avatarFile: File | null,
-    isActive: boolean,
   ) => {
     try {
-      // If setting this profile as active, deactivate all others first
-      if (isActive) {
-        await supabase
-          .from("profiles")
-          .update({ is_active: false })
-          .neq("id", id);
-      }
+      let updateData: any = { name, tagline, bio };
 
-      let updateData: any = { name, tagline, bio, is_active: isActive };
+      // Fetch current profile to get current file URLs
+      const currentProfile = await fetchProfileById(id);
+      if (!currentProfile) return false;
 
       if (cvFile) {
+        // Delete old CV file
+        await deleteFile(currentProfile.cv, 'cv-file');
+        // Upload new CV file
         const cvUrl = await uploadCV(cvFile);
         if (!cvUrl) return false;
         updateData.cv = cvUrl;
       }
 
       if (avatarFile) {
+        // Delete old avatar file
+        await deleteFile(currentProfile.avatar, 'avatar-image');
+        // Upload new avatar file
         const avatarUrl = await uploadAvatar(avatarFile);
         if (!avatarUrl) return false;
         updateData.avatar = avatarUrl;
@@ -204,100 +162,6 @@ export function useProfiles() {
     }
   };
 
-  const deleteProfile = async (id: number) => {
-    try {
-      const profile = await fetchProfileById(id.toString());
-      if (!profile) return false;
-
-      // Delete files from storage
-      const cvFileName = profile.cv.split("/").pop();
-      const avatarFileName = profile.avatar.split("/").pop();
-
-      await Promise.all([
-        supabase.storage.from("cv-file").remove([`cvs/${cvFileName}`]),
-        supabase.storage
-          .from("avatar-image")
-          .remove([`avatars/${avatarFileName}`]),
-      ]);
-
-      const { error } = await supabase.from("profiles").delete().eq("id", id);
-
-      if (error) {
-        toast({
-          title: "Error",
-          description: "Failed to delete profile",
-          variant: "destructive",
-        });
-        return false;
-      }
-
-      toast({
-        title: "Success",
-        description: "Profile deleted successfully",
-      });
-      await fetchProfiles();
-      return true;
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred",
-        variant: "destructive",
-      });
-      return false;
-    }
-  };
-
-  const bulkDeleteProfiles = async (ids: number[]) => {
-    try {
-      // Fetch profiles first to get file paths
-      const { data: profiles } = await supabase
-        .from("profiles")
-        .select()
-        .in("id", ids);
-
-      if (profiles) {
-        // Delete all files from storage
-        for (const profile of profiles) {
-          const cvFileName = profile.cv.split("/").pop();
-          const avatarFileName = profile.avatar.split("/").pop();
-
-          await Promise.all([
-            supabase.storage.from("cv-file").remove([`cvs/${cvFileName}`]),
-            supabase.storage
-              .from("avatar-image")
-              .remove([`avatars/${avatarFileName}`]),
-          ]);
-        }
-      }
-
-      // Delete profiles from database
-      const { error } = await supabase.from("profiles").delete().in("id", ids);
-
-      if (error) {
-        toast({
-          title: "Error",
-          description: "Failed to delete profiles",
-          variant: "destructive",
-        });
-        return false;
-      }
-
-      toast({
-        title: "Success",
-        description: `${ids.length} profile(s) deleted successfully`,
-      });
-      await fetchProfiles();
-      return true;
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred",
-        variant: "destructive",
-      });
-      return false;
-    }
-  };
-
   const fetchProfileById = async (id: string) => {
     try {
       const { data, error } = await supabase
@@ -320,12 +184,9 @@ export function useProfiles() {
   return {
     profiles,
     fetchProfiles,
-    createProfile,
     updateProfile,
-    deleteProfile,
     fetchProfileById,
     uploadCV,
     uploadAvatar,
-    bulkDeleteProfiles,
   };
 }
