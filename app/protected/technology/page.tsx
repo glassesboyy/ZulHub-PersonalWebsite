@@ -20,7 +20,7 @@ export default function TechnologyPage() {
   }, []);
 
   return (
-    <div className="container max-w-4xl py-10">
+    <div className="container">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold tracking-tight">Technologies</h1>
         <Link href="/protected/technology/create">
