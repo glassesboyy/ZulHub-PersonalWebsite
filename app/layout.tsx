@@ -1,6 +1,7 @@
 import HeaderAuth from "@/components/header-auth";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Toaster } from "@/components/ui/toaster";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { ThemeProvider } from "next-themes";
 import { Geist } from "next/font/google";
 import { headers } from "next/headers";
@@ -70,6 +71,7 @@ export default async function RootLayout({
           )}
           <Toaster />
         </ThemeProvider>
+        <GoogleAnalytics gaId="G-JG980K76DH" />
       </body>
     </html>
   );

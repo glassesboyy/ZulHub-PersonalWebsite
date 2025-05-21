@@ -92,7 +92,7 @@ export default function ProtectedPage() {
           ),
         },
       ],
-      managePath: "/protected/projects",
+      managePath: "/protected/project",
     },
     {
       title: "Social Media",
@@ -124,7 +124,7 @@ export default function ProtectedPage() {
           },
         },
       ],
-      managePath: "/protected/socials",
+      managePath: "/protected/social",
     },
     {
       title: "Technologies",
@@ -140,7 +140,7 @@ export default function ProtectedPage() {
           },
         },
       ],
-      managePath: "/protected/technologies",
+      managePath: "/protected/technology",
     },
     {
       title: "Testimonials",
@@ -162,7 +162,7 @@ export default function ProtectedPage() {
           ),
         },
       ],
-      managePath: "/protected/testimonials",
+      managePath: "/protected/testimonial",
     },
   ];
 
