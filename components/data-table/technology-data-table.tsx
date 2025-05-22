@@ -9,17 +9,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DataTableHeader } from "@/components/ui/data-table-header";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -44,8 +44,6 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
 import * as Si from "react-icons/si";
-import { DataTableHeader } from "@/components/ui/data-table-header";
-import { DataTablePagination } from "@/components/ui/data-table-pagination";
 
 interface TechnologyDataTableProps {
   data: Technology[];
@@ -122,26 +120,14 @@ export function TechnologyDataTable({
         const IconComponent = Si[row.original.icon as keyof typeof Si];
         return (
           <div className="flex items-center">
-            {IconComponent ? <IconComponent size={20} /> : null}
+            {IconComponent ? <IconComponent size={24} /> : null}
           </div>
         );
       },
     },
     {
-      accessorKey: "created_at",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Created At
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => new Date(row.original.created_at).toLocaleDateString(),
-    },
-    {
       id: "actions",
+      header: "Actions",
       cell: ({ row }) => {
         const tech = row.original;
         return (

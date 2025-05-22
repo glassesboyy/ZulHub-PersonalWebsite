@@ -115,7 +115,7 @@ export function CertificateDataTable({
       accessorKey: "certificate_image",
       header: "Certificate Image",
       cell: ({ row }) => (
-        <div className="w-20 h-20 relative">
+        <div className="w-40 h-20 relative">
           <Image
             src={row.original.certificate_image}
             alt={row.original.title}
@@ -127,24 +127,8 @@ export function CertificateDataTable({
       ),
     },
     {
-      accessorKey: "created_at",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Created At
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => {
-        return new Date(row.original.created_at).toLocaleDateString();
-      },
-    },
-    {
       id: "actions",
+      header: "Actions",
       cell: ({ row }) => {
         const certificate = row.original;
         return (

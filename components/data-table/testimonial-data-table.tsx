@@ -127,7 +127,7 @@ export function TestimonialDataTable({
       header: "Status",
       cell: ({ row }) => (
         <div
-          className={`px-2 py-1 rounded-full text-center ${
+          className={`px-4 py-1 w-fit rounded-full text-center text-xxxs uppercase font-medium tracking-widest ${
             row.original.is_approved ? "bg-green-600" : "bg-gray-600"
           }`}
         >
@@ -137,6 +137,7 @@ export function TestimonialDataTable({
     },
     {
       id: "actions",
+      header: "Actions",
       cell: ({ row }) => {
         const testimonial = row.original;
         return (

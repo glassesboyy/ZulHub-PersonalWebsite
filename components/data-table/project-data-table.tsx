@@ -129,17 +129,15 @@ export function ProjectDataTable({
     },
     {
       accessorKey: "name",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Name
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
       cell: ({ row }) => (
         <div className="max-w-[150px] truncate font-medium">
           {row.original.name}
@@ -147,28 +145,19 @@ export function ProjectDataTable({
       ),
     },
     {
-      accessorKey: "description",
-      header: "Description",
-      cell: ({ row }) => (
-        <div className="max-w-[220px] truncate">{row.original.description}</div>
-      ),
-    },
-    {
       accessorKey: "status",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Status
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
       cell: ({ row }) => (
         <div
-          className={`py-1 rounded-full text-center ${getStatusColor(row.original.status)}`}
+          className={`px-4 py-1 w-fit rounded-full text-center text-xxxs uppercase font-medium tracking-widest ${getStatusColor(row.original.status)}`}
         >
           {row.original.status}
         </div>
@@ -176,17 +165,15 @@ export function ProjectDataTable({
     },
     {
       accessorKey: "created_at",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Created At
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created At
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
       cell: ({ row }) => {
         return new Date(row.original.created_at).toLocaleDateString();
       },
@@ -208,6 +195,7 @@ export function ProjectDataTable({
     },
     {
       id: "actions",
+      header: "Actions",
       cell: ({ row }) => {
         const project = row.original;
         return (
@@ -298,7 +286,7 @@ export function ProjectDataTable({
 
       <div className="rounded-md border">
         <Table>
-          <TableHeader className="bg-muted/50">
+          <TableHeader className="bg-muted/50 ">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (

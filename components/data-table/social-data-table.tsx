@@ -9,11 +9,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import { DataTableHeader } from "@/components/ui/data-table-header";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -35,18 +41,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
-import { DataTableHeader } from "@/components/ui/data-table-header";
-import { DataTablePagination } from "@/components/ui/data-table-pagination";
 
 // Add this type helper
 type TablerIconComponent = keyof typeof TablerIcons;
@@ -128,14 +125,15 @@ export function SocialDataTable({
       accessorKey: "link",
       header: "Link",
       cell: ({ row }) => (
-        <a
-          href={row.original.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 hover:underline truncate block max-w-[200px]"
+        <Button
+          variant="link"
+          className="p-0 h-auto"
+          onClick={() =>
+            window.open(row.original.link, "_blank", "noopener,noreferrer")
+          }
         >
-          {row.original.link}
-        </a>
+          Visit Link
+        </Button>
       ),
     },
     {
@@ -153,20 +151,8 @@ export function SocialDataTable({
       },
     },
     {
-      accessorKey: "created_at",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Created At
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => new Date(row.original.created_at).toLocaleDateString(),
-    },
-    {
       id: "actions",
+      header: "Actions",
       cell: ({ row }) => {
         const social = row.original;
         return (
