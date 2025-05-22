@@ -138,7 +138,7 @@ export function ProjectDataTable({
       accessorKey: "description",
       header: "Description",
       cell: ({ row }) => (
-        <div className="max-w-[500px] truncate">{row.original.description}</div>
+        <div className="max-w-[250px] truncate">{row.original.description}</div>
       ),
     },
     {

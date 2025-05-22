@@ -323,6 +323,26 @@ export function useProjects() {
     }
   };
 
+  const deleteFile = async (url: string) => {
+    try {
+      const fileName = url.split('/').pop();
+      const filePath = `projects/${fileName}`;
+      
+      const { error } = await supabase.storage
+        .from('project-image')
+        .remove([filePath]);
+
+      if (error) {
+        console.error('Error deleting file:', error.message);
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      return false;
+    }
+  };
+
   const updateProjectWithTechnologies = async (
     id: string,
     name: string,
@@ -335,6 +355,14 @@ export function useProjects() {
       let updateData: any = { name, description, status };
 
       if (imageFile) {
+        // Fetch current project to get current image URL
+        const currentProject = await fetchProjectById(id);
+        if (!currentProject) return false;
+
+        // Delete old image file
+        await deleteFile(currentProject.project_image);
+
+        // Upload new image file
         const imageUrl = await uploadImage(imageFile);
         if (!imageUrl) {
           toast({

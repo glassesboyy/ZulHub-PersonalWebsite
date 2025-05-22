@@ -52,6 +52,26 @@ export function useCertificates() {
     }
   };
 
+  const deleteFile = async (url: string) => {
+    try {
+      const fileName = url.split('/').pop();
+      const filePath = `certificates/${fileName}`;
+      
+      const { error } = await supabase.storage
+        .from('certificate-image')
+        .remove([filePath]);
+
+      if (error) {
+        console.error('Error deleting file:', error.message);
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      return false;
+    }
+  };
+
   const createCertificate = async (title: string, imageFile: File) => {
     try {
       const imageUrl = await uploadImage(imageFile);
@@ -98,10 +118,18 @@ export function useCertificates() {
     imageFile: File | null,
   ) => {
     try {
-      let imageUrl = null;
+      let updateData: any = { title };
 
       if (imageFile) {
-        imageUrl = await uploadImage(imageFile);
+        // Fetch current certificate to get current image URL
+        const currentCertificate = await fetchCertificateById(id);
+        if (!currentCertificate) return false;
+
+        // Delete old image file
+        await deleteFile(currentCertificate.certificate_image);
+
+        // Upload new image file
+        const imageUrl = await uploadImage(imageFile);
         if (!imageUrl) {
           toast({
             title: "Error",
@@ -110,12 +138,8 @@ export function useCertificates() {
           });
           return false;
         }
+        updateData.certificate_image = imageUrl;
       }
-
-      const updateData = {
-        title,
-        ...(imageUrl && { certificate_image: imageUrl }),
-      };
 
       const { error } = await supabase
         .from("certificates")
