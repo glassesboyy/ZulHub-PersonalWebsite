@@ -83,3 +83,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+.data-table-row:hover {
+  background-color: hsl(var(--muted));
+}
+
+.data-table-cell {
+  padding: 12px;
+}

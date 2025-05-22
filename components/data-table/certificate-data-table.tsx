@@ -9,11 +9,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import { DataTableHeader } from "@/components/ui/data-table-header";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -34,7 +40,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
@@ -142,25 +148,32 @@ export function CertificateDataTable({
       cell: ({ row }) => {
         const certificate = row.original;
         return (
-          <div className="flex justify-end gap-2">
-            <Link href={`/protected/certificate/detail/${certificate.id}`}>
-              <Button variant="outline" size="sm">
-                View
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
               </Button>
-            </Link>
-            <Link href={`/protected/certificate/edit/${certificate.id}`}>
-              <Button variant="outline" size="sm">
-                Edit
-              </Button>
-            </Link>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => setSingleDeleteId(certificate.id)}
-            >
-              Delete
-            </Button>
-          </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>
+                <Link href={`/protected/certificate/detail/${certificate.id}`}>
+                  Details
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href={`/protected/certificate/edit/${certificate.id}`}>
+                  Edit
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-red-600"
+                onClick={() => setSingleDeleteId(certificate.id)}
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         );
       },
     },
@@ -184,63 +197,30 @@ export function CertificateDataTable({
   });
 
   return (
-    <div>
-      {/* AlertDialog untuk bulk delete */}
-      <AlertDialog>
-        <div className="flex items-center justify-between gap-4 py-4">
-          <Input
-            placeholder="Filter titles..."
-            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("title")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <AlertDialogTrigger asChild>
-            <Button
-              variant="destructive"
-              size="sm"
-              disabled={table.getFilteredSelectedRowModel().rows.length === 0}
-            >
-              Delete Selected
-            </Button>
-          </AlertDialogTrigger>
-        </div>
-
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Selected Certificates</AlertDialogTitle>
-            <AlertDialogDescription>
-              You are about to permanently delete{" "}
-              {table.getFilteredSelectedRowModel().rows.length} selected
-              certificate(s). This action is irreversible. Please confirm to
-              proceed.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={async () => {
-                const selectedRows = table.getFilteredSelectedRowModel().rows;
-                const selectedIds = selectedRows.map((row) => row.original.id);
-                const success = await onBulkDelete(selectedIds);
-                if (success) {
-                  setRowSelection({});
-                }
-              }}
-              className="bg-destructive text-destructive-foreground"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      {/* AlertDialog untuk single delete */}
+    <div className="space-y-4">
       <AlertDialog
         open={!!singleDeleteId}
         onOpenChange={() => setSingleDeleteId(null)}
       >
+        <DataTableHeader
+          filterKey="title"
+          filterValue={
+            (table.getColumn("title")?.getFilterValue() as string) ?? ""
+          }
+          placeholder="Filter titles..."
+          onFilterChange={(value) =>
+            table.getColumn("title")?.setFilterValue(value)
+          }
+          selectedCount={table.getFilteredSelectedRowModel().rows.length}
+          onBulkDelete={async () => {
+            const selectedRows = table.getFilteredSelectedRowModel().rows;
+            const selectedIds = selectedRows.map((row) => row.original.id);
+            const success = await onBulkDelete(selectedIds);
+            if (success) {
+              setRowSelection({});
+            }
+          }}
+        />
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Certificate</AlertDialogTitle>
@@ -263,7 +243,7 @@ export function CertificateDataTable({
 
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-muted/50">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -306,28 +286,8 @@ export function CertificateDataTable({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
+
+      <DataTablePagination table={table} />
     </div>
   );
 }

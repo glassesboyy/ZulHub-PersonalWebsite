@@ -38,6 +38,15 @@ import {
 import { ArrowUpDown } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
+import { DataTableHeader } from "@/components/ui/data-table-header";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
 
 // Add this type helper
 type TablerIconComponent = keyof typeof TablerIcons;
@@ -161,25 +170,30 @@ export function SocialDataTable({
       cell: ({ row }) => {
         const social = row.original;
         return (
-          <div className="flex justify-end gap-2">
-            <Link href={`/protected/social/detail/${social.id}`}>
-              <Button variant="outline" size="sm">
-                View
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
               </Button>
-            </Link>
-            <Link href={`/protected/social/edit/${social.id}`}>
-              <Button variant="outline" size="sm">
-                Edit
-              </Button>
-            </Link>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => setSingleDeleteId(social.id)}
-            >
-              Delete
-            </Button>
-          </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>
+                <Link href={`/protected/social/detail/${social.id}`}>
+                  Details
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href={`/protected/social/edit/${social.id}`}>Edit</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-red-600"
+                onClick={() => setSingleDeleteId(social.id)}
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         );
       },
     },
@@ -203,47 +217,44 @@ export function SocialDataTable({
   });
 
   return (
-    <div>
-      <div className="flex items-center justify-between gap-4 py-4">
-        <Input
-          placeholder="Filter names..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+    <div className="space-y-4">
+      <AlertDialog
+        open={!!singleDeleteId}
+        onOpenChange={() => setSingleDeleteId(null)}
+      >
+        <DataTableHeader
+          filterKey="name"
+          filterValue={
+            (table.getColumn("name")?.getFilterValue() as string) ?? ""
           }
-          className="max-w-sm"
+          placeholder="Filter names..."
+          onFilterChange={(value) =>
+            table.getColumn("name")?.setFilterValue(value)
+          }
+          selectedCount={table.getFilteredSelectedRowModel().rows.length}
+          onBulkDelete={handleBulkDelete}
         />
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              variant="destructive"
-              size="sm"
-              disabled={table.getFilteredSelectedRowModel().rows.length === 0}
-            >
-              Delete Selected
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action will permanently delete{" "}
-                {table.getFilteredSelectedRowModel().rows.length} selected
-                social(s). This action cannot be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleBulkDelete}>
-                Delete
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </div>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action will permanently delete{" "}
+              {table.getFilteredSelectedRowModel().rows.length} selected
+              social(s). This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleBulkDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-muted/50">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -286,73 +297,8 @@ export function SocialDataTable({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
-      <AlertDialog>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Multiple Social Links</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete{" "}
-              {table.getFilteredSelectedRowModel().rows.length} selected social
-              link(s)? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleBulkDelete}
-              className="bg-destructive text-destructive-foreground"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
 
-      <AlertDialog
-        open={!!singleDeleteId}
-        onOpenChange={() => setSingleDeleteId(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Social Link</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete this social link? This action
-              cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleSingleDelete}
-              className="bg-destructive text-destructive-foreground"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DataTablePagination table={table} />
     </div>
   );
 }
