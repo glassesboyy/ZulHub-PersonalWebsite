@@ -101,22 +101,10 @@ export function TestimonialDataTable({
       ),
     },
     {
-      accessorKey: "email",
-      header: "Email",
-      cell: ({ row }) => (
-        <div className="max-w-[200px] truncate">{row.original.email}</div>
-      ),
-    },
-    {
-      accessorKey: "relation",
-      header: "Relation",
-      cell: ({ row }) => <div>{row.original.relation}</div>,
-    },
-    {
       accessorKey: "message",
       header: "Message",
       cell: ({ row }) => (
-        <div className="max-w-[300px] truncate">{row.original.message}</div>
+        <div className="max-w-[400px] truncate">{row.original.message}</div>
       ),
     },
     {

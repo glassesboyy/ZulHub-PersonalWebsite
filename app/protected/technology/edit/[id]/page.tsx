@@ -16,6 +16,7 @@ import {
   TechnologyFormValues,
 } from "@/lib/validations/technology-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { use, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -63,59 +64,74 @@ export default function EditTechnologyPage({
   }
 
   return (
-    <div className="container max-w-2xl py-10">
-      <h1 className="text-3xl font-bold tracking-tight mb-8">
-        Edit Technology
-      </h1>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="Technology name" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <div className="container max-w-3xl">
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-xl font-bold tracking-tight">Edit Technology</h1>
+        <Button variant="outline" asChild>
+          <Link href="/protected/technology">Back to Technologies</Link>
+        </Button>
+      </div>
 
-          <FormField
-            control={form.control}
-            name="icon"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Icon Class</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="e.g. SiJavascript" />
-                </FormControl>
-                <FormMessage />
-                <p className="text-sm text-muted-foreground">
-                  Enter the icon name from react-icons/si (e.g., SiJavascript,
-                  SiReact, SiNextdotjs). The name must start with 'Si' followed
-                  by the technology name.
-                </p>
-              </FormItem>
-            )}
-          />
+      <div className="space-y-8 rounded-lg border bg-card p-8">
+        <div className="space-y-2">
+          <p className="text-sm text-muted-foreground">
+            Update the technology details below. You can modify both the name
+            and icon.
+          </p>
+        </div>
 
-          <div className="flex gap-4">
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Saving..." : "Update Technology"}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.push("/protected/technology")}
-            >
-              Cancel
-            </Button>
-          </div>
-        </form>
-      </Form>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Technology name" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="icon"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Icon Class</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g. SiJavascript" />
+                  </FormControl>
+                  <FormMessage />
+                  <p className="text-sm text-muted-foreground">
+                    Enter the icon name from react-icons/si (e.g., SiJavascript,
+                    SiReact, SiNextdotjs). The name must start with 'Si'
+                    followed by the technology name.
+                  </p>
+                </FormItem>
+              )}
+            />
+
+            <div className="flex gap-4">
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting
+                  ? "Saving..."
+                  : "Update Technology"}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.push("/protected/technology")}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }

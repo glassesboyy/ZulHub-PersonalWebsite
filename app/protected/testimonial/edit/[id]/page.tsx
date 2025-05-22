@@ -26,6 +26,7 @@ import {
 } from "@/lib/validations/testimonial-validation";
 import { relationOptions } from "@/types/testimonials";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { use, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -84,113 +85,128 @@ export default function EditTestimonialPage({
   };
 
   return (
-    <div className="container max-w-2xl py-10">
-      <h1 className="text-3xl font-bold tracking-tight mb-8">
-        Edit Testimonial
-      </h1>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="Your name" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <div className="container max-w-3xl">
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-xl font-bold tracking-tight">Edit Testimonial</h1>
+        <Button variant="outline" asChild>
+          <Link href="/protected/testimonial">Back to Testimonials</Link>
+        </Button>
+      </div>
 
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input {...field} type="email" placeholder="Your email" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <div className="space-y-8 rounded-lg border bg-card p-8">
+        <div className="space-y-2">
+          <p className="text-sm text-muted-foreground">
+            Update the testimonial details below. You can modify all information
+            and approve or disapprove the testimonial.
+          </p>
+        </div>
 
-          <FormField
-            control={form.control}
-            name="relation"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Relation</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select relation" />
-                    </SelectTrigger>
+                    <Input {...field} placeholder="Your name" />
                   </FormControl>
-                  <SelectContent>
-                    {relationOptions.map((option) => (
-                      <SelectItem key={option} value={option}>
-                        {option}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="message"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Message</FormLabel>
-                <FormControl>
-                  <Textarea {...field} rows={4} placeholder="Your message" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="email" placeholder="Your email" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="isApproved"
-            render={({ field }) => (
-              <FormItem className="flex items-center space-x-2">
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <FormLabel>Approve Testimonial</FormLabel>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="relation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Relation</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select relation" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {relationOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <div className="flex gap-4">
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Saving..." : "Update Testimonial"}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.push("/protected/testimonial")}
-            >
-              Cancel
-            </Button>
-          </div>
-        </form>
-      </Form>
+            <FormField
+              control={form.control}
+              name="message"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Message</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} rows={4} placeholder="Your message" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="isApproved"
+              render={({ field }) => (
+                <FormItem className="flex items-center space-x-2">
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormLabel>Approve Testimonial</FormLabel>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex gap-4">
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting
+                  ? "Saving..."
+                  : "Update Testimonial"}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.push("/protected/testimonial")}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }

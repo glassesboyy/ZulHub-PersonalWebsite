@@ -2,20 +2,6 @@
 
 import { signOutAction } from "@/app/actions";
 import {
-  Album,
-  Bolt,
-  Folders,
-  Globe,
-  LayoutDashboard,
-  LogOut,
-  Star,
-  UserCircle,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-
-import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -28,6 +14,19 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
+import {
+  Album,
+  Bolt,
+  Folders,
+  Globe,
+  LayoutDashboard,
+  LogOut,
+  Star,
+  UserCircle,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const items = [
   {
@@ -79,8 +78,8 @@ export function ProtectedSidebar() {
 
   return (
     <Sidebar className="border-r bg-gradient-to-b from-background to-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <SidebarHeader className="border-b px-6 py-4">
-        <div className="flex items-center gap-2">
+      <SidebarHeader className="px-6 py-4">
+        <div className="flex items-center gap-2 justify-center">
           <div className="h-7 w-7 rounded-lg p-1 bg-background border border-primary flex items-center justify-center">
             <Star className="h-full w-full text-primary" />
           </div>
