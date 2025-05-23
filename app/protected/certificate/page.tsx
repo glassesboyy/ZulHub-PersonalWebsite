@@ -1,6 +1,6 @@
 "use client";
 
-import { CertificateDataTable } from "@/components/dasboard/data-table/certificate-data-table";
+import { CertificateDataTable } from "@/components/dashboard/data-table/certificate-data-table";
 import { Button } from "@/components/ui/button";
 import { useCertificates } from "@/hooks/certificate-hooks";
 import Link from "next/link";

@@ -28,7 +28,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Testimonial } from "@/types/testimonials";
+import { Social } from "@/types/socials";
+import * as TablerIcons from "@tabler/icons-react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -44,18 +45,21 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import * as React from "react";
 const { useRouter } = require("next/navigation");
 
-interface TestimonialDataTableProps {
-  data: Testimonial[];
-  onDelete: (id: number) => Promise<boolean>;
-  onBulkDelete: (ids: number[]) => Promise<boolean>;
-  onToggleApproval: (id: number, currentStatus: boolean) => Promise<boolean>;
+// Add this type helper
+type TablerIconComponent = keyof typeof TablerIcons;
+type IconKey = keyof typeof TablerIcons;
+
+interface SocialDataTableProps {
+  data: Social[];
+  onDelete: (id: number) => void;
+  onBulkDelete: (ids: number[]) => void;
 }
 
-export function TestimonialDataTable({
+export function SocialDataTable({
   data,
   onDelete,
   onBulkDelete,
-}: TestimonialDataTableProps) {
+}: SocialDataTableProps) {
   const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -65,26 +69,26 @@ export function TestimonialDataTable({
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
     null
   );
-
-  const handleSingleDelete = async () => {
-    if (singleDeleteId) {
-      const success = await onDelete(singleDeleteId);
-      if (success) {
-        setSingleDeleteId(null);
-      }
-    }
-  };
+  const [bulkDeleteIds, setBulkDeleteIds] = React.useState<number[] | null>(
+    null
+  );
 
   const handleBulkDelete = async () => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows;
-    const selectedIds = selectedRows.map((row) => row.original.id);
-    const success = await onBulkDelete(selectedIds);
-    if (success) {
+    if (bulkDeleteIds) {
+      await onBulkDelete(bulkDeleteIds);
+      setBulkDeleteIds(null);
       setRowSelection({});
     }
   };
 
-  const columns: ColumnDef<Testimonial>[] = [
+  const handleSingleDelete = () => {
+    if (singleDeleteId !== null) {
+      onDelete(singleDeleteId);
+      setSingleDeleteId(null);
+    }
+  };
+
+  const columns: ColumnDef<Social>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -117,36 +121,54 @@ export function TestimonialDataTable({
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="max-w-[120px] truncate  text-xxs xs:text-xs md:text-sm font-medium">
+        <div className="text-xxs xs:text-xs md:text-sm font-medium">
           {row.original.name}
         </div>
       ),
     },
     {
-      accessorKey: "message",
+      accessorKey: "description",
       header: ({ column }) => (
-        <div className="text-xxs xs:text-xs md:text-sm">Message</div>
+        <div className="text-xxs xs:text-xs md:text-sm">Description</div>
       ),
       cell: ({ row }) => (
         <div className="max-w-[100px] xs:max-w-[150px] md:max-w-[200px] truncate text-xxs xs:text-xs md:text-sm">
-          {row.original.message}
+          {row.original.description}
         </div>
       ),
     },
     {
-      accessorKey: "is_approved",
+      accessorKey: "link",
       header: ({ column }) => (
-        <div className="text-xxs xs:text-xs md:text-sm">Status</div>
+        <div className="text-xxs xs:text-xs md:text-sm">Link</div>
       ),
       cell: ({ row }) => (
-        <div
-          className={`px-2 xs:px-4 py-1 w-fit rounded-full text-center text-xxxs xs:text-xxs md:text-xs uppercase font-medium tracking-widest text-white ${
-            row.original.is_approved ? "bg-green-600" : "bg-gray-600"
-          }`}
+        <Button
+          variant="link"
+          className="p-0 h-auto text-xxs xs:text-xs md:text-sm text-blue-600 hover:text-blue-600/50 transition-colors duration-300"
+          onClick={() =>
+            window.open(row.original.link, "_blank", "noopener,noreferrer")
+          }
         >
-          {row.original.is_approved ? "Approved" : "Pending"}
-        </div>
+          Visit Link
+        </Button>
       ),
+    },
+    {
+      accessorKey: "icon",
+      header: ({ column }) => (
+        <div className="text-xxs xs:text-xs md:text-sm">Icon</div>
+      ),
+      cell: ({ row }) => {
+        const IconComponent = TablerIcons[
+          row.original.icon as IconKey
+        ] as React.ComponentType<{ size: number }>;
+        return (
+          <div className="flex items-center">
+            {IconComponent && <IconComponent size={20} />}
+          </div>
+        );
+      },
     },
     {
       id: "actions",
@@ -154,7 +176,7 @@ export function TestimonialDataTable({
         <div className="text-xxs xs:text-xs md:text-sm">Actions</div>
       ),
       cell: ({ row }) => {
-        const testimonial = row.original;
+        const social = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -169,21 +191,21 @@ export function TestimonialDataTable({
             >
               <DropdownMenuItem
                 onClick={() =>
-                  router.push(`/protected/testimonial/detail/${testimonial.id}`)
+                  router.push(`/protected/social/detail/${social.id}`)
                 }
               >
                 Details
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
-                  router.push(`/protected/testimonial/edit/${testimonial.id}`)
+                  router.push(`/protected/social/edit/${social.id}`)
                 }
               >
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-red-600"
-                onClick={() => setSingleDeleteId(testimonial.id)}
+                onClick={() => setSingleDeleteId(social.id)}
               >
                 Delete
               </DropdownMenuItem>
@@ -213,77 +235,74 @@ export function TestimonialDataTable({
 
   return (
     <div className="space-y-2 xs:space-y-4">
+      {/* Single Delete Dialog */}
       <AlertDialog
         open={!!singleDeleteId}
         onOpenChange={() => setSingleDeleteId(null)}
       >
-        <DataTableHeader
-          filterKey="name"
-          filterValue={
-            (table.getColumn("name")?.getFilterValue() as string) ?? ""
-          }
-          placeholder="Filter by name..."
-          onFilterChange={(value) =>
-            table.getColumn("name")?.setFilterValue(value)
-          }
-          selectedCount={table.getFilteredSelectedRowModel().rows.length}
-          onBulkDelete={handleBulkDelete}
-        />
         <AlertDialogContent className="max-w-[90%] xs:max-w-lg">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-lg xs:text-xl">
-              Delete Multiple Testimonials
+              Are you sure?
             </AlertDialogTitle>
             <AlertDialogDescription className="text-xxs xs:text-xs md:text-sm">
-              Are you sure you want to delete{" "}
+              This action will permanently delete{" "}
               {table.getFilteredSelectedRowModel().rows.length} selected
-              testimonial(s)? This action cannot be undone.
+              social(s). This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={async () => {
-                const selectedRows = table.getFilteredSelectedRowModel().rows;
-                const selectedIds = selectedRows.map((row) => row.original.id);
-                const success = await onBulkDelete(selectedIds);
-                if (success) {
-                  setRowSelection({});
-                }
-              }}
-              className="bg-destructive text-destructive-foreground"
-            >
+            <AlertDialogAction onClick={handleBulkDelete}>
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
+      {/* Bulk Delete Dialog */}
       <AlertDialog
-        open={!!singleDeleteId}
-        onOpenChange={() => setSingleDeleteId(null)}
+        open={!!bulkDeleteIds}
+        onOpenChange={() => setBulkDeleteIds(null)}
       >
         <AlertDialogContent className="max-w-[90%] xs:max-w-lg">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-lg xs:text-xl">
-              Delete Testimonial
+              Bulk Delete Socials
             </AlertDialogTitle>
             <AlertDialogDescription className="text-xxs xs:text-xs md:text-sm">
-              Are you sure you want to delete this testimonial? This action
-              cannot be undone.
+              Are you sure you want to delete {bulkDeleteIds?.length} social
+              links?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={handleSingleDelete}
+              onClick={handleBulkDelete}
               className="bg-destructive text-destructive-foreground"
             >
-              Delete
+              Delete All
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <DataTableHeader
+        filterKey="name"
+        filterValue={
+          (table.getColumn("name")?.getFilterValue() as string) ?? ""
+        }
+        placeholder="Filter names..."
+        onFilterChange={(value) =>
+          table.getColumn("name")?.setFilterValue(value)
+        }
+        selectedCount={table.getFilteredSelectedRowModel().rows.length}
+        onBulkDelete={() => {
+          const selectedRows = table.getFilteredSelectedRowModel().rows;
+          const selectedIds = selectedRows.map((row) => row.original.id);
+          setBulkDeleteIds(selectedIds);
+        }}
+      />
 
       <div className="rounded-md border overflow-x-auto">
         <Table>
@@ -323,7 +342,7 @@ export function TestimonialDataTable({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No testimonials found.
+                  No socials found.
                 </TableCell>
               </TableRow>
             )}

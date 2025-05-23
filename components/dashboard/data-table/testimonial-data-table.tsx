@@ -28,7 +28,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Technology } from "@/types/technology";
+import { Testimonial } from "@/types/testimonials";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -41,48 +41,54 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { useRouter } from "next/navigation";
 import * as React from "react";
-import * as Si from "react-icons/si";
+const { useRouter } = require("next/navigation");
 
-interface TechnologyDataTableProps {
-  data: Technology[];
+interface TestimonialDataTableProps {
+  data: Testimonial[];
   onDelete: (id: number) => Promise<boolean>;
   onBulkDelete: (ids: number[]) => Promise<boolean>;
+  onToggleApproval: (id: number, currentStatus: boolean) => Promise<boolean>;
 }
 
-export function TechnologyDataTable({
+export function TestimonialDataTable({
   data,
   onDelete,
   onBulkDelete,
-}: TechnologyDataTableProps) {
+}: TestimonialDataTableProps) {
   const router = useRouter();
-  const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
-    null
-  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [rowSelection, setRowSelection] = React.useState({});
+  const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
+    null
+  );
+  const [bulkDeleteIds, setBulkDeleteIds] = React.useState<number[] | null>(
+    null
+  );
 
   const handleSingleDelete = async () => {
     if (singleDeleteId) {
-      await onDelete(singleDeleteId);
-      setSingleDeleteId(null);
+      const success = await onDelete(singleDeleteId);
+      if (success) {
+        setSingleDeleteId(null);
+      }
     }
   };
 
   const handleBulkDelete = async () => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows;
-    const selectedIds = selectedRows.map((row) => row.original.id);
-    const success = await onBulkDelete(selectedIds);
-    if (success) {
-      setRowSelection({});
+    if (bulkDeleteIds) {
+      const success = await onBulkDelete(bulkDeleteIds);
+      if (success) {
+        setBulkDeleteIds(null);
+        setRowSelection({});
+      }
     }
   };
 
-  const columns: ColumnDef<Technology>[] = [
+  const columns: ColumnDef<Testimonial>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -115,29 +121,36 @@ export function TechnologyDataTable({
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="text-xxs xs:text-xs md:text-sm font-medium">
+        <div className="max-w-[120px] truncate  text-xxs xs:text-xs md:text-sm font-medium">
           {row.original.name}
         </div>
       ),
     },
     {
-      accessorKey: "icon",
+      accessorKey: "message",
       header: ({ column }) => (
-        <div className="text-xxs xs:text-xs md:text-sm">Icon</div>
+        <div className="text-xxs xs:text-xs md:text-sm">Message</div>
       ),
-      cell: ({ row }) => {
-        const IconComponent = Si[row.original.icon as keyof typeof Si];
-        return (
-          <div className="flex items-center">
-            {IconComponent && (
-              <IconComponent
-                size={16}
-                className="xs:w-5 xs:h-5 md:w-6 md:h-6"
-              />
-            )}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <div className="max-w-[100px] xs:max-w-[150px] md:max-w-[200px] truncate text-xxs xs:text-xs md:text-sm">
+          {row.original.message}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "is_approved",
+      header: ({ column }) => (
+        <div className="text-xxs xs:text-xs md:text-sm">Status</div>
+      ),
+      cell: ({ row }) => (
+        <div
+          className={`px-2 xs:px-4 py-1 w-fit rounded-full text-center text-xxxs xs:text-xxs md:text-xs uppercase font-medium tracking-widest text-white ${
+            row.original.is_approved ? "bg-green-600" : "bg-gray-600"
+          }`}
+        >
+          {row.original.is_approved ? "Approved" : "Pending"}
+        </div>
+      ),
     },
     {
       id: "actions",
@@ -145,7 +158,7 @@ export function TechnologyDataTable({
         <div className="text-xxs xs:text-xs md:text-sm">Actions</div>
       ),
       cell: ({ row }) => {
-        const tech = row.original;
+        const testimonial = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -160,14 +173,21 @@ export function TechnologyDataTable({
             >
               <DropdownMenuItem
                 onClick={() =>
-                  router.push(`/protected/technology/edit/${tech.id}`)
+                  router.push(`/protected/testimonial/detail/${testimonial.id}`)
+                }
+              >
+                Details
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push(`/protected/testimonial/edit/${testimonial.id}`)
                 }
               >
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-red-600"
-                onClick={() => setSingleDeleteId(tech.id)}
+                onClick={() => setSingleDeleteId(testimonial.id)}
               >
                 Delete
               </DropdownMenuItem>
@@ -197,29 +217,18 @@ export function TechnologyDataTable({
 
   return (
     <div className="space-y-2 xs:space-y-4">
+      {/* Single Delete Dialog */}
       <AlertDialog
         open={!!singleDeleteId}
         onOpenChange={() => setSingleDeleteId(null)}
       >
-        <DataTableHeader
-          filterKey="name"
-          filterValue={
-            (table.getColumn("name")?.getFilterValue() as string) ?? ""
-          }
-          placeholder="Filter names..."
-          onFilterChange={(value) =>
-            table.getColumn("name")?.setFilterValue(value)
-          }
-          selectedCount={table.getFilteredSelectedRowModel().rows.length}
-          onBulkDelete={handleBulkDelete}
-        />
         <AlertDialogContent className="max-w-[90%] xs:max-w-lg">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-lg xs:text-xl">
-              Delete Technology
+              Delete Testimonial
             </AlertDialogTitle>
             <AlertDialogDescription className="text-xxs xs:text-xs md:text-sm">
-              Are you sure you want to delete this technology? This action
+              Are you sure you want to delete this testimonial? This action
               cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -234,6 +243,50 @@ export function TechnologyDataTable({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Bulk Delete Dialog */}
+      <AlertDialog
+        open={!!bulkDeleteIds}
+        onOpenChange={() => setBulkDeleteIds(null)}
+      >
+        <AlertDialogContent className="max-w-[90%] xs:max-w-lg">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-lg xs:text-xl">
+              Bulk Delete Testimonials
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-xxs xs:text-xs md:text-sm">
+              Are you sure you want to delete {bulkDeleteIds?.length}{" "}
+              testimonials?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleBulkDelete}
+              className="bg-destructive text-destructive-foreground"
+            >
+              Delete All
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <DataTableHeader
+        filterKey="name"
+        filterValue={
+          (table.getColumn("name")?.getFilterValue() as string) ?? ""
+        }
+        placeholder="Filter by name..."
+        onFilterChange={(value) =>
+          table.getColumn("name")?.setFilterValue(value)
+        }
+        selectedCount={table.getFilteredSelectedRowModel().rows.length}
+        onBulkDelete={() => {
+          const selectedRows = table.getFilteredSelectedRowModel().rows;
+          const selectedIds = selectedRows.map((row) => row.original.id);
+          setBulkDeleteIds(selectedIds);
+        }}
+      />
 
       <div className="rounded-md border overflow-x-auto">
         <Table>
@@ -273,13 +326,14 @@ export function TechnologyDataTable({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No technologies found.
+                  No testimonials found.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+
       <DataTablePagination table={table} />
     </div>
   );

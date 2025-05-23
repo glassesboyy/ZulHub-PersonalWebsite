@@ -60,6 +60,9 @@ export function CertificateDataTable({
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
     null
   );
+  const [bulkDeleteIds, setBulkDeleteIds] = React.useState<number[] | null>(
+    null
+  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -71,6 +74,16 @@ export function CertificateDataTable({
       const success = await onDelete(singleDeleteId);
       if (success) {
         setSingleDeleteId(null);
+      }
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (bulkDeleteIds) {
+      const success = await onBulkDelete(bulkDeleteIds);
+      if (success) {
+        setBulkDeleteIds(null);
+        setRowSelection({});
       }
     }
   };
@@ -204,25 +217,6 @@ export function CertificateDataTable({
         open={!!singleDeleteId}
         onOpenChange={() => setSingleDeleteId(null)}
       >
-        <DataTableHeader
-          filterKey="title"
-          filterValue={
-            (table.getColumn("title")?.getFilterValue() as string) ?? ""
-          }
-          placeholder="Filter titles..."
-          onFilterChange={(value) =>
-            table.getColumn("title")?.setFilterValue(value)
-          }
-          selectedCount={table.getFilteredSelectedRowModel().rows.length}
-          onBulkDelete={async () => {
-            const selectedRows = table.getFilteredSelectedRowModel().rows;
-            const selectedIds = selectedRows.map((row) => row.original.id);
-            const success = await onBulkDelete(selectedIds);
-            if (success) {
-              setRowSelection({});
-            }
-          }}
-        />
         <AlertDialogContent className="max-w-[90%] xs:max-w-lg">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-lg xs:text-xl">
@@ -244,6 +238,49 @@ export function CertificateDataTable({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <AlertDialog
+        open={!!bulkDeleteIds}
+        onOpenChange={() => setBulkDeleteIds(null)}
+      >
+        <AlertDialogContent className="max-w-[90%] xs:max-w-lg">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-lg xs:text-xl">
+              Bulk Delete Certificates
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-xxs xs:text-xs md:text-sm">
+              Are you sure you want to delete {bulkDeleteIds?.length}{" "}
+              certificates? This action is permanent and cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleBulkDelete}
+              className="bg-destructive text-destructive-foreground"
+            >
+              Delete All
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <DataTableHeader
+        filterKey="title"
+        filterValue={
+          (table.getColumn("title")?.getFilterValue() as string) ?? ""
+        }
+        placeholder="Filter titles..."
+        onFilterChange={(value) =>
+          table.getColumn("title")?.setFilterValue(value)
+        }
+        selectedCount={table.getFilteredSelectedRowModel().rows.length}
+        onBulkDelete={() => {
+          const selectedRows = table.getFilteredSelectedRowModel().rows;
+          const selectedIds = selectedRows.map((row) => row.original.id);
+          setBulkDeleteIds(selectedIds);
+        }}
+      />
 
       <div className="rounded-md border overflow-x-auto">
         <Table>

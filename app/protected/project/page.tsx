@@ -1,6 +1,6 @@
 "use client";
 
-import { ProjectDataTable } from "@/components/dasboard/data-table/project-data-table";
+import { ProjectDataTable } from "@/components/dashboard/data-table/project-data-table";
 import { Button } from "@/components/ui/button";
 import { useProjects } from "@/hooks/project-hooks";
 import Link from "next/link";
