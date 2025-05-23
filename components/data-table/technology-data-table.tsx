@@ -41,7 +41,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import * as Si from "react-icons/si";
 
@@ -56,6 +56,7 @@ export function TechnologyDataTable({
   onDelete,
   onBulkDelete,
 }: TechnologyDataTableProps) {
+  const router = useRouter();
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
     null
   );
@@ -139,8 +140,12 @@ export function TechnologyDataTable({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Link href={`/protected/technology/edit/${tech.id}`}>Edit</Link>
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push(`/protected/technology/edit/${tech.id}`)
+                }
+              >
+                Edit
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-red-600"

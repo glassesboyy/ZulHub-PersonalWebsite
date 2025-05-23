@@ -42,9 +42,9 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import * as React from "react";
 import { useState } from "react";
+const { useRouter } = require("next/navigation");
 
 interface ProjectDataTableProps {
   data: Project[];
@@ -57,6 +57,7 @@ export function ProjectDataTable({
   onDelete,
   onBulkDelete,
 }: ProjectDataTableProps) {
+  const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -207,13 +208,19 @@ export function ProjectDataTable({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Link href={`/protected/project/detail/${project.id}`}>
-                  Details
-                </Link>
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push(`/protected/project/detail/${project.id}`)
+                }
+              >
+                Details
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href={`/protected/project/edit/${project.id}`}>Edit</Link>
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push(`/protected/project/edit/${project.id}`)
+                }
+              >
+                Edit
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-red-600"

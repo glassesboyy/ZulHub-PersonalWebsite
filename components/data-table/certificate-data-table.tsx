@@ -42,8 +42,8 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import * as React from "react";
+const { useRouter } = require("next/navigation");
 
 interface CertificateDataTableProps {
   data: Certificate[];
@@ -56,6 +56,7 @@ export function CertificateDataTable({
   onDelete,
   onBulkDelete,
 }: CertificateDataTableProps) {
+  const router = useRouter();
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
     null
   );
@@ -140,15 +141,19 @@ export function CertificateDataTable({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Link href={`/protected/certificate/detail/${certificate.id}`}>
-                  Details
-                </Link>
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push(`/protected/certificate/detail/${certificate.id}`)
+                }
+              >
+                Details
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href={`/protected/certificate/edit/${certificate.id}`}>
-                  Edit
-                </Link>
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push(`/protected/certificate/edit/${certificate.id}`)
+                }
+              >
+                Edit
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-red-600"

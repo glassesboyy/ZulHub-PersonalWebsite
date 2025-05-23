@@ -41,8 +41,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import Link from "next/link";
 import * as React from "react";
+const { useRouter } = require("next/navigation");
 
 interface TestimonialDataTableProps {
   data: Testimonial[];
@@ -56,6 +56,7 @@ export function TestimonialDataTable({
   onDelete,
   onBulkDelete,
 }: TestimonialDataTableProps) {
+  const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -149,15 +150,19 @@ export function TestimonialDataTable({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Link href={`/protected/testimonial/detail/${testimonial.id}`}>
-                  Details
-                </Link>
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push(`/protected/testimonial/detail/${testimonial.id}`)
+                }
+              >
+                Details
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href={`/protected/testimonial/edit/${testimonial.id}`}>
-                  Edit
-                </Link>
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push(`/protected/testimonial/edit/${testimonial.id}`)
+                }
+              >
+                Edit
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-red-600"

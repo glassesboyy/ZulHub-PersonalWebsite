@@ -42,8 +42,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import Link from "next/link";
 import * as React from "react";
+const { useRouter } = require("next/navigation");
 
 // Add this type helper
 type TablerIconComponent = keyof typeof TablerIcons;
@@ -60,6 +60,7 @@ export function SocialDataTable({
   onDelete,
   onBulkDelete,
 }: SocialDataTableProps) {
+  const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -164,13 +165,19 @@ export function SocialDataTable({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Link href={`/protected/social/detail/${social.id}`}>
-                  Details
-                </Link>
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push(`/protected/social/detail/${social.id}`)
+                }
+              >
+                Details
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href={`/protected/social/edit/${social.id}`}>Edit</Link>
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push(`/protected/social/edit/${social.id}`)
+                }
+              >
+                Edit
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-red-600"

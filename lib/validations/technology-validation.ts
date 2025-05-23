@@ -9,8 +9,8 @@ const technologySchema = z.object({
     .string()
     .min(1, "Icon name is required")
     .regex(
-      /^Si[A-Za-z]+$/,
-      "Invalid icon name format. Must start with 'Si' followed by letters (e.g., SiJavascript)"
+      /^Si[A-Za-z0-9]+$/,
+      "Invalid icon name format. Must start with 'Si' followed by letters or numbers (e.g., SiHtml5, SiJavascript)"
     ),
 });
 
