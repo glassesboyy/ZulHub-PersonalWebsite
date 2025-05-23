@@ -2,7 +2,6 @@ import { Template } from "@/app/animation/template";
 import { DownloadCVButton } from "@/components/front/download-cv-button";
 import { StarBorder } from "@/components/ui/star-border";
 import { createClient } from "@/utils/supabase/server";
-import Spline from "@splinetool/react-spline";
 import Link from "next/link";
 
 export default async function Home() {
@@ -36,11 +35,11 @@ export default async function Home() {
               <DownloadCVButton cvUrl={profile?.cv} />
             </div>
           </div>
-          <div className="flex-1 md:h-full absolute xs:top-40 md:top-0 md:relative w-full">
+          {/* <div className="flex-1 md:h-full absolute xs:top-40 md:top-0 md:relative w-full">
             <div className="mx-auto xs:w-[250%] md:w-full aspect-square md:aspect-auto -translate-x-1/2 md:translate-x-0 left-1/2 md:left-0 relative">
               <Spline scene="https://prod.spline.design/QwHTUku6HjNMOzE3/scene.splinecode" />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </Template>

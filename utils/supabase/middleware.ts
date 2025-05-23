@@ -24,16 +24,22 @@ export const updateSession = async (request: NextRequest) => {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  if (request.nextUrl.pathname.startsWith("/protected") && !user) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
-  }
+    // Only handle redirects if we successfully got the user status
+    if (user === null && request.nextUrl.pathname.startsWith("/protected")) {
+      return NextResponse.redirect(new URL("/sign-in", request.url));
+    }
 
-  if (request.nextUrl.pathname === "/" && user) {
-    return NextResponse.redirect(new URL("/protected", request.url));
+    if (user && request.nextUrl.pathname === "/") {
+      return NextResponse.redirect(new URL("/protected", request.url));
+    }
+  } catch (error) {
+    // On error, just proceed with the request
+    console.error("Auth error:", error);
   }
 
   return response;

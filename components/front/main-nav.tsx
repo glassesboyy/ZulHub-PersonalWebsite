@@ -9,7 +9,7 @@ const menuItems = [
   { title: "About", icon: User, href: "/public/about" },
   { title: "Tech", icon: Bolt, href: "/public/tech" },
   { title: "Certificate", icon: Album, href: "/public/certificate" },
-  { title: "Projects", icon: Folder, href: "/public/projects" },
+  { title: "Projects", icon: Folder, href: "/public/project" },
   { title: "Contact", icon: Mail, href: "/public/contact" },
 ];
 
