@@ -63,7 +63,7 @@ export function StarBorder<T extends ElementType = "button">({
           ],
           // Secondary variant
           variant === "secondary" && [
-            "bg-gradient-to-b from-secondary/90 to-secondary-foreground/90 border-secondary/40",
+            "bg-gradient-to-b from-secondary/90 to-secondary-foreground border-secondary/40",
             "dark:from-secondary dark:to-secondary-foreground dark:border-secondary",
             "text-secondary-foreground dark:text-secondary",
           ],

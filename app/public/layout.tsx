@@ -1,4 +1,4 @@
-import { MainNav } from "@/components/front/main-nav";
+import { MainNav } from "@/components/front/section/main-nav";
 
 export default function PublicLayout({
   children,

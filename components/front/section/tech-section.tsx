@@ -5,7 +5,7 @@ import { useTechnologies } from "@/hooks/technology-hooks";
 import { useEffect } from "react";
 import * as Si from "react-icons/si";
 
-export function TechStack() {
+export function TechSection() {
   const { technologies, fetchTechnologies } = useTechnologies();
 
   useEffect(() => {
