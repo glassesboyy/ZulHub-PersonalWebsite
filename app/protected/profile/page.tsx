@@ -28,7 +28,7 @@ export default function ProfilePage() {
     <div className="container max-w-5xl">
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">My Profile</h1>
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-col xs:flex-col sm:flex-row">
           <Button
             variant="outline"
             onClick={() => router.push("/protected/profile/reset-password")}
@@ -95,7 +95,7 @@ export default function ProfilePage() {
         <div className="rounded-lg border bg-card p-6">
           <h3 className="mb-4 text-xl font-medium">About Me</h3>
           <div className="prose prose-gray dark:prose-invert max-w-none">
-            <div className="rounded-md bg-muted/50 p-6">
+            <div className="rounded-md bg-muted/50 p-6 max-h-[420px] min-h-[420px] overflow-y-auto resize-none">
               <p className="whitespace-pre-wrap text-pretty text-muted-foreground">
                 {profile.bio}
               </p>

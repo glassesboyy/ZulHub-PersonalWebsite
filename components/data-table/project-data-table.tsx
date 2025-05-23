@@ -134,13 +134,14 @@ export function ProjectDataTable({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="text-xxs xs:text-xs md:text-sm"
         >
           Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 h-3 xs:h-4 w-3 xs:w-4" />
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="max-w-[150px] truncate font-medium">
+        <div className="max-w-[150px] truncate font-medium text-xxs xs:text-xs md:text-sm">
           {row.original.name}
         </div>
       ),
@@ -151,63 +152,57 @@ export function ProjectDataTable({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="text-xxs xs:text-xs md:text-sm"
         >
           Status
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 h-3 xs:h-4 w-3 xs:w-4" />
         </Button>
       ),
       cell: ({ row }) => (
         <div
-          className={`px-4 py-1 w-fit rounded-full text-center text-xxxs uppercase font-medium tracking-widest ${getStatusColor(row.original.status)}`}
+          className={`px-2 xs:px-4 py-1 w-fit rounded-full text-center text-xxxs xs:text-xxs md:text-xs uppercase font-medium tracking-widest text-white ${getStatusColor(
+            row.original.status
+          )}`}
         >
           {row.original.status}
         </div>
       ),
     },
     {
-      accessorKey: "created_at",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Created At
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => {
-        return new Date(row.original.created_at).toLocaleDateString();
-      },
-    },
-    {
       accessorKey: "project_image",
-      header: "Project Image",
+      header: ({ column }) => (
+        <div className="text-xxs xs:text-xs md:text-sm">Project Image</div>
+      ),
       cell: ({ row }) => (
-        <div className="w-36 h-16 relative">
+        <div className="w-20 xs:w-28 md:w-36 h-12 xs:h-14 md:h-16 relative">
           <Image
             src={row.original.project_image}
             alt={row.original.name}
             fill
-            className="rounded-md"
-            style={{ objectFit: "cover" }}
+            className="rounded-md object-cover"
           />
         </div>
       ),
     },
     {
       id: "actions",
-      header: "Actions",
+      header: ({ column }) => (
+        <div className="text-xxs xs:text-xs md:text-sm">Actions</div>
+      ),
       cell: ({ row }) => {
         const project = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
+              <Button variant="ghost" className="h-6 xs:h-8 w-6 xs:w-8 p-0">
                 <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
+                <MoreHorizontal className="h-3 xs:h-4 w-3 xs:w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent
+              align="end"
+              className="text-xxs xs:text-xs md:text-sm"
+            >
               <DropdownMenuItem
                 onClick={() =>
                   router.push(`/protected/project/detail/${project.id}`)
@@ -253,7 +248,7 @@ export function ProjectDataTable({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2 xs:space-y-4">
       <AlertDialog
         open={bulkDeleteDialogOpen}
         onOpenChange={setBulkDeleteDialogOpen}
@@ -291,7 +286,7 @@ export function ProjectDataTable({
         </AlertDialogContent>
       </AlertDialog>
 
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader className="bg-muted/50 ">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -340,10 +335,12 @@ export function ProjectDataTable({
       <DataTablePagination table={table} />
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="max-w-[90%] xs:max-w-lg">
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Project</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-lg xs:text-xl">
+              Delete Project
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-xxs xs:text-xs md:text-sm">
               Are you sure you want to delete this project? This action cannot
               be undone.
             </AlertDialogDescription>

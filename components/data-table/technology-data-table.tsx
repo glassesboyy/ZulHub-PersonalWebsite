@@ -108,38 +108,56 @@ export function TechnologyDataTable({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="text-xxs xs:text-xs md:text-sm"
         >
           Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 h-3 xs:h-4 w-3 xs:w-4" />
         </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="text-xxs xs:text-xs md:text-sm font-medium">
+          {row.original.name}
+        </div>
       ),
     },
     {
       accessorKey: "icon",
-      header: "Icon",
+      header: ({ column }) => (
+        <div className="text-xxs xs:text-xs md:text-sm">Icon</div>
+      ),
       cell: ({ row }) => {
         const IconComponent = Si[row.original.icon as keyof typeof Si];
         return (
           <div className="flex items-center">
-            {IconComponent ? <IconComponent size={24} /> : null}
+            {IconComponent && (
+              <IconComponent
+                size={16}
+                className="xs:w-5 xs:h-5 md:w-6 md:h-6"
+              />
+            )}
           </div>
         );
       },
     },
     {
       id: "actions",
-      header: "Actions",
+      header: ({ column }) => (
+        <div className="text-xxs xs:text-xs md:text-sm">Actions</div>
+      ),
       cell: ({ row }) => {
         const tech = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
+              <Button variant="ghost" className="h-6 xs:h-8 w-6 xs:w-8 p-0">
                 <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
+                <MoreHorizontal className="h-3 xs:h-4 w-3 xs:w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent
+              align="end"
+              className="text-xxs xs:text-xs md:text-sm"
+            >
               <DropdownMenuItem
                 onClick={() =>
                   router.push(`/protected/technology/edit/${tech.id}`)
@@ -178,7 +196,7 @@ export function TechnologyDataTable({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2 xs:space-y-4">
       <AlertDialog
         open={!!singleDeleteId}
         onOpenChange={() => setSingleDeleteId(null)}
@@ -195,42 +213,12 @@ export function TechnologyDataTable({
           selectedCount={table.getFilteredSelectedRowModel().rows.length}
           onBulkDelete={handleBulkDelete}
         />
-        <AlertDialogContent>
+        <AlertDialogContent className="max-w-[90%] xs:max-w-lg">
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action will permanently delete{" "}
-              {table.getFilteredSelectedRowModel().rows.length} selected
-              technology(ies). This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={async () => {
-                const selectedRows = table.getFilteredSelectedRowModel().rows;
-                const selectedIds = selectedRows.map((row) => row.original.id);
-                const success = await onBulkDelete(selectedIds);
-                if (success) {
-                  setRowSelection({});
-                }
-              }}
-              className="bg-destructive text-destructive-foreground"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog
-        open={!!singleDeleteId}
-        onOpenChange={() => setSingleDeleteId(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Technology</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-lg xs:text-xl">
+              Delete Technology
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-xxs xs:text-xs md:text-sm">
               Are you sure you want to delete this technology? This action
               cannot be undone.
             </AlertDialogDescription>
@@ -247,37 +235,7 @@ export function TechnologyDataTable({
         </AlertDialogContent>
       </AlertDialog>
 
-      <AlertDialog>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Multiple Technologies</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete{" "}
-              {table.getFilteredSelectedRowModel().rows.length} selected
-              technology(ies)? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={async () => {
-                const selectedIds = table
-                  .getFilteredSelectedRowModel()
-                  .rows.map((row) => row.original.id);
-                const success = await onBulkDelete(selectedIds);
-                if (success) {
-                  setRowSelection({});
-                }
-              }}
-              className="bg-destructive text-destructive-foreground"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader className="bg-muted/50">
             {table.getHeaderGroups().map((headerGroup) => (

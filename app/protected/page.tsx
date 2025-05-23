@@ -115,7 +115,7 @@ export default function ProtectedPage() {
               href={value}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline hover:text-blue-600/50 transition-colors duration-300"
             >
               View Link
             </a>

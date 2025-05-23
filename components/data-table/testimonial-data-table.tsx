@@ -110,25 +110,37 @@ export function TestimonialDataTable({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="text-xxs xs:text-xs md:text-sm"
         >
           Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 h-3 xs:h-4 w-3 xs:w-4" />
         </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="max-w-[120px] truncate  text-xxs xs:text-xs md:text-sm font-medium">
+          {row.original.name}
+        </div>
       ),
     },
     {
       accessorKey: "message",
-      header: "Message",
+      header: ({ column }) => (
+        <div className="text-xxs xs:text-xs md:text-sm">Message</div>
+      ),
       cell: ({ row }) => (
-        <div className="max-w-[400px] truncate">{row.original.message}</div>
+        <div className="max-w-[100px] xs:max-w-[150px] md:max-w-[200px] truncate text-xxs xs:text-xs md:text-sm">
+          {row.original.message}
+        </div>
       ),
     },
     {
       accessorKey: "is_approved",
-      header: "Status",
+      header: ({ column }) => (
+        <div className="text-xxs xs:text-xs md:text-sm">Status</div>
+      ),
       cell: ({ row }) => (
         <div
-          className={`px-4 py-1 w-fit rounded-full text-center text-xxxs uppercase font-medium tracking-widest ${
+          className={`px-2 xs:px-4 py-1 w-fit rounded-full text-center text-xxxs xs:text-xxs md:text-xs uppercase font-medium tracking-widest text-white ${
             row.original.is_approved ? "bg-green-600" : "bg-gray-600"
           }`}
         >
@@ -138,18 +150,23 @@ export function TestimonialDataTable({
     },
     {
       id: "actions",
-      header: "Actions",
+      header: ({ column }) => (
+        <div className="text-xxs xs:text-xs md:text-sm">Actions</div>
+      ),
       cell: ({ row }) => {
         const testimonial = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
+              <Button variant="ghost" className="h-6 xs:h-8 w-6 xs:w-8 p-0">
                 <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
+                <MoreHorizontal className="h-3 xs:h-4 w-3 xs:w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent
+              align="end"
+              className="text-xxs xs:text-xs md:text-sm"
+            >
               <DropdownMenuItem
                 onClick={() =>
                   router.push(`/protected/testimonial/detail/${testimonial.id}`)
@@ -195,7 +212,7 @@ export function TestimonialDataTable({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2 xs:space-y-4">
       <AlertDialog
         open={!!singleDeleteId}
         onOpenChange={() => setSingleDeleteId(null)}
@@ -212,10 +229,12 @@ export function TestimonialDataTable({
           selectedCount={table.getFilteredSelectedRowModel().rows.length}
           onBulkDelete={handleBulkDelete}
         />
-        <AlertDialogContent>
+        <AlertDialogContent className="max-w-[90%] xs:max-w-lg">
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Multiple Testimonials</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-lg xs:text-xl">
+              Delete Multiple Testimonials
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-xxs xs:text-xs md:text-sm">
               Are you sure you want to delete{" "}
               {table.getFilteredSelectedRowModel().rows.length} selected
               testimonial(s)? This action cannot be undone.
@@ -244,10 +263,12 @@ export function TestimonialDataTable({
         open={!!singleDeleteId}
         onOpenChange={() => setSingleDeleteId(null)}
       >
-        <AlertDialogContent>
+        <AlertDialogContent className="max-w-[90%] xs:max-w-lg">
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Testimonial</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-lg xs:text-xl">
+              Delete Testimonial
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-xxs xs:text-xs md:text-sm">
               Are you sure you want to delete this testimonial? This action
               cannot be undone.
             </AlertDialogDescription>
@@ -264,7 +285,7 @@ export function TestimonialDataTable({
         </AlertDialogContent>
       </AlertDialog>
 
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader className="bg-muted/50">
             {table.getHeaderGroups().map((headerGroup) => (

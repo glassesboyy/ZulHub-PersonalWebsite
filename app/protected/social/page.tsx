@@ -16,11 +16,13 @@ export default function SocialPage() {
   }, []);
 
   return (
-    <div className="container">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Social Media</h1>
+    <div className="flex flex-col gap-4 xs:gap-6 md:gap-8 p-2 xs:p-4 md:p-6">
+      <div className="flex flex-col xs:flex-row gap-2 xs:gap-0 xs:items-center justify-between">
+        <h1 className="text-xl xs:text-2xl md:text-3xl font-bold tracking-tight">
+          Social Media
+        </h1>
         <Link href="/protected/social/create">
-          <Button>Create New Social Media</Button>
+          <Button className="w-full xs:w-auto">Create New Social Media</Button>
         </Link>
       </div>
       <SocialDataTable

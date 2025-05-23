@@ -242,7 +242,7 @@ export default function EditProfilePage({
                     <FormControl>
                       <Textarea
                         {...field}
-                        className="min-h-[300px] resize-none bg-muted/50 p-4"
+                        className="min-h-[470px] max-h-[470px] resize-none bg-muted/50 p-4"
                         placeholder="Write something about yourself..."
                       />
                     </FormControl>
