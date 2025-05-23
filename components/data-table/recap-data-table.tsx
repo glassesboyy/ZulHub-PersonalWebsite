@@ -34,11 +34,13 @@ export function RecapDataTable({
   };
 
   return (
-    <div className="rounded-md border">
-      <div className="flex items-center justify-between p-4 border-b">
-        <h2 className="text-xl font-semibold">{title}</h2>
+    <div className="rounded-md border w-full">
+      <div className="flex flex-col xs:flex-row items-center justify-between p-2 xs:p-4 border-b gap-2 xs:gap-0">
+        <h2 className="text-lg xs:text-xl font-semibold">{title}</h2>
         <Link href={managePath}>
-          <Button>Manage</Button>
+          <Button size="sm" className="w-full xs:w-auto">
+            Manage
+          </Button>
         </Link>
       </div>
       <div className="relative w-full overflow-auto">
@@ -46,7 +48,12 @@ export function RecapDataTable({
           <TableHeader>
             <TableRow>
               {columns.map((column) => (
-                <TableHead key={column.accessorKey}>{column.header}</TableHead>
+                <TableHead
+                  key={column.accessorKey}
+                  className="text-xxs xs:text-xs md:text-sm whitespace-nowrap"
+                >
+                  {column.header}
+                </TableHead>
               ))}
             </TableRow>
           </TableHeader>
@@ -55,7 +62,7 @@ export function RecapDataTable({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="text-center h-24"
+                  className="text-center h-16 xs:h-20 md:h-24 text-xs xs:text-sm"
                 >
                   No data available
                 </TableCell>
@@ -64,7 +71,10 @@ export function RecapDataTable({
               data.slice(0, 5).map((row, i) => (
                 <TableRow key={i}>
                   {columns.map((column) => (
-                    <TableCell key={column.accessorKey}>
+                    <TableCell
+                      key={column.accessorKey}
+                      className="text-xxs xs:text-xs md:text-sm whitespace-nowrap"
+                    >
                       {renderCell(column, row)}
                     </TableCell>
                   ))}

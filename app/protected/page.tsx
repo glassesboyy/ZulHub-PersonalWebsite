@@ -33,7 +33,15 @@ export default function ProtectedPage() {
       title: "Certificates",
       data: certificates,
       columns: [
-        { header: "Title", accessorKey: "title" },
+        {
+          header: "Title",
+          accessorKey: "title",
+          cell: (value: string) => (
+            <div className="truncate max-w-[150px] xs:max-w-[200px] md:max-w-[250px]">
+              {value}
+            </div>
+          ),
+        },
         {
           header: "Certificate",
           accessorKey: "certificate_image",
@@ -107,9 +115,9 @@ export default function ProtectedPage() {
               href={value}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline truncate block max-w-[200px]"
+              className="text-blue-600 hover:underline"
             >
-              {value}
+              View Link
             </a>
           ),
         },
@@ -167,17 +175,17 @@ export default function ProtectedPage() {
   ];
 
   return (
-    <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">
+    <div className="flex flex-col gap-4 xs:gap-6 md:gap-8 p-2 xs:p-4 md:p-6">
+      <div className="flex flex-col gap-1 xs:gap-2">
+        <h1 className="text-xl xs:text-2xl md:text-3xl font-bold tracking-tight">
           Dashboard Overview
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-xxs xs:text-xs md:text-sm text-muted-foreground">
           Here's a quick overview of all your data
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 xs:gap-4 md:gap-6">
         {recapSections.map((section) => (
           <RecapDataTable
             key={section.title}

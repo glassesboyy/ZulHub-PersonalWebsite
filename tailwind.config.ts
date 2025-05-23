@@ -10,11 +10,24 @@ const config = {
   ],
   prefix: "",
   theme: {
+    screens: {
+      'xs': '320px',     // Extra Small Mobile
+      'sm': '480px',     // Small Mobile
+      'md': '601px',     // Small Tablets
+      'lg': '768px',     // Regular Tablets
+      'xl': '1025px',    // Small Laptops
+      '2xl': '1280px',   // Laptops & Desktops
+    },
     container: {
       center: true,
       padding: '2rem',
       screens: {
-        '2xl': '1400px'
+        'xs': '320px',
+        'sm': '480px',
+        'md': '601px',
+        'lg': '768px',
+        'xl': '1025px',
+        '2xl': '1280px',
       }
     },
     extend: {
