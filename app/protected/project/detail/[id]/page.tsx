@@ -39,74 +39,111 @@ export default function ProjectDetailPage({
   if (!project) return <div>Loading...</div>;
 
   return (
-    <div className="container max-w-2xl py-10">
-      <h1 className="text-3xl font-bold tracking-tight mb-8">
-        Project Details
-      </h1>
-      <div className="space-y-6">
-        <div>
-          <h2 className="text-xl font-semibold mb-2">{project.name}</h2>
-          <p className="text-gray-600 mb-4">{project.description}</p>
-          <div
-            className={`inline-block px-3 py-1 rounded-full text-sm ${
-              project.status === "planned"
-                ? "bg-gray-600"
-                : project.status === "on process"
-                  ? "bg-blue-600"
-                  : project.status === "on hold"
-                    ? "bg-yellow-600"
-                    : "bg-green-600"
-            }`}
-          >
-            {project.status}
-          </div>
-        </div>
-
-        <div className="mt-6">
-          <h3 className="text-lg font-medium mb-2">Project Image</h3>
-          <div className="border border-white  rounded-md py-1 px-2">
-            <div className="relative w-full h-[120px] ">
-              <Image
-                src={project.project_image}
-                alt={project.name}
-                fill
-                style={{ objectFit: "contain" }}
-                className="rounded-md"
-              />
-            </div>
-          </div>
-        </div>
-
-        {project.technologies && project.technologies.length > 0 && (
-          <div className="mt-6">
-            <h3 className="text-lg font-medium mb-2">Technologies Used</h3>
-            <div className="flex flex-wrap gap-2">
-              {project.technologies.map((tech: Technology) => (
-                <span
-                  key={tech.id}
-                  className="px-3 py-1 bg-black border border-white/70 rounded-full text-sm"
-                >
-                  {tech.name}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div className="flex gap-4">
+    <div className="flex flex-col gap-4 xs:gap-6 md:gap-8 p-2 xs:p-4 md:p-6">
+      {/* Header Section */}
+      <div className="flex flex-col xs:flex-row gap-2 xs:gap-4 xs:items-center justify-between">
+        <h1 className="text-xl xs:text-2xl md:text-3xl font-bold tracking-tight">
+          Project Details
+        </h1>
+        <div className="flex w-full xs:w-auto xs:flex-col md:flex-row gap-2 xs:gap-4">
           <Button
-            type="button"
+            variant="outline"
+            onClick={() =>
+              router.push(`/protected/project/edit/${project?.id}`)
+            }
+            className="w-full xs:w-auto text-xs xs:text-xs md:text-sm"
+          >
+            Edit Project
+          </Button>
+          <Button
             onClick={() => router.push("/protected/project")}
+            className="w-full xs:w-auto text-xs xs:text-xs md:text-sm"
           >
             Back to List
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push(`/protected/project/edit/${project.id}`)}
-          >
-            Edit
-          </Button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="grid gap-4 xs:gap-6 md:gap-8">
+        {/* Project Header Card */}
+        <div className="rounded-lg border bg-card p-4 xs:p-6">
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="relative aspect-video md:w-[300px] rounded-md overflow-hidden">
+              <Image
+                src={project?.project_image || "/placeholder.png"}
+                alt={project?.name || "Project"}
+                fill
+                className="object-cover"
+                priority
+                sizes="(max-width: 320px) 100vw, (max-width: 768px) 80vw, 300px"
+              />
+            </div>
+            <div className="flex-1 space-y-4">
+              <div>
+                <h2 className="text-lg xs:text-xl md:text-2xl font-semibold">
+                  {project?.name}
+                </h2>
+                <div className="h-[1px] w-20 bg-primary/20 my-3" />
+              </div>
+
+              {/* Technologies Section with Label */}
+              {project?.technologies && project.technologies.length > 0 && (
+                <div className="space-y-2">
+                  <span className="text-xxs xs:text-xs md:text-sm text-muted-foreground font-medium">
+                    Technologies Used:
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.map((tech: Technology) => (
+                      <span
+                        key={tech.id}
+                        className="px-4 py-1 bg-primary/10 text-primary hover:bg-primary/20 transition-colors cursor-default border border-primary/20 rounded-full text-xxs xs:text-xs md:text-sm"
+                      >
+                        {tech.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Status Section with Label */}
+              <div className="space-y-2">
+                <span className="text-xxs xs:text-xs md:text-sm text-muted-foreground font-medium">
+                  Project Status:
+                </span>
+                <div
+                  className={`px-4 py-1 w-fit rounded-full uppercase text-xxs xs:text-xs md:text-sm font-medium tracking-wide text-white ${
+                    project?.status === "planned"
+                      ? "bg-gray-600"
+                      : project?.status === "on process"
+                        ? "bg-blue-600"
+                        : project?.status === "on hold"
+                          ? "bg-yellow-600"
+                          : "bg-green-600"
+                  }`}
+                >
+                  {project?.status}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Project Details Grid */}
+        <div className="grid gap-4 xs:gap-6 grid-cols-1">
+          {/* Description Section */}
+          <div className="rounded-lg border bg-card p-4 xs:p-6 order-2 lg:order-1">
+            <h3 className="text-sm xs:text-base md:text-lg font-medium mb-4">
+              Project Description
+            </h3>
+            <div className="prose prose-gray dark:prose-invert max-w-none">
+              <div className="rounded-md bg-muted/50 p-4 xs:p-6">
+                <p className="whitespace-pre-wrap text-pretty text-xxs xs:text-xs md:text-sm text-muted-foreground">
+                  {project?.description}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

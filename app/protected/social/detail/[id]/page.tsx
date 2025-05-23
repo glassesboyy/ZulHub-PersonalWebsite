@@ -40,55 +40,83 @@ export default function SocialDetailPage({
   }>;
 
   return (
-    <div className="container max-w-2xl py-10">
-      <h1 className="text-3xl font-bold tracking-tight mb-8">
-        Social Media Details
-      </h1>
-      <div className="space-y-6">
-        <div>
-          <h2 className="text-xl font-semibold mb-2">{social.name}</h2>
-          <p className="text-gray-600 mb-4">{social.description}</p>
-          <div className="space-y-4">
-            <p>
-              <span className="font-medium">Link: </span>
-              <a
-                href={social.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
-              >
-                {social.link}
-              </a>
-            </p>
-            <div className="flex items-center gap-2">
-              <span className="font-medium">Icon: </span>
-              {IconComponent && (
-                <div className="flex items-center gap-2">
-                  <IconComponent size={24} />
-                  <span className="text-gray-600">{social.icon}</span>
-                </div>
-              )}
-            </div>
-            <p>
-              <span className="font-medium">Created: </span>
-              {new Date(social.created_at).toLocaleDateString()}
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-4">
+    <div className="flex flex-col gap-4 xs:gap-6 md:gap-8 p-2 xs:p-4 md:p-6">
+      {/* Header Section */}
+      <div className="flex flex-col xs:flex-row gap-2 xs:gap-4 xs:items-center justify-between">
+        <h1 className="text-xl xs:text-2xl md:text-3xl font-bold tracking-tight">
+          Social Media Details
+        </h1>
+        <div className="flex w-full xs:w-auto xs:flex-col md:flex-row gap-2 xs:gap-4">
           <Button
-            type="button"
+            variant="outline"
+            onClick={() => router.push(`/protected/social/edit/${social?.id}`)}
+            className="w-full xs:w-auto text-xs xs:text-xs md:text-sm"
+          >
+            Edit Social Media
+          </Button>
+          <Button
             onClick={() => router.push("/protected/social")}
+            className="w-full xs:w-auto text-xs xs:text-xs md:text-sm"
           >
             Back to List
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push(`/protected/social/edit/${social.id}`)}
-          >
-            Edit
-          </Button>
+        </div>
+      </div>
+
+      {/* Main Content Card */}
+      <div className="rounded-lg border bg-card">
+        {/* Icon and Name Header */}
+        <div className="p-4 xs:p-6 border-b flex flex-col xs:flex-row gap-4 items-center">
+          <div className="w-16 h-16 xs:w-20 xs:h-20 rounded-full bg-primary/10 flex items-center justify-center">
+            {IconComponent && <IconComponent size={32} />}
+          </div>
+          <div className="text-center xs:text-left">
+            <h2 className="text-lg xs:text-xl md:text-2xl font-semibold">
+              {social?.name}
+            </h2>
+            <p className="text-xxs xs:text-xs md:text-sm text-muted-foreground mt-1">
+              {social?.icon}
+            </p>
+          </div>
+        </div>
+
+        {/* Details Content */}
+        <div className="p-4 xs:p-6 space-y-4 xs:space-y-6">
+          {/* Description */}
+          <div className="space-y-2">
+            <span className="text-xxs xs:text-xs md:text-sm text-muted-foreground font-medium">
+              Description
+            </span>
+            <p className="text-xxs xs:text-xs md:text-sm">
+              {social?.description}
+            </p>
+          </div>
+
+          {/* Visit Link Button */}
+          <div className="pt-2">
+            <Button
+              variant="outline"
+              className="w-full text-xxs xs:text-xs md:text-sm"
+              onClick={() =>
+                window.open(social?.link, "_blank", "noopener,noreferrer")
+              }
+            >
+              <svg
+                className="h-3 xs:h-4 w-3 xs:w-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+              Visit {social?.name}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
