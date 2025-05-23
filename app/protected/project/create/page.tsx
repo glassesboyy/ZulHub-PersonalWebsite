@@ -1,7 +1,8 @@
 "use client";
 
-import { ComboboxTechnologies } from "@/components/combobox-technologies";
+import { ComboboxTechnologies } from "@/components/dasboard/combobox-technologies";
 import { Button } from "@/components/ui/button";
+import { FileInput } from "@/components/ui/file-input";
 import {
   Form,
   FormControl,
@@ -27,11 +28,10 @@ import {
 import { Technology } from "@/types/technology";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { FileInput } from "@/components/ui/file-input";
-import Link from "next/link";
 
 export default function CreateProjectPage() {
   const [technologies, setTechnologies] = useState<Technology[]>([]);

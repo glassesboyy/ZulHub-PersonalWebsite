@@ -1,6 +1,6 @@
 "use client";
 
-import { SocialDataTable } from "@/components/data-table/social-data-table";
+import { SocialDataTable } from "@/components/dasboard/data-table/social-data-table";
 import { Button } from "@/components/ui/button";
 import { useSocials } from "@/hooks/social-hooks";
 import Link from "next/link";

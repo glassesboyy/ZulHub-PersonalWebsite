@@ -1,9 +1,9 @@
 export type Profile = {
   id: number;
-  name: string;
+  full_name: string;
   tagline: string;
   bio: string;
   cv: string;
-  avatar: string;
-  created_at: string;
+  avatar_url: string;
+  updated_at: string;
 };

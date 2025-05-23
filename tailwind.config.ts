@@ -111,11 +111,42 @@ const config = {
           to: {
             height: '0'
           }
-        }
+        },
+        'star-movement-bottom': {
+  				'0%': {
+  					transform: 'translate(0%, 0%)',
+  					opacity: '1'
+  				},
+  				'100%': {
+  					transform: 'translate(-100%, 0%)',
+  					opacity: '0'
+  				}
+  			},
+  			'star-movement-top': {
+  				'0%': {
+  					transform: 'translate(0%, 0%)',
+  					opacity: '1'
+  				},
+  				'100%': {
+  					transform: 'translate(100%, 0%)',
+  					opacity: '0'
+  				}
+  			},
+  			orbit: {
+  				'0%': {
+  					transform: 'rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg))'
+  				},
+  				'100%': {
+  					transform: 'rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg))'
+  				}
+  			}
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out'
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        'star-movement-bottom': 'star-movement-bottom linear infinite alternate',
+  			'star-movement-top': 'star-movement-top linear infinite alternate',
+  			orbit: 'orbit calc(var(--duration)*1s) linear infinite'
       }
     }
   },

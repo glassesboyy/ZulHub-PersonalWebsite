@@ -1,6 +1,6 @@
 "use client";
 
-import { TechnologyDataTable } from "@/components/data-table/technology-data-table";
+import { TechnologyDataTable } from "@/components/dasboard/data-table/technology-data-table";
 import { Button } from "@/components/ui/button";
 import { useTechnologies } from "@/hooks/technology-hooks";
 import Link from "next/link";

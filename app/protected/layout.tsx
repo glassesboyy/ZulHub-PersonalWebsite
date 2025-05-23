@@ -1,5 +1,5 @@
-import { ProtectedSidebar } from "@/components/protected-sidebar";
-import { ThemeSwitcher } from "@/components/theme-switcher";
+import { ProtectedSidebar } from "@/components/dasboard/protected-sidebar";
+import { ThemeSwitcher } from "@/components/dasboard/theme-switcher";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function ProtectedLayout({

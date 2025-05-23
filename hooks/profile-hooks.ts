@@ -102,14 +102,14 @@ export function useProfiles() {
 
   const updateProfile = async (
     id: string,
-    name: string,
+    full_name: string,
     tagline: string,
     bio: string,
     cvFile: File | null,
     avatarFile: File | null,
   ) => {
     try {
-      let updateData: any = { name, tagline, bio };
+      let updateData: any = { full_name, tagline, bio };
 
       // Fetch current profile to get current file URLs
       const currentProfile = await fetchProfileById(id);
@@ -126,11 +126,11 @@ export function useProfiles() {
 
       if (avatarFile) {
         // Delete old avatar file
-        await deleteFile(currentProfile.avatar, 'avatar-image');
+        await deleteFile(currentProfile.avatar_url, 'avatar-image');
         // Upload new avatar file
         const avatarUrl = await uploadAvatar(avatarFile);
         if (!avatarUrl) return false;
-        updateData.avatar = avatarUrl;
+        updateData.avatar_url = avatarUrl;
       }
 
       const { error } = await supabase

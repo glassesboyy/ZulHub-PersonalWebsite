@@ -25,7 +25,7 @@ export default function ProfilePage() {
   if (!profile) return <div>Loading...</div>;
 
   return (
-    <div className="container max-w-5xl">
+    <div className="container">
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">My Profile</h1>
         <div className="flex gap-4 flex-col xs:flex-col sm:flex-row">
@@ -49,15 +49,15 @@ export default function ProfilePage() {
           <div className="rounded-lg border bg-card p-6">
             <div className="relative mx-auto mb-6 h-48 w-48">
               <Image
-                src={profile.avatar}
-                alt={profile.name}
+                src={profile.avatar_url}
+                alt={profile.full_name}
                 fill
                 className="rounded-full object-cover ring-2 ring-primary/20"
                 priority
               />
             </div>
             <div className="text-center">
-              <h2 className="text-2xl font-semibold">{profile.name}</h2>
+              <h2 className="text-2xl font-semibold">{profile.full_name}</h2>
               <p className="mt-2 text-pretty text-muted-foreground">
                 {profile.tagline}
               </p>

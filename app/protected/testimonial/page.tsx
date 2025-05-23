@@ -1,6 +1,6 @@
 "use client";
 
-import { TestimonialDataTable } from "@/components/data-table/testimonial-data-table";
+import { TestimonialDataTable } from "@/components/dasboard/data-table/testimonial-data-table";
 import { Button } from "@/components/ui/button";
 import { useTestimonials } from "@/hooks/testimonial-hooks";
 import Link from "next/link";

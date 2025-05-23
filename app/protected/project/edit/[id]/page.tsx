@@ -1,6 +1,6 @@
 "use client";
 
-import { ComboboxTechnologies } from "@/components/combobox-technologies";
+import { ComboboxTechnologies } from "@/components/dasboard/combobox-technologies";
 import { Button } from "@/components/ui/button";
 import { FileInput } from "@/components/ui/file-input";
 import {

@@ -1,6 +1,6 @@
 "use client";
 
-import { RecapDataTable } from "@/components/data-table/recap-data-table";
+import { RecapDataTable } from "@/components/dasboard/data-table/recap-data-table";
 import { useCertificates } from "@/hooks/certificate-hooks";
 import { useProjects } from "@/hooks/project-hooks";
 import { useSocials } from "@/hooks/social-hooks";

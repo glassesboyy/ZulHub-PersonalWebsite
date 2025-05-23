@@ -5,7 +5,7 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 const ACCEPTED_CV_TYPES = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
 
 const profileSchema = z.object({
-  name: z
+  full_name: z
     .string()
     .min(2, "Name must be at least 2 characters")
     .max(100, "Name must not exceed 100 characters"),

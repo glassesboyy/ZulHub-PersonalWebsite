@@ -38,7 +38,7 @@ export default function EditProfilePage({
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: "",
+      full_name: "",
       tagline: "",
       bio: "",
       avatarFile: null,
@@ -51,13 +51,13 @@ export default function EditProfilePage({
       const profile = await fetchProfileById(resolvedParams.id);
       if (profile) {
         form.reset({
-          name: profile.name,
+          full_name: profile.full_name,
           tagline: profile.tagline,
           bio: profile.bio,
           avatarFile: null,
           cvFile: null,
         });
-        setAvatarPreview(profile.avatar);
+        setAvatarPreview(profile.avatar_url);
         setCurrentCV(profile.cv);
       }
     }
@@ -68,7 +68,7 @@ export default function EditProfilePage({
   const onSubmit = async (data: ProfileFormValues) => {
     const success = await updateProfile(
       resolvedParams.id,
-      data.name,
+      data.full_name,
       data.tagline,
       data.bio,
       data.cvFile,
@@ -80,7 +80,7 @@ export default function EditProfilePage({
   };
 
   return (
-    <div className="container max-w-5xl">
+    <div className="container">
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Edit Profile</h1>
         <div className="flex gap-4">
@@ -151,7 +151,7 @@ export default function EditProfilePage({
                 <div className="space-y-4">
                   <FormField
                     control={form.control}
-                    name="name"
+                    name="full_name"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
