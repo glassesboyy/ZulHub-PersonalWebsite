@@ -285,7 +285,7 @@ export function useProjects() {
     status: string,
     imageFile: File,
     techIds: number[],
-    link: string, // Add this parameter
+    link: string,
   ) => {
     try {
       const imageUrl = await uploadImage(imageFile);

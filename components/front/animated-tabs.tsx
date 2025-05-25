@@ -96,31 +96,31 @@ const AnimatedTabs = ({
   if (!tabs?.length) return null;
 
   return (
-    <div className={cn("w-full max-w-3xl flex flex-col gap-y-4", className)}>
+    <div className={cn("w-full max-w-3xl flex flex-col gap-y-6", className)}>
       {/* Tab buttons */}
-      <div className="flex gap-2 flex-wrap bg-[#11111198] bg-opacity-50 backdrop-blur-sm p-1 rounded-xl">
+      <div className="flex gap-3 flex-wrap bg-background/90 border border-primary/10 hover:border-primary/20 backdrop-blur-sm p-1.5 rounded-xl transition-all duration-300">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={cn(
-              "relative px-3 py-1.5 text-sm font-medium rounded-lg text-white outline-none transition-colors"
+              "relative px-4 py-1 text-xs tracking-wider rounded-lg text-foreground/80 outline-none"
             )}
           >
             {activeTab === tab.id && (
               <motion.div
                 layoutId="active-tab"
-                className="absolute inset-0 bg-[#111111d1] bg-opacity-50 shadow-[0_0_20px_rgba(0,0,0,0.2)] backdrop-blur-sm !rounded-lg"
-                transition={{ type: "spring", duration: 0.6 }}
+                className="absolute inset-0 bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10  shadow-[0_0_20px_rgba(0,0,0,0.2)] backdrop-blur-sm !rounded-lg"
+                transition={{ type: "spring", duration: 0.5, bounce: 0.2 }}
               />
             )}
-            <span className="relative z-10">{tab.label}</span>
+            <span className="relative z-10 font-[Audiowide]">{tab.label}</span>
           </button>
         ))}
       </div>
 
-      {/* Content area with hidden scrollbar */}
-      <div className="p-4 bg-[#11111198] shadow-[0_0_20px_rgba(0,0,0,0.2)] text-white bg-opacity-50 backdrop-blur-sm rounded-xl border h-[420px]">
+      {/* Content area */}
+      <div className="px-1 py-2 bg-gradient-to-b from-background/90 to-muted/70 border border-primary/10 hover:border-primary/20 backdrop-blur-sm rounded-xl h-[420px] transition-all duration-300">
         {tabs.map(
           (tab) =>
             activeTab === tab.id && (
@@ -139,7 +139,7 @@ const AnimatedTabs = ({
                   ease: "circInOut",
                   type: "spring",
                 }}
-                className="h-full overflow-y-auto flex flex-col gap-6 p-4 scrollbar-hide"
+                className="h-full overflow-y-auto flex flex-col gap-4 p-4 scrollbar-hide"
               >
                 {tab.content}
               </motion.div>

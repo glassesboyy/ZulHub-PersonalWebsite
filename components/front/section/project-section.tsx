@@ -11,16 +11,22 @@ import { BadgeFe } from "../badge-fe";
 const StatusBadge = ({ status }: { status: string }) => {
   const statusStyles =
     {
-      done: "bg-green-500/20 text-green-500",
-      "on process": "bg-blue-500/20 text-blue-500",
-      "on hold": "bg-yellow-500/20 text-yellow-500",
-      planned: "bg-gray-500/20 text-gray-500",
-    }[status] || "bg-gray-500/20 text-gray-500";
+      done: "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 hover:from-green-500/30 hover:to-emerald-500/30 border-green-500/30",
+      "on process":
+        "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-400 hover:from-blue-500/30 hover:to-cyan-500/30 border-blue-500/30",
+      "on hold":
+        "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 hover:from-yellow-500/30 hover:to-orange-500/30 border-yellow-500/30",
+      planned:
+        "bg-gradient-to-r from-gray-500/20 to-slate-500/20 text-gray-400 hover:from-gray-500/30 hover:to-slate-500/30 border-gray-500/30",
+    }[status] ||
+    "bg-gradient-to-r from-gray-500/20 to-slate-500/20 text-gray-400";
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm text-white/60">Status:</span>
-      <span className={`px-3 py-1 rounded-full text-xs ${statusStyles}`}>
+    <div className="flex flex-col gap-2 max-w-fit">
+      <span className="text-xs font-medium text-foreground/60">Status:</span>
+      <span
+        className={`px-3 py-1 rounded-full text-xxs uppercase tracking-wide transition-all duration-300 hover:shadow-lg ${statusStyles}`}
+      >
         {status}
       </span>
     </div>
@@ -29,24 +35,24 @@ const StatusBadge = ({ status }: { status: string }) => {
 
 const ProjectContent = ({ project }: { project: Project }) => (
   <>
-    {/* Image Section */}
-    <div className="relative h-[250px]  w-full flex-shrink-0">
+    <div className="relative h-[280px] w-full flex-shrink-0 overflow-hidden rounded-xl ring-1 ring-border/10 hover-scale">
       <Image
         src={project.project_image}
         alt={project.name}
         fill
-        className="rounded-xl object-cover shadow-[0_0_20px_rgba(0,0,0,0.2)] border-none"
+        className="object-cover transition-all duration-500 hover:scale-110"
       />
     </div>
 
-    {/* Content */}
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 pb-4 px-4 pt-2 rounded-md shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_30px_rgba(0,0,0,0.15)] transition-all duration-300">
       {/* Title */}
-      <div className="space-y-2">
-        <h2 className="text-xl font-[audioWide] tracking-wide font-medium text-white">
+      <div className="space-y-6">
+        <h2 className="text-xl font-[audioWide] tracking-wide font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
           {project.name}
         </h2>
-        <div className="h-[1px] w-full bg-primary/20" />
+
+        {/* Simple separator */}
+        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
       </div>
 
       {/* Technologies */}
@@ -55,7 +61,7 @@ const ProjectContent = ({ project }: { project: Project }) => (
           {project.technologies.map((tech) => (
             <span
               key={tech.id}
-              className="px-2 py-1 bg-primary/10 text-primary text-xxs rounded-full"
+              className="px-3 py-1 bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10 hover:border-primary/20 text-xxs rounded-full transition-all duration-300"
             >
               {tech.name}
             </span>
@@ -68,8 +74,8 @@ const ProjectContent = ({ project }: { project: Project }) => (
 
       {/* Description */}
       <div className="space-y-2">
-        <h3 className="text-xs font-medium text-white/60">Description:</h3>
-        <p className="text-xs text-gray-200 leading-relaxed">
+        <h3 className="text-xs font-medium text-foreground/60">Description:</h3>
+        <p className="text-xs text-foreground/80 leading-relaxed">
           {project.description}
         </p>
       </div>
@@ -77,14 +83,16 @@ const ProjectContent = ({ project }: { project: Project }) => (
       {/* Project Link */}
       {project.link && (
         <div className="space-y-2">
-          <h3 className="text-xs font-medium text-white/60">Project Link:</h3>
+          <h3 className="text-xs font-medium text-foreground/60">
+            Project Link:
+          </h3>
           <Link
             href={project.link}
             target="_blank"
-            className="text-primary hover:underline text-xs inline-flex items-center gap-2 group"
+            className="py-2 px-4 rounded-lg bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10 shadow-[0_0_20px_rgba(0,0,0,0.2)] backdrop-blur-sm text-foreground hover:text-primary text-xs inline-flex items-center gap-2 group transition-all duration-300"
           >
             View Project
-            <span className="transform transition-transform group-hover:translate-x-1">
+            <span className="transform transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary">
               →
             </span>
           </Link>
@@ -96,7 +104,7 @@ const ProjectContent = ({ project }: { project: Project }) => (
 
 const ProjectHeader = () => (
   <div className="text-center mb-8">
-    <div className="space-y-1">
+    <div className="space-y-4">
       <BadgeFe label="My Project Gallery" />
       <div className="space-y-1">
         <span className="font-base uppercase xs:text-2xl md:text-3xl tracking-widest font-[Audiowide] text-white">

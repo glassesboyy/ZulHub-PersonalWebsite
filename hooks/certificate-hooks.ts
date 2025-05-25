@@ -31,7 +31,7 @@ export function useCertificates() {
       const filePath = `certificates/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("certificate-image") // Mengubah nama bucket sesuai dengan yang ada di Supabase
+        .from("certificate-image")
         .upload(filePath, file);
 
       if (uploadError) {
@@ -42,7 +42,7 @@ export function useCertificates() {
       const {
         data: { publicUrl },
       } = supabase.storage
-        .from("certificate-image") // Mengubah nama bucket sesuai dengan yang ada di Supabase
+        .from("certificate-image")
         .getPublicUrl(filePath);
 
       return publicUrl;
@@ -121,7 +121,7 @@ export function useCertificates() {
       let updateData: any = { title };
 
       if (imageFile) {
-        // Fetch current certificate to get current image URL
+
         const currentCertificate = await fetchCertificateById(id);
         if (!currentCertificate) return false;
 
@@ -172,7 +172,6 @@ export function useCertificates() {
 
   const deleteCertificate = async (id: number) => {
     try {
-      // Ambil data sertifikat terlebih dahulu untuk mendapatkan URL gambar
       const certificate = await fetchCertificateById(id.toString());
       if (!certificate) return false;
 
