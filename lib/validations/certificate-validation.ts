@@ -8,6 +8,15 @@ export const certificateFormSchema = z.object({
     .string()
     .min(3, "Title must be at least 3 characters")
     .max(100, "Title must not exceed 100 characters"),
+  issuer: z
+    .string()
+    .min(2, "Issuer must be at least 2 characters")
+    .max(100, "Issuer must not exceed 100 characters"),
+  year: z
+    .string()
+    .min(4, "Year must be at least 4 characters, and should be a valid year")
+    .max(4, "Year must not exceed 4 characters, and should be a valid year")
+    .regex(/^\d{4}$/, "Year must be a valid 4-digit number"),
   certificateImage: z
     .instanceof(File)
     .refine(

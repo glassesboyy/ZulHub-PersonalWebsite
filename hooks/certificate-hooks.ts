@@ -72,7 +72,7 @@ export function useCertificates() {
     }
   };
 
-  const createCertificate = async (title: string, imageFile: File) => {
+  const createCertificate = async (title: string, issuer: string, year: string, imageFile: File) => {
     try {
       const imageUrl = await uploadImage(imageFile);
       if (!imageUrl) {
@@ -86,7 +86,7 @@ export function useCertificates() {
 
       const { error } = await supabase
         .from("certificates")
-        .insert([{ title, certificate_image: imageUrl }]);
+        .insert([{ title, issuer, year, certificate_image: imageUrl }]);
 
       if (error) {
         toast({
@@ -115,10 +115,12 @@ export function useCertificates() {
   const updateCertificate = async (
     id: string,
     title: string,
+    issuer: string,
+    year: string,
     imageFile: File | null,
   ) => {
     try {
-      let updateData: any = { title };
+      let updateData: any = { title, issuer, year };
 
       if (imageFile) {
 

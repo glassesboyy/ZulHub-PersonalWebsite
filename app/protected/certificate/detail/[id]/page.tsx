@@ -89,6 +89,11 @@ export default function CertificateDetailPage({
               <h2 className="text-lg xs:text-xl md:text-2xl font-semibold">
                 {certificate?.title}
               </h2>
+              <div className="mt-2 flex justify-center items-center gap-2 text-sm text-muted-foreground">
+                <span>{certificate?.issuer}</span>
+                <span>•</span>
+                <span>{certificate?.year}</span>
+              </div>
               <div className="mt-2 h-[1px] w-40 bg-primary/20 mx-auto" />
             </div>
 

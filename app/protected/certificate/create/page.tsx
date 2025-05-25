@@ -32,6 +32,8 @@ export default function CreateCertificatePage() {
     resolver: zodResolver(certificateFormSchema),
     defaultValues: {
       title: "",
+      issuer: "",
+      year: "",
     },
   });
 
@@ -44,7 +46,12 @@ export default function CreateCertificatePage() {
       return;
     }
 
-    const success = await createCertificate(data.title, data.certificateImage);
+    const success = await createCertificate(
+      data.title,
+      data.issuer,
+      data.year,
+      data.certificateImage
+    );
     if (success) {
       router.push("/protected/certificate");
     }
@@ -79,6 +86,47 @@ export default function CreateCertificatePage() {
                   <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Certificate title" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="issuer"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Issuer</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Certificate issuer" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="year"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Year</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="YYYY"
+                      maxLength={4}
+                      onKeyPress={(e) => {
+                        if (!/[0-9]/.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        field.onChange(value);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -43,7 +43,9 @@ export function Template({ children }: TemplateProps) {
   const pathname = usePathname();
 
   return (
-    <div className="relative perspective-1000 h-screen overflow-hidden">
+    <div className="relative perspective-1000 min-h-screen">
+      {" "}
+      {/* Removed h-screen and overflow-hidden */}
       <AnimatePresence mode="wait">
         <motion.main
           key={pathname}
@@ -66,7 +68,11 @@ export function Template({ children }: TemplateProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
-          <div className="relative z-10">{children}</div>
+          <div className="relative z-10 pb-8">
+            {" "}
+            {/* Added padding bottom */}
+            {children}
+          </div>
         </motion.main>
       </AnimatePresence>
     </div>

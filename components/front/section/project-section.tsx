@@ -104,7 +104,7 @@ const ProjectContent = ({ project }: { project: Project }) => (
 
 const ProjectHeader = () => (
   <div className="text-center mb-8">
-    <div className="space-y-4">
+    <div className="space-y-1">
       <BadgeFe label="My Project Gallery" />
       <div className="space-y-1">
         <span className="font-base uppercase xs:text-2xl md:text-3xl tracking-widest font-[Audiowide] text-white">

@@ -132,6 +132,26 @@ export function CertificateDataTable({
       ),
     },
     {
+      accessorKey: "issuer",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="text-xxs xs:text-xs md:text-sm"
+          >
+            Issuer
+            <ArrowUpDown className="ml-2 h-3 xs:h-4 w-3 xs:w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="text-xxs xs:text-xs md:text-sm">
+          {row.original.issuer}
+        </div>
+      ),
+    },
+    {
       accessorKey: "certificate_image",
       header: ({ column }) => (
         <div className="text-xxs xs:text-xs md:text-sm">Certificate Image</div>
