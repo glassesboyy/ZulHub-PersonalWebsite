@@ -1,15 +1,14 @@
+"use client";
 import { Template } from "@/app/animation/template";
+import ProjectSection from "@/components/front/section/project-section";
 
 export default function Project() {
   return (
     <Template>
-      <div className="flex flex-col items-center justify-center">
-        <h1 className="text-3xl font-bold font-[Audiowide]">
-          Welcome to Project Page
-        </h1>
-        <p className="text-xs text-white text-center font-[Montserrat] font-light">
-          Subheading Project Page Here..
-        </p>
+      <div className="w-full overflow-hidden px-2">
+        <div className="mx-auto w-full max-w-3xl">
+          <ProjectSection />
+        </div>
       </div>
     </Template>
   );

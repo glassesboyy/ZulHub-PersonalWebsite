@@ -12,13 +12,26 @@ export function useProjects() {
     try {
       const { data, error } = await supabase
         .from("projects")
-        .select("*")
+        .select(`
+          *,
+          technologies:project_tech(
+            technology:technologies(*)
+          )
+        `)
         .order("created_at", { ascending: false });
+
       if (error) {
         console.error("Error fetching projects:", error.message);
         return;
       }
-      setProjects(data || []);
+
+      // Transform the nested data structure
+      const transformedData = data?.map(project => ({
+        ...project,
+        technologies: project.technologies?.map((t: any) => t.technology) || []
+      }));
+
+      setProjects(transformedData || []);
     } catch (error) {
       console.error("Error:", error);
     }
