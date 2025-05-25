@@ -51,7 +51,7 @@ export function TechSection() {
             <span className="font-base uppercase xs:text-2xl md:text-3xl tracking-widest font-[Audiowide] text-white">
               Technologies Stack
             </span>
-            <p className="xs:text-xxs md:text-xs text-white/50 max-w-lg mx-auto">
+            <p className="xs:text-xxs md:text-xs text-white/50 max-w-xl mx-auto">
               Mastering modern frontend technologies like React, Next.js, and
               Tailwind CSS to create responsive, performance, and visually
               stunning web applications. Bringing designs to life with smooth

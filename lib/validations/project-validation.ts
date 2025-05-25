@@ -13,6 +13,7 @@ export const projectSchema = z.object({
     .min(10, "Description must be at least 10 characters")
     .max(2000, "Description must not exceed 2000 characters"),
   status: z.enum(["planned", "on process", "on hold", "done"]),
+  link: z.string().url("Must be a valid URL").or(z.literal("")), // Add this line
   imageFile: z
     .any()
     .refine(file => !file || (file instanceof File && file.size <= MAX_FILE_SIZE),

@@ -272,6 +272,7 @@ export function useProjects() {
     status: string,
     imageFile: File,
     techIds: number[],
+    link: string, // Add this parameter
   ) => {
     try {
       const imageUrl = await uploadImage(imageFile);
@@ -287,7 +288,7 @@ export function useProjects() {
       // Insert project
       const { data: project, error: projectError } = await supabase
         .from("projects")
-        .insert([{ name, description, status, project_image: imageUrl }])
+        .insert([{ name, description, status, project_image: imageUrl, link }]) // Add link
         .select()
         .single();
 
@@ -350,9 +351,10 @@ export function useProjects() {
     status: string,
     imageFile: File | null,
     techIds: number[],
+    link: string, // Add this parameter
   ) => {
     try {
-      let updateData: any = { name, description, status };
+      let updateData: any = { name, description, status, link }; // Add link
 
       if (imageFile) {
         // Fetch current project to get current image URL

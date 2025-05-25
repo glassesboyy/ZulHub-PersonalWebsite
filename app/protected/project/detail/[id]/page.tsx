@@ -14,6 +14,7 @@ interface ProjectWithTech {
   status: string;
   project_image: string;
   technologies: Technology[];
+  link?: string;
 }
 
 export default function ProjectDetailPage({
@@ -144,6 +145,23 @@ export default function ProjectDetailPage({
               </div>
             </div>
           </div>
+
+          {/* Project Link Section */}
+          {project?.link && (
+            <div className="rounded-lg border bg-card p-4 xs:p-6 space-y-2">
+              <h3 className="text-sm xs:text-base md:text-lg font-medium">
+                Project Link
+              </h3>
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xxs xs:text-xs md:text-sm text-primary hover:underline break-all"
+              >
+                {project.link}
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>

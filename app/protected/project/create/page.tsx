@@ -45,6 +45,7 @@ export default function CreateProjectPage() {
       name: "",
       description: "",
       status: "planned",
+      link: "", // Add this line
       imageFile: null,
       technologies: [],
     },
@@ -72,7 +73,8 @@ export default function CreateProjectPage() {
       data.description,
       data.status,
       data.imageFile as File,
-      data.technologies || []
+      data.technologies || [],
+      data.link // Add this
     );
 
     if (success) {
@@ -153,6 +155,24 @@ export default function CreateProjectPage() {
                       <SelectItem value="done">Done</SelectItem>
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="link"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Project Link (Optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://example.com"
+                      {...field}
+                      type="url"
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

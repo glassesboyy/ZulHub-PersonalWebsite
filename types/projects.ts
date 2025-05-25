@@ -8,6 +8,7 @@ export type Project = {
   description: string;
   status: ProjectStatus;
   project_image: string;
+  link: string;
   created_at: string;
   technologies?: Technology[];
 };
