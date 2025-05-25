@@ -7,6 +7,7 @@ import React, { useState } from "react";
 interface Tab {
   id: string;
   label: string;
+  tooltip?: string; // Add tooltip property
   content: React.ReactNode;
 }
 
@@ -96,27 +97,53 @@ const AnimatedTabs = ({
   if (!tabs?.length) return null;
 
   return (
-    <div className={cn("w-full max-w-3xl flex flex-col gap-y-6", className)}>
+    <div className={cn("w-full max-w-3xl flex flex-col gap-y-3", className)}>
       {/* Tab buttons */}
-      <div className="flex gap-3 flex-wrap bg-background/90 border border-primary/10 hover:border-primary/20 backdrop-blur-sm p-1.5 rounded-xl transition-all duration-300">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={cn(
-              "relative px-4 py-1 text-xs tracking-wider rounded-lg text-foreground/80 outline-none"
-            )}
-          >
-            {activeTab === tab.id && (
-              <motion.div
-                layoutId="active-tab"
-                className="absolute inset-0 bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10  shadow-[0_0_20px_rgba(0,0,0,0.2)] backdrop-blur-sm !rounded-lg"
-                transition={{ type: "spring", duration: 0.5, bounce: 0.2 }}
-              />
-            )}
-            <span className="relative z-10 font-[Audiowide]">{tab.label}</span>
-          </button>
-        ))}
+      <div className="flex justify-center">
+        <div className="w-fit flex gap-3 flex-wrap bg-background/90 border border-primary/10 hover:border-primary/20 backdrop-blur-sm p-1.5 rounded-xl transition-all duration-300">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "relative px-4 py-1 text-xs tracking-wider rounded-lg text-foreground/80 outline-none group"
+              )}
+            >
+              {activeTab === tab.id && (
+                <motion.div
+                  layoutId="active-tab"
+                  className="absolute inset-0 bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10  shadow-[0_0_20px_rgba(0,0,0,0.2)] backdrop-blur-sm !rounded-lg"
+                  transition={{ type: "spring", duration: 0.5, bounce: 0.2 }}
+                />
+              )}
+              <span className="relative z-10 font-[Audiowide]">
+                {tab.label}
+              </span>
+
+              {/* Updated tooltip to appear above */}
+              {tab.tooltip && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      duration: 0.15,
+                      ease: "easeOut",
+                    },
+                  }}
+                  className="z-50 absolute hidden group-hover:block bottom-full  -translate-x-1/2 mb-2 w-max"
+                >
+                  <div className="relative px-3 py-1 text-xxxs bg-background/95 border border-primary/10 rounded-md shadow-lg backdrop-blur-sm">
+                    {tab.tooltip}
+                    {/* Arrow pointing down */}
+                    <div className="absolute -bottom-1 -translate-x-1/2 w-2 h-2 bg-background/95 border-r border-b border-primary/10 transform rotate-45" />
+                  </div>
+                </motion.div>
+              )}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Content area */}

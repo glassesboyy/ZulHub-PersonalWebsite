@@ -144,6 +144,7 @@ const ProjectSection = () => {
     return projects.map((project: Project, index: number) => ({
       id: project.id.toString(),
       label: `Project ${index + 1}`,
+      tooltip: project.name, // Add project name as tooltip
       content: <ProjectContent project={project} />,
     }));
   }, [projects]);
