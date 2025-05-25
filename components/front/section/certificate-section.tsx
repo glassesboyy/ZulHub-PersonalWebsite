@@ -62,11 +62,11 @@ const CertificateCard = ({ certificate }: { certificate: Certificate }) => (
         }}
       />
       <div className="px-3 pt-3 pb-2 flex flex-col gap-4 bg-gradient-to-b from-background/90 to-muted/90 rounded-lg transition-all duration-300">
-        <h3 className="font-[Audiowide] text-xxs font-medium bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent truncate">
+        <h3 className="text-xs font-[audioWide] uppercase tracking-wide text-primary/80 truncate">
           {certificate.title}
         </h3>
         <div className="w-full flex justify-between items-center">
-          <span className="text-xxxs text-primary/80 truncate max-w-[100px]">
+          <span className="text-xxxs text-primary/60 truncate max-w-[100px]">
             {certificate.issuer}
           </span>
           <span className="text-xxxs text-primary/60 flex-shrink-0">
@@ -87,13 +87,13 @@ const PaginationControls = ({
   totalPages: number;
   onPageChange: (page: number) => void;
 }) => (
-  <div className="flex justify-center items-center gap-2 mt-4">
+  <div className="flex justify-center items-center gap-2 mt-4 relative z-50">
     <Button
       variant="gradient"
       size="sm"
       onClick={() => onPageChange(currentPage - 1)}
       disabled={currentPage === 1}
-      className="text-xxxs xs:text-xxs"
+      className="text-xxxs xs:text-xxs relative"
     >
       Previous
     </Button>
@@ -104,7 +104,7 @@ const PaginationControls = ({
           variant={currentPage === i + 1 ? "gradient" : "ghost"}
           size="sm"
           onClick={() => onPageChange(i + 1)}
-          className="text-xs w-8"
+          className="text-xs w-8 relative"
         >
           {i + 1}
         </Button>
@@ -115,7 +115,7 @@ const PaginationControls = ({
       size="sm"
       onClick={() => onPageChange(currentPage + 1)}
       disabled={currentPage === totalPages}
-      className="text-xs"
+      className="text-xs relative"
     >
       Next
     </Button>
@@ -164,7 +164,7 @@ const CertificateSection = () => {
   }
 
   return (
-    <>
+    <div className="relative">
       {/* Header */}
       <div className="text-center mb-8">
         <div className="space-y-1">
@@ -219,6 +219,7 @@ const CertificateSection = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
+        className="relative z-50"
       >
         {totalPages > 1 && (
           <PaginationControls
@@ -230,11 +231,11 @@ const CertificateSection = () => {
       </motion.div>
 
       {/* Curved Background Section */}
-      <div className="relative -mt-32 h-96 w-full overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]">
-        <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,hsl(var(--foreground)),transparent_70%)] before:opacity-20" />
+      <div className="relative -mt-32 h-96 w-full overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)] pointer-events-none">
+        <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,hsl(var(--foreground-2)),transparent_90%)] before:opacity-20" />
         <div className="absolute -left-1/2 top-1/2 aspect-[1/0.7] z-10 w-[200%] rounded-[100%] border-t border-border/40 bg-background dark:bg-muted" />
       </div>
-    </>
+    </div>
   );
 };
 

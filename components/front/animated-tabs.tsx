@@ -112,11 +112,11 @@ const AnimatedTabs = ({
               {activeTab === tab.id && (
                 <motion.div
                   layoutId="active-tab"
-                  className="absolute inset-0 bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10  shadow-[0_0_20px_rgba(0,0,0,0.2)] backdrop-blur-sm !rounded-lg"
+                  className="absolute inset-0 bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10 !rounded-lg"
                   transition={{ type: "spring", duration: 0.5, bounce: 0.2 }}
                 />
               )}
-              <span className="relative z-10 font-[Audiowide]">
+              <span className="relative z-10 text-xxs uppercase font-medium tracking-widest">
                 {tab.label}
               </span>
 
@@ -134,7 +134,7 @@ const AnimatedTabs = ({
                   }}
                   className="z-50 absolute hidden group-hover:block bottom-full  -translate-x-1/2 mb-2 w-max"
                 >
-                  <div className="relative px-3 py-1 text-xxxs bg-background/95 border border-primary/10 rounded-md shadow-lg backdrop-blur-sm">
+                  <div className="relative px-3 py-1 text-xxxs bg-background/95 border border-primary/10 rounded-md">
                     {tab.tooltip}
                     {/* Arrow pointing down */}
                     <div className="absolute -bottom-1 -translate-x-1/2 w-2 h-2 bg-background/95 border-r border-b border-primary/10 transform rotate-45" />
@@ -147,7 +147,7 @@ const AnimatedTabs = ({
       </div>
 
       {/* Content area */}
-      <div className="px-1 py-2 bg-gradient-to-b from-background/90 to-muted/70 border border-primary/10 hover:border-primary/20 backdrop-blur-sm rounded-xl h-[420px] transition-all duration-300">
+      <div className="px-1 py-2 bg-gradient-to-b from-background/90 to-muted/40 border border-primary/10 hover:border-primary/20 backdrop-blur-sm rounded-xl h-[420px] transition-all duration-300">
         {tabs.map(
           (tab) =>
             activeTab === tab.id && (

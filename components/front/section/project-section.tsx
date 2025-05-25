@@ -35,69 +35,74 @@ const StatusBadge = ({ status }: { status: string }) => {
 
 const ProjectContent = ({ project }: { project: Project }) => (
   <>
-    <div className="relative h-[280px] w-full flex-shrink-0 overflow-hidden rounded-xl ring-1 ring-border/10 hover-scale">
-      <Image
-        src={project.project_image}
-        alt={project.name}
-        fill
-        className="object-cover transition-all duration-500 hover:scale-110"
-      />
-    </div>
-
-    <div className="flex flex-col gap-6 pb-4 px-4 pt-2 rounded-md shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_30px_rgba(0,0,0,0.15)] transition-all duration-300">
-      {/* Title */}
-      <div className="space-y-6">
-        <h2 className="text-xl font-[audioWide] tracking-wide font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-          {project.name}
-        </h2>
-
-        {/* Simple separator */}
-        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+    {/* Main container - Add relative and z-index */}
+    <div className="relative z-10 flex flex-col gap-2">
+      <div className="relative h-[280px] w-full flex-shrink-0 overflow-hidden rounded-xl ring-1 ring-border/10 hover-scale">
+        <Image
+          src={project.project_image}
+          alt={project.name}
+          fill
+          className="object-cover transition-all duration-500 hover:scale-110"
+        />
       </div>
 
-      {/* Technologies */}
-      {project.technologies && project.technologies.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {project.technologies.map((tech) => (
-            <span
-              key={tech.id}
-              className="px-3 py-1 bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10 hover:border-primary/20 text-xxs rounded-full transition-all duration-300"
-            >
-              {tech.name}
-            </span>
-          ))}
+      <div className="flex flex-col gap-6 pb-4 px-4 pt-2 rounded-md transition-all duration-300">
+        {/* Title */}
+        <div className="space-y-6">
+          <h2 className="text-xl font-[audioWide] uppercase tracking-wide font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+            {project.name}
+          </h2>
+
+          {/* Simple separator */}
+          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
         </div>
-      )}
 
-      {/* Status */}
-      <StatusBadge status={project.status} />
+        {/* Technologies */}
+        {project.technologies && project.technologies.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {project.technologies.map((tech) => (
+              <span
+                key={tech.id}
+                className="px-3 py-1 bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10 hover:border-primary/20 text-xxs rounded-full transition-all duration-300"
+              >
+                {tech.name}
+              </span>
+            ))}
+          </div>
+        )}
 
-      {/* Description */}
-      <div className="space-y-2">
-        <h3 className="text-xs font-medium text-foreground/60">Description:</h3>
-        <p className="text-xs text-foreground/80 leading-relaxed">
-          {project.description}
-        </p>
-      </div>
+        {/* Status */}
+        <StatusBadge status={project.status} />
 
-      {/* Project Link */}
-      {project.link && (
+        {/* Description */}
         <div className="space-y-2">
           <h3 className="text-xs font-medium text-foreground/60">
-            Project Link:
+            Description:
           </h3>
-          <Link
-            href={project.link}
-            target="_blank"
-            className="py-2 px-4 rounded-lg bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10 shadow-[0_0_20px_rgba(0,0,0,0.2)] backdrop-blur-sm text-foreground hover:text-primary text-xs inline-flex items-center gap-2 group transition-all duration-300"
-          >
-            View Project
-            <span className="transform transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary">
-              →
-            </span>
-          </Link>
+          <p className="text-xs text-foreground/80 leading-relaxed">
+            {project.description}
+          </p>
         </div>
-      )}
+
+        {/* Project Link - Add relative and z-index */}
+        {project.link && (
+          <div className="relative z-20 space-y-2">
+            <h3 className="text-xs font-medium text-foreground/60">
+              Project Link:
+            </h3>
+            <Link
+              href={project.link}
+              target="_blank"
+              className="relative z-20 py-2 px-4 rounded-lg bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10 text-foreground hover:text-primary text-xs inline-flex items-center gap-2 group transition-all duration-300"
+            >
+              View Project
+              <span className="transform transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary">
+                →
+              </span>
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   </>
 );
@@ -156,10 +161,11 @@ const ProjectSection = () => {
   return (
     <>
       <ProjectHeader />
-      <ProjectShowcase projectTabs={projectTabs} />
-      {/* Curved Background Section */}
-      <div className="relative -mt-28 h-96 w-full overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]">
-        <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,hsl(var(--foreground)),transparent_70%)] before:opacity-20" />
+      <div className="relative z-10">
+        <ProjectShowcase projectTabs={projectTabs} />
+      </div>
+      <div className="relative -mt-24 h-96 w-full overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]">
+        <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,hsl(var(--foreground-2)),transparent_90%)] before:opacity-20" />
         <div className="absolute -left-1/2 top-1/2 aspect-[1/0.7] z-10 w-[200%] rounded-[100%] border-t border-border/40 bg-background dark:bg-muted" />
       </div>
     </>
