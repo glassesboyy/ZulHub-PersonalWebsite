@@ -82,10 +82,6 @@ export function TechSection() {
         <OrbitingCircles iconSize={20} radius={50} duration={20}>
           {inner.map((tech) => renderTechIcon(tech, 20, "text-foreground/40"))}
         </OrbitingCircles>
-
-        <div className="absolute -bottom-4 left-0 right-0 text-center xs:text-xxs md:text-xs text-foreground/40 pb-4">
-          Crafting digital experiences with my favorite tools
-        </div>
       </div>
 
       {/* Curved Background Section */}

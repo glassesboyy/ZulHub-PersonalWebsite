@@ -111,9 +111,9 @@ const ProjectHeader = () => (
           Project Showcase
         </span>
         <p className="xs:text-xxs md:text-xs text-white/50 max-w-xl mx-auto">
-          Explore my portfolio of diverse projects spanning web, mobile, and
-          desktop applications. Each project demonstrates my commitment to
-          creating innovative and user-centric solutions.
+          Discover a collection of projects built with creativity, usability,
+          and technical versatility spanning platforms to solve real-world
+          problems with user-focused design.
         </p>
       </div>
     </div>
@@ -157,6 +157,11 @@ const ProjectSection = () => {
     <>
       <ProjectHeader />
       <ProjectShowcase projectTabs={projectTabs} />
+      {/* Curved Background Section */}
+      <div className="relative -mt-28 h-96 w-full overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]">
+        <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,hsl(var(--foreground)),transparent_70%)] before:opacity-20" />
+        <div className="absolute -left-1/2 top-1/2 aspect-[1/0.7] z-10 w-[200%] rounded-[100%] border-t border-border/40 bg-background dark:bg-muted" />
+      </div>
     </>
   );
 };

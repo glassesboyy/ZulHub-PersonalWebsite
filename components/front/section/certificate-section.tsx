@@ -89,7 +89,7 @@ const PaginationControls = ({
 }) => (
   <div className="flex justify-center items-center gap-2 mt-4">
     <Button
-      variant="outline"
+      variant="gradient"
       size="sm"
       onClick={() => onPageChange(currentPage - 1)}
       disabled={currentPage === 1}
@@ -101,7 +101,7 @@ const PaginationControls = ({
       {Array.from({ length: totalPages }, (_, i) => (
         <Button
           key={i + 1}
-          variant={currentPage === i + 1 ? "default" : "outline"}
+          variant={currentPage === i + 1 ? "gradient" : "ghost"}
           size="sm"
           onClick={() => onPageChange(i + 1)}
           className="text-xs w-8"
@@ -111,7 +111,7 @@ const PaginationControls = ({
       ))}
     </div>
     <Button
-      variant="outline"
+      variant="gradient"
       size="sm"
       onClick={() => onPageChange(currentPage + 1)}
       disabled={currentPage === totalPages}
@@ -166,7 +166,7 @@ const CertificateSection = () => {
   return (
     <>
       {/* Header */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-8">
         <div className="space-y-1">
           <BadgeFe label="My Certifications" />
           <div className="space-y-1">
@@ -228,6 +228,12 @@ const CertificateSection = () => {
           />
         )}
       </motion.div>
+
+      {/* Curved Background Section */}
+      <div className="relative -mt-32 h-96 w-full overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]">
+        <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,hsl(var(--foreground)),transparent_70%)] before:opacity-20" />
+        <div className="absolute -left-1/2 top-1/2 aspect-[1/0.7] z-10 w-[200%] rounded-[100%] border-t border-border/40 bg-background dark:bg-muted" />
+      </div>
     </>
   );
 };
