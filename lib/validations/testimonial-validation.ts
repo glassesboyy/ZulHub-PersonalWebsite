@@ -14,7 +14,7 @@ const testimonialSchema = z.object({
   message: z
     .string()
     .min(10, "Message must be at least 10 characters")
-    .max(1000, "Message must not exceed 1000 characters"),
+    .max(110, "Message must not exceed 110 characters"),
   isApproved: z.boolean(),
 });
 

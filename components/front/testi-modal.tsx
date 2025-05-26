@@ -72,7 +72,7 @@ export function TestiModal({ open, onOpenChange }: TestiModalProps) {
         setTimeout(() => {
           setIsSuccess(false);
         }, 300);
-      }, 300000);
+      }, 5000);
     }
   };
 
@@ -198,7 +198,7 @@ export function TestiModal({ open, onOpenChange }: TestiModalProps) {
 
                 <div className="flex justify-center pt-2">
                   <Button variant="gradient" type="submit" size={"sm"}>
-                    Share Feedback
+                    SUBMIT MESSAGE
                   </Button>
                 </div>
               </form>
@@ -212,8 +212,8 @@ export function TestiModal({ open, onOpenChange }: TestiModalProps) {
                 Testimonial Received!
               </h3>
               <p className="text-xxs text-muted-foreground">
-                Thanks a bunch for sharing! It’s now waiting for review before
-                being published just to make sure everything’s good to go.
+                Thanks a bunch for sharing! It's now waiting for review before
+                being published just to make sure everything's good to go.
                 Appreciate the love!
               </p>
             </div>
