@@ -1,7 +1,7 @@
 "use client";
 
 import { ExpandableTabs } from "@/components/front/expandable-tabs";
-import { Album, Bolt, Folder, Home, Mail, User } from "lucide-react";
+import { Album, Bolt, Folder, Home, Mail, Star, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const menuItems = [
@@ -10,6 +10,7 @@ const menuItems = [
   { title: "Tech", icon: Bolt, href: "/public/tech" },
   { title: "Certificate", icon: Album, href: "/public/certificate" },
   { title: "Projects", icon: Folder, href: "/public/project" },
+  { title: "Testimonial", icon: Star, href: "/public/testimonial" },
   { title: "Contact", icon: Mail, href: "/public/contact" },
 ];
 

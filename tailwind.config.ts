@@ -32,6 +32,7 @@ const config = {
     },
     extend: {
       fontSize: {
+        'xxxxs': '0.5rem',       // 8px
         'xxxs': '0.625rem',     // 10px
         'xxs': '0.75rem',       // 12px
         'xs': '0.875rem',       // 14px
@@ -139,9 +140,15 @@ const config = {
   				'100%': {
   					transform: 'rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg))'
   				}
-  			}
+        },
+        scroll: {
+          to: {
+            transform: 'translate(calc(-50% - 0.5rem))',
+          }
+        },
       },
       animation: {
+        scroll: 'scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'star-movement-bottom': 'star-movement-bottom linear infinite alternate',

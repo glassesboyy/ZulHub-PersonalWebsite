@@ -103,7 +103,7 @@ export function ExpandableTabs({
             onClick={() => handleSelect(index)}
             transition={transition}
             className={cn(
-              "relative flex items-center rounded-[4px] px-3 py-1.5",
+              "relative flex items-center rounded-[4px] tracking-widest px-3 py-1.5",
               "text-xxs font-[Audiowide]",
               "transition-colors duration-300",
               selected === index

@@ -1,6 +1,6 @@
 "use client";
 
-import { StatsCard } from "@/components/dashboard/statistic"; // Update this line
+import { StatsCard } from "@/components/dashboard/statistic";
 import { BadgeFe } from "@/components/front/badge-fe";
 import { Spotlight } from "@/components/front/spotlight";
 import { useProfiles } from "@/hooks/profile-hooks";
