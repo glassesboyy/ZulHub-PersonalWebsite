@@ -48,7 +48,6 @@ export function HomeSection() {
               rel="noopener noreferrer"
               size="sm"
               className="tracking-wide"
-              variant="secondary"
               onClick={(e) => {
                 if (!profile?.cv) {
                   e.preventDefault();

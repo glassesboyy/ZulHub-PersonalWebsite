@@ -92,10 +92,10 @@ export const InfiniteMovingCards = ({
         >
           {items.map((item, idx) => (
             <li
-              className="relative w-[300px] max-w-full shrink-0 rounded-xl border border-zinc-800/50 bg-gradient-to-br from-zinc-900/50 via-zinc-900/80 to-black/90 px-6 py-6 pb-4 md:w-[300px] backdrop-blur-sm transition-all duration-300 hover:border-zinc-700/50 hover:bg-gradient-to-br hover:from-zinc-900/60 hover:via-zinc-900/90 hover:to-black/95 flex flex-col"
+              className="relative w-[300px] max-w-full shrink-0 rounded-xl border border-zinc-800/50 bg-gradient-to-br from-zinc-900/50 via-zinc-800/90 to-black/90 px-6 py-6 pb-3 md:w-[300px] backdrop-blur-sm transition-all duration-300 hover:border-zinc-700/50 hover:bg-gradient-to-br hover:from-zinc-900/60 hover:via-zinc-800 hover:to-black/95 flex flex-col cursor-pointer hover:scale-[1.02] active:scale-[0.98] ease-in-out"
               style={{
                 boxShadow: "0 8px 30px rgba(0, 0, 0, 0.4)",
-                minHeight: "150px",
+                minHeight: "70px",
               }}
               key={item.name}
             >

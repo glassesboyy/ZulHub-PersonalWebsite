@@ -21,7 +21,7 @@ export function StatsCard({
         variant === "default" && "bg-muted/50",
         variant === "bordered" && "border bg-card",
         variant === "fancy" &&
-          "relative overflow-hidden bg-gradient-to-br from-black/20 via-primary/5 to-black/20 backdrop-blur-sm border border-white/10 hover:border-primary/30 hover:shadow-[0_0_15px_rgba(var(--primary),0.15)] hover:bg-gradient-to-br hover:from-black/30 hover:via-primary/10 hover:to-black/30"
+          "w-full relative overflow-hidden bg-gradient-to-br from-black/20 via-primary/5 to-black/20 backdrop-blur-sm border border-white/10 hover:border-primary/30 hover:shadow-[0_0_15px_rgba(var(--primary),0.15)] hover:bg-gradient-to-br hover:from-black/30 hover:via-primary/10 hover:to-black/30"
       )}
     >
       <div className="flex items-center gap-1.5">

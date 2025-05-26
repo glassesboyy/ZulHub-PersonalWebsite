@@ -1,10 +1,13 @@
 "use client";
 import { BadgeFe } from "@/components/front/badge-fe";
 import { InfiniteMovingCards } from "@/components/front/infinite-moving-cards";
+import { TestiModal } from "@/components/front/testi-modal";
+import { StarBorder } from "@/components/ui/star-border";
 import { useTestimonials } from "@/hooks/testimonial-hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function TestimonialSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { testimonials, fetchTestimonials } = useTestimonials();
 
   useEffect(() => {
@@ -20,40 +23,61 @@ export function TestimonialSection() {
       title: t.relation,
     }));
 
-  // Split testimonials into two groups for different rows
+  // Split testimonials into three groups for different rows
   const splitTestimonials = (testimonials: any[]) => {
     const length = testimonials.length;
-    const half = Math.ceil(length / 2);
-    return [testimonials.slice(0, half), testimonials.slice(half)];
+    const third = Math.ceil(length / 3);
+    return [
+      testimonials.slice(0, third),
+      testimonials.slice(third, third * 2),
+      testimonials.slice(third * 2),
+    ];
   };
 
-  const [row1, row2] = splitTestimonials(approvedTestimonials);
+  const [row1, row2, row3] = splitTestimonials(approvedTestimonials);
 
   return (
     <>
       <div className="text-center">
         <div className="space-y-1">
-          <BadgeFe label="Client Reviews" />
+          <BadgeFe label="Community Voices" />
           <div className="space-y-1">
             <span className="font-base uppercase xs:text-2xl md:text-3xl tracking-widest font-[Audiowide] text-white">
               What People Say
             </span>
             <p className="xs:text-xxs md:text-xs text-white/50 max-w-xl mx-auto">
-              Discover what clients and collaborators have to say about their
-              experiences working with me. Real feedback from real projects that
-              showcase my commitment to delivering excellence.
+              Discover testimonials from clients, colleagues, and industry peers
+              that highlight my impact across various roles, projects, and
+              collaborations.
             </p>
           </div>
         </div>
       </div>
-      <div className="h-[25rem] rounded-md flex flex-col items-center justify-center relative overflow-hidden bg-background">
+      <div className="h-[30rem] rounded-md flex flex-col items-center justify-center relative overflow-hidden bg-background">
         {approvedTestimonials.length > 0 && (
           <>
             <InfiniteMovingCards items={row1} direction="right" speed="slow" />
             <InfiniteMovingCards items={row2} direction="left" speed="slow" />
+            <InfiniteMovingCards items={row3} direction="right" speed="slow" />
           </>
         )}
       </div>
+      <div className="flex justify-center mt-4">
+        <StarBorder
+          size="sm"
+          className="tracking-wide uppercase"
+          onClick={() => setIsModalOpen(true)}
+        >
+          Share Your Experience
+        </StarBorder>
+      </div>
+
+      {/* Curved Background Section */}
+      <div className="relative -mt-32 h-96 w-full overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]">
+        <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,hsl(var(--foreground-2)),transparent_90%)] before:opacity-20" />
+        <div className="absolute -left-1/2 top-1/2 aspect-[1/0.7] z-10 w-[200%] rounded-[100%] border-t border-border/40 bg-background dark:bg-muted" />
+      </div>
+      <TestiModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </>
   );
 }

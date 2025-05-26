@@ -8,7 +8,6 @@ interface StarBorderProps<T extends ElementType> {
   className?: string;
   children: React.ReactNode;
   size?: "sm" | "default";
-  variant?: "default" | "secondary";
 }
 
 export function StarBorder<T extends ElementType = "button">({
@@ -17,13 +16,12 @@ export function StarBorder<T extends ElementType = "button">({
   color,
   speed = "6s",
   size = "default",
-  variant = "default",
   children,
   ...props
 }: StarBorderProps<T> &
   Omit<ComponentPropsWithoutRef<T>, keyof StarBorderProps<T>>) {
   const Component = as || "button";
-  const defaultColor = color || "hsl(var(--foreground))";
+  const defaultColor = color || "hsl(var(--muted))";
 
   return (
     <Component
@@ -56,18 +54,8 @@ export function StarBorder<T extends ElementType = "button">({
       <div
         className={cn(
           "relative z-1 border text-foreground text-center rounded-[4px] font-[Audiowide]",
-          // Default variant
-          variant === "default" && [
-            "bg-gradient-to-b from-background/90 to-muted/90 border-border/40",
-            "dark:from-background dark:to-muted dark:border-border",
-          ],
-          // Secondary variant
-          variant === "secondary" && [
-            "bg-gradient-to-b from-secondary/90 to-secondary-foreground border-secondary/40",
-            "dark:from-secondary dark:to-secondary-foreground dark:border-secondary",
-            "text-secondary-foreground dark:text-secondary",
-          ],
-          // Size variations
+          "bg-gradient-to-b from-background/90 to-muted/90 border-border/40",
+          "dark:from-background dark:to-muted dark:border-border",
           size === "sm" ? "text-xxs py-2 px-3" : "text-base py-4 px-6"
         )}
       >
