@@ -1,15 +1,24 @@
 "use client";
 
 import { RecapDataTable } from "@/components/dashboard/data-table/recap-data-table";
+import { StatsCard } from "@/components/dashboard/statistic";
 import { useCertificates } from "@/hooks/certificate-hooks";
+import { useProfiles } from "@/hooks/profile-hooks";
 import { useProjects } from "@/hooks/project-hooks";
 import { useSocials } from "@/hooks/social-hooks";
 import { useTechnologies } from "@/hooks/technology-hooks";
 import { useTestimonials } from "@/hooks/testimonial-hooks";
 import * as TablerIcons from "@tabler/icons-react";
 import { IconProps } from "@tabler/icons-react";
-import Image from "next/image"; // Update this import
-import { useEffect } from "react";
+import {
+  Award,
+  FolderGit,
+  Globe2,
+  MessageSquareText,
+  MonitorSmartphone,
+} from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import * as Si from "react-icons/si";
 
@@ -19,6 +28,8 @@ export default function ProtectedPage() {
   const { socials, fetchSocials } = useSocials();
   const { technologies, fetchTechnologies } = useTechnologies();
   const { testimonials, fetchTestimonials } = useTestimonials();
+  const { fetchProfiles } = useProfiles();
+  const [profileStats, setProfileStats] = useState<any>(null);
 
   useEffect(() => {
     fetchCertificates();
@@ -26,7 +37,15 @@ export default function ProtectedPage() {
     fetchSocials();
     fetchTechnologies();
     fetchTestimonials();
+    loadProfileStats();
   }, []);
+
+  const loadProfileStats = async () => {
+    const profiles = await fetchProfiles();
+    if (profiles && profiles.length > 0) {
+      setProfileStats(profiles[0]);
+    }
+  };
 
   const recapSections = [
     {
@@ -184,6 +203,42 @@ export default function ProtectedPage() {
           Here's a quick overview of all your data
         </p>
       </div>
+
+      {/* Stats Cards */}
+      {profileStats && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          <StatsCard
+            title="Certificates"
+            value={profileStats.certificates?.length || 0}
+            icon={<Award />}
+            variant="bordered"
+          />
+          <StatsCard
+            title="Projects"
+            value={profileStats.projects?.length || 0}
+            icon={<FolderGit />}
+            variant="bordered"
+          />
+          <StatsCard
+            title="Technologies"
+            value={profileStats.technologies?.length || 0}
+            icon={<MonitorSmartphone />}
+            variant="bordered"
+          />
+          <StatsCard
+            title="Socials"
+            value={profileStats.socials?.length || 0}
+            icon={<Globe2 />}
+            variant="bordered"
+          />
+          <StatsCard
+            title="Testimonials"
+            value={profileStats.testimonials?.length || 0}
+            icon={<MessageSquareText />}
+            variant="bordered"
+          />
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 xs:gap-4 md:gap-6">
         {recapSections.map((section) => (

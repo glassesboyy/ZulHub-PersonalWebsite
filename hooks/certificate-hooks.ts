@@ -72,8 +72,21 @@ export function useCertificates() {
     }
   };
 
-  const createCertificate = async (title: string, issuer: string, year: string, imageFile: File) => {
+  const createCertificate = async (
+    title: string, 
+    issuer: string, 
+    year: string, 
+    imageFile: File
+  ) => {
     try {
+      // Ambil profile ID yang aktif
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id")
+        .limit(1);
+      
+      const profile_id = profiles?.[0]?.id;
+
       const imageUrl = await uploadImage(imageFile);
       if (!imageUrl) {
         toast({
@@ -86,7 +99,13 @@ export function useCertificates() {
 
       const { error } = await supabase
         .from("certificates")
-        .insert([{ title, issuer, year, certificate_image: imageUrl }]);
+        .insert([{ 
+          title, 
+          issuer, 
+          year, 
+          certificate_image: imageUrl,
+          profile_id
+        }]);
 
       if (error) {
         toast({

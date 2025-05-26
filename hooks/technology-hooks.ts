@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
 
 export function useTechnologies() {
-  const { toast } = useToast(); // Add this
+  const { toast } = useToast();
   const [technologies, setTechnologies] = useState<Technology[]>([]);
   const supabase = createClient();
 
@@ -26,9 +26,17 @@ export function useTechnologies() {
 
   const createTechnology = async (name: string, icon: string) => {
     try {
+      // Ambil profile ID yang aktif
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id")
+        .limit(1);
+      
+      const profile_id = profiles?.[0]?.id;
+
       const { error } = await supabase
         .from("technologies")
-        .insert([{ name, icon }]);
+        .insert([{ name, icon, profile_id }]);
 
       if (error) {
         console.error("Error creating technology:", error.message);

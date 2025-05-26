@@ -10,17 +10,39 @@ export function useProfiles() {
 
   const fetchProfiles = async () => {
     try {
-      const { data, error } = await supabase
+      const { data: rawData, error } = await supabase
         .from("profiles")
-        .select("*")
+        .select(`
+          *,
+          certificates(*),
+          projects(
+            *,
+            technologies:project_tech(
+              technology:technologies(*)
+            )
+          ),
+          socials(*),
+          technologies(*),
+          testimonials(*)
+        `)
         .limit(1);
       
       if (error) {
         console.error("Error fetching profile:", error.message);
         return [];
       }
-      setProfiles(data || []);
-      return data;
+
+      // Transform projects data structure
+      const transformedData = rawData?.map(profile => ({
+        ...profile,
+        projects: profile.projects?.map((project: any) => ({
+          ...project,
+          technologies: project.technologies?.map((t: any) => t.technology) || []
+        }))
+      }));
+
+      setProfiles(transformedData || []);
+      return transformedData;
     } catch (error) {
       console.error("Error:", error);
       return [];
@@ -166,7 +188,18 @@ export function useProfiles() {
     try {
       const { data, error } = await supabase
         .from("profiles")
-        .select()
+        .select(`
+          *,
+          certificates(*),
+          projects(
+            *,
+            technologies:project_tech(
+              technology:technologies(*)
+            )
+          ),
+          socials(*),
+          testimonials(*)
+        `)
         .eq("id", id)
         .single();
 
@@ -174,7 +207,20 @@ export function useProfiles() {
         console.error("Error fetching profile:", error.message);
         return null;
       }
-      return data;
+
+      // Transform projects data structure
+      if (data) {
+        const transformedData = {
+          ...data,
+          projects: data.projects?.map((project: any) => ({
+            ...project,
+            technologies: project.technologies?.map((t: any) => t.technology) || []
+          }))
+        };
+        return transformedData;
+      }
+
+      return null;
     } catch (error) {
       console.error("Error:", error);
       return null;

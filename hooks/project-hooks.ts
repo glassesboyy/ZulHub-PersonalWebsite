@@ -288,6 +288,14 @@ export function useProjects() {
     link: string,
   ) => {
     try {
+      // Ambil profile ID yang aktif
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id")
+        .limit(1);
+      
+      const profile_id = profiles?.[0]?.id;
+
       const imageUrl = await uploadImage(imageFile);
       if (!imageUrl) {
         toast({
@@ -298,10 +306,17 @@ export function useProjects() {
         return false;
       }
 
-      // Insert project
+      // Insert project with profile_id
       const { data: project, error: projectError } = await supabase
         .from("projects")
-        .insert([{ name, description, status, project_image: imageUrl, link }]) // Add link
+        .insert([{ 
+          name, 
+          description, 
+          status, 
+          project_image: imageUrl, 
+          link,
+          profile_id 
+        }])
         .select()
         .single();
 

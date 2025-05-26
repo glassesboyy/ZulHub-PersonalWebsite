@@ -1,8 +1,16 @@
 "use client";
 
+import { StatsCard } from "@/components/dashboard/statistic";
 import { Button } from "@/components/ui/button";
 import { useProfiles } from "@/hooks/profile-hooks";
 import { Profile } from "@/types/profiles";
+import {
+  Award,
+  FolderGit,
+  Globe2,
+  MessageSquareText,
+  MonitorSmartphone,
+} from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -101,6 +109,43 @@ export default function ProfilePage() {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Stats Card - Moved to bottom */}
+      <div className="mt-6 rounded-lg border bg-card p-6">
+        <h3 className="mb-4 text-lg font-medium">Statistics</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          <StatsCard
+            title="Certificates"
+            value={profile.certificates?.length || 0}
+            icon={<Award />}
+            variant="default"
+          />
+          <StatsCard
+            title="Projects"
+            value={profile.projects?.length || 0}
+            icon={<FolderGit />}
+            variant="default"
+          />
+          <StatsCard
+            title="Technologies"
+            value={profile.technologies?.length || 0}
+            icon={<MonitorSmartphone />}
+            variant="default"
+          />
+          <StatsCard
+            title="Socials"
+            value={profile.socials?.length || 0}
+            icon={<Globe2 />}
+            variant="default"
+          />
+          <StatsCard
+            title="Testimonials"
+            value={profile.testimonials?.length || 0}
+            icon={<MessageSquareText />}
+            variant="default"
+          />
         </div>
       </div>
     </div>

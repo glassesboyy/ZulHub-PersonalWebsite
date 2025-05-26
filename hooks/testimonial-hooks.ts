@@ -31,9 +31,17 @@ export function useTestimonials() {
     message: string,
   ) => {
     try {
+      // Ambil profile ID yang aktif
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id")
+        .limit(1);
+      
+      const profile_id = profiles?.[0]?.id;
+
       const { error } = await supabase
         .from("testimonials")
-        .insert([{ name, email, relation, message, is_approved: false }]);
+        .insert([{ name, email, relation, message, is_approved: false, profile_id }]);
 
       if (error) {
         toast({
