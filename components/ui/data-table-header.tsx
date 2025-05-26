@@ -13,7 +13,6 @@ interface DataTableHeaderProps {
 }
 
 export function DataTableHeader({
-  filterKey,
   filterValue,
   placeholder,
   onFilterChange,

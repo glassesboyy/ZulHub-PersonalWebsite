@@ -42,8 +42,8 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import * as React from "react";
-const { useRouter } = require("next/navigation");
 
 interface CertificateDataTableProps {
   data: Certificate[];
@@ -153,7 +153,7 @@ export function CertificateDataTable({
     },
     {
       accessorKey: "certificate_image",
-      header: ({ column }) => (
+      header: () => (
         <div className="text-xxs xs:text-xs md:text-sm">Certificate Image</div>
       ),
       cell: ({ row }) => (
@@ -170,7 +170,7 @@ export function CertificateDataTable({
     },
     {
       id: "actions",
-      header: ({ column }) => (
+      header: () => (
         <div className="text-xxs xs:text-xs md:text-sm">Actions</div>
       ),
       cell: ({ row }) => {

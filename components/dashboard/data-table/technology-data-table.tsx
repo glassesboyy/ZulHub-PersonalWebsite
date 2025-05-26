@@ -126,9 +126,7 @@ export function TechnologyDataTable({
     },
     {
       accessorKey: "icon",
-      header: ({ column }) => (
-        <div className="text-xxs xs:text-xs md:text-sm">Icon</div>
-      ),
+      header: () => <div className="text-xxs xs:text-xs md:text-sm">Icon</div>,
       cell: ({ row }) => {
         const IconComponent = Si[row.original.icon as keyof typeof Si];
         return (
@@ -145,7 +143,7 @@ export function TechnologyDataTable({
     },
     {
       id: "actions",
-      header: ({ column }) => (
+      header: () => (
         <div className="text-xxs xs:text-xs md:text-sm">Actions</div>
       ),
       cell: ({ row }) => {

@@ -25,9 +25,9 @@ import {
 } from "@/lib/validations/testimonial-validation";
 import { relationOptions } from "@/types/testimonials";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
 
 export default function CreateTestimonialPage() {
   const router = useRouter();
@@ -73,7 +73,8 @@ export default function CreateTestimonialPage() {
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground">
             Add a new testimonial below. Fill in all the required information
-            including the person's name, email, and their relationship to you.
+            including the person&apos;s name, email, and their relationship to
+            you.
           </p>
         </div>
 

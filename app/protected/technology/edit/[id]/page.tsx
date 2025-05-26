@@ -108,8 +108,8 @@ export default function EditTechnologyPage({
                   <FormMessage />
                   <p className="text-sm text-muted-foreground">
                     Enter the icon name from react-icons/si (e.g., SiJavascript,
-                    SiReact, SiNextdotjs). The name must start with 'Si'
-                    followed by the technology name.
+                    SiReact, SiNextdotjs). The name must start with
+                    &apos;Si&apos; followed by the technology name.
                   </p>
                 </FormItem>
               )}

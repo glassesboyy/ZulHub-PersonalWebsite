@@ -41,8 +41,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { useRouter } from "next/navigation";
 import * as React from "react";
-const { useRouter } = require("next/navigation");
 
 interface TestimonialDataTableProps {
   data: Testimonial[];
@@ -128,7 +128,7 @@ export function TestimonialDataTable({
     },
     {
       accessorKey: "message",
-      header: ({ column }) => (
+      header: () => (
         <div className="text-xxs xs:text-xs md:text-sm">Message</div>
       ),
       cell: ({ row }) => (
@@ -139,7 +139,7 @@ export function TestimonialDataTable({
     },
     {
       accessorKey: "is_approved",
-      header: ({ column }) => (
+      header: () => (
         <div className="text-xxs xs:text-xs md:text-sm">Status</div>
       ),
       cell: ({ row }) => (
@@ -154,7 +154,7 @@ export function TestimonialDataTable({
     },
     {
       id: "actions",
-      header: ({ column }) => (
+      header: () => (
         <div className="text-xxs xs:text-xs md:text-sm">Actions</div>
       ),
       cell: ({ row }) => {

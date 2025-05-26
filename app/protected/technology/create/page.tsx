@@ -16,9 +16,9 @@ import {
   TechnologyFormValues,
 } from "@/lib/validations/technology-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
 
 export default function CreateTechnologyPage() {
   const router = useRouter();
@@ -86,8 +86,8 @@ export default function CreateTechnologyPage() {
                   <FormMessage />
                   <p className="text-sm text-muted-foreground">
                     Enter the icon name from react-icons/si (e.g., SiJavascript,
-                    SiReact, SiNextdotjs). The name must start with 'Si'
-                    followed by the technology name.
+                    SiReact, SiNextdotjs). The name must start with
+                    &apos;Si&apos; followed by the technology name.
                   </p>
                 </FormItem>
               )}

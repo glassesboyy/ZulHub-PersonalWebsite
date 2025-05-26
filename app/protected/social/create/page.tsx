@@ -17,9 +17,9 @@ import {
   SocialFormValues,
 } from "@/lib/validations/social-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
 
 export default function CreateSocialPage() {
   const router = useRouter();
@@ -128,7 +128,8 @@ export default function CreateSocialPage() {
                   <p className="text-sm text-muted-foreground">
                     Enter the icon name from @tabler/icons-react (e.g.,
                     IconBrandGithub, IconBrandLinkedin, IconBrandInstagram). The
-                    name must start with 'Icon' followed by the icon name.
+                    name must start with &apos;Icon&apos; followed by the icon
+                    name.
                   </p>
                 </FormItem>
               )}

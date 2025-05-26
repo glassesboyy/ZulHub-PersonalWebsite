@@ -142,7 +142,8 @@ export default function EditSocialPage({
                   <p className="text-sm text-muted-foreground">
                     Enter the icon name from @tabler/icons-react (e.g.,
                     IconBrandGithub, IconBrandLinkedin, IconBrandInstagram). The
-                    name must start with 'Icon' followed by the icon name.
+                    name must start with &apos;Icon&apos; followed by the icon
+                    name.
                   </p>
                 </FormItem>
               )}

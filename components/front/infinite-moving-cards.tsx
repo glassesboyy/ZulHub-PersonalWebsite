@@ -25,6 +25,7 @@ export const InfiniteMovingCards = ({
 
   useEffect(() => {
     addAnimation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [start, setStart] = useState(false);
   function addAnimation() {
@@ -90,7 +91,7 @@ export const InfiniteMovingCards = ({
             pauseOnHover && "hover:[animation-play-state:paused]"
           )}
         >
-          {items.map((item, idx) => (
+          {items.map((item) => (
             <li
               className="relative w-[300px] max-w-full shrink-0 rounded-xl border border-zinc-800/50 bg-gradient-to-br from-zinc-900/50 via-zinc-800/90 to-black/90 px-6 py-6 pb-3 md:w-[300px] backdrop-blur-sm transition-all duration-300 hover:border-zinc-700/50 hover:bg-gradient-to-br hover:from-zinc-900/60 hover:via-zinc-800 hover:to-black/95 flex flex-col cursor-pointer hover:scale-[1.02] active:scale-[0.98] ease-in-out"
               style={{
@@ -105,7 +106,7 @@ export const InfiniteMovingCards = ({
                   className="pointer-events-none absolute -top-px left-0 h-px w-full bg-gradient-to-r from-transparent via-zinc-500/20 to-transparent"
                 />
                 <span className="relative z-20 text-xxs leading-[1.6] text-primary/90 italic flex-grow">
-                  "{item.quote}"
+                  &ldquo;{item.quote}&rdquo;
                 </span>
                 {/* Separator using SVG for consistent rendering */}
                 <svg className="w-full h-[1px] my-2" preserveAspectRatio="none">

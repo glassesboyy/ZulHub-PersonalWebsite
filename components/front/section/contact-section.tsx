@@ -27,8 +27,8 @@ export function ContactSection() {
               Contact Me
             </span>
             <p className="xs:text-xxs md:text-xs text-white/50 max-w-xl mx-auto">
-              Let's connect and discuss how we can work together to bring your
-              ideas to life. Feel free to reach out for collaborations,
+              Let&apos;s connect and discuss how we can work together to bring
+              your ideas to life. Feel free to reach out for collaborations,
               opportunities, or just a friendly chat.
             </p>
           </div>

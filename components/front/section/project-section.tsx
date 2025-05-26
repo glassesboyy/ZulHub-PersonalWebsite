@@ -8,6 +8,13 @@ import { useEffect, useMemo, useState } from "react";
 import { AnimatedTabs } from "../animated-tabs";
 import { BadgeFe } from "../badge-fe";
 
+interface ProjectTab {
+  id: string;
+  label: string;
+  tooltip: string;
+  content: React.ReactNode;
+}
+
 const StatusBadge = ({ status }: { status: string }) => {
   const statusStyles =
     {
@@ -125,7 +132,7 @@ const ProjectHeader = () => (
   </div>
 );
 
-const ProjectShowcase = ({ projectTabs }: { projectTabs: any[] }) => (
+const ProjectShowcase = ({ projectTabs }: { projectTabs: ProjectTab[] }) => (
   <section className="w-full">
     <div>
       <AnimatedTabs tabs={projectTabs} className="mx-auto" />
@@ -149,7 +156,7 @@ const ProjectSection = () => {
     return projects.map((project: Project, index: number) => ({
       id: project.id.toString(),
       label: `Project ${index + 1}`,
-      tooltip: project.name, // Add project name as tooltip
+      tooltip: project.name,
       content: <ProjectContent project={project} />,
     }));
   }, [projects]);

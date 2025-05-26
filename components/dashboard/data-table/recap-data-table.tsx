@@ -7,30 +7,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { RecapColumn } from "@/types/recap";
 import Link from "next/link";
 
-interface RecapDataTableProps {
-  data: any[];
-  columns: {
-    header: string;
-    accessorKey: string;
-    cell?: (value: any) => React.ReactNode;
-  }[];
+interface RecapDataTableProps<T extends Record<string, unknown>> {
+  data: T[];
+  columns: RecapColumn<T>[];
   title: string;
   managePath: string;
 }
 
-export function RecapDataTable({
+export function RecapDataTable<T extends Record<string, unknown>>({
   data,
   columns,
   title,
   managePath,
-}: RecapDataTableProps) {
-  const renderCell = (column: any, row: any) => {
+}: RecapDataTableProps<T>) {
+  const renderCell = (column: RecapColumn<T>, row: T): React.ReactNode => {
+    const value = row[column.accessorKey];
     if (column.cell) {
-      return column.cell(row[column.accessorKey]);
+      return column.cell(value);
     }
-    return row[column.accessorKey];
+    if (typeof value === "string" || typeof value === "number") {
+      return value;
+    }
+    return null;
   };
 
   return (
@@ -49,7 +50,7 @@ export function RecapDataTable({
             <TableRow>
               {columns.map((column) => (
                 <TableHead
-                  key={column.accessorKey}
+                  key={column.accessorKey as string}
                   className="text-xxs xs:text-xs md:text-sm whitespace-nowrap"
                 >
                   {column.header}
@@ -72,7 +73,7 @@ export function RecapDataTable({
                 <TableRow key={i}>
                   {columns.map((column) => (
                     <TableCell
-                      key={column.accessorKey}
+                      key={column.accessorKey as string}
                       className="text-xxs xs:text-xs md:text-sm whitespace-nowrap"
                     >
                       {renderCell(column, row)}

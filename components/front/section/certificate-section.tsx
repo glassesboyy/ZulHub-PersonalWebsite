@@ -6,7 +6,8 @@ import { Tilt } from "@/components/front/tilt";
 import { Button } from "@/components/ui/button";
 import { useCertificates } from "@/hooks/certificate-hooks";
 import { Certificate } from "@/types/certificate";
-import { AnimatePresence, motion } from "framer-motion"; // Add this import
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image"; // Add this import
 import { useEffect, useState } from "react";
 
 const ITEMS_PER_PAGE = 6;
@@ -34,11 +35,15 @@ const CertificateCard = ({ certificate }: { certificate: Certificate }) => (
           mass: 0.2,
         }}
       />
-      <img
-        src={certificate.certificate_image}
-        alt={certificate.title}
-        className="w-full h-[125px] object-cover transition-all duration-700 group-hover:scale-110"
-      />
+      <div className="relative w-full h-[125px]">
+        <Image
+          src={certificate.certificate_image}
+          alt={certificate.title}
+          fill
+          className="object-cover transition-all duration-700 group-hover:scale-110"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+      </div>
     </Tilt>
 
     {/* Content Container with separate Tilt */}

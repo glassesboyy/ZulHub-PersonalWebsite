@@ -212,9 +212,9 @@ export function TestiModal({ open, onOpenChange }: TestiModalProps) {
                 Testimonial Received!
               </h3>
               <p className="text-xxs text-muted-foreground">
-                Thanks a bunch for sharing! It's now waiting for review before
-                being published just to make sure everything's good to go.
-                Appreciate the love!
+                Thanks a bunch for sharing! It&apos;s now waiting for review
+                before being published just to make sure everything&apos;s good
+                to go. Appreciate the love!
               </p>
             </div>
           </div>

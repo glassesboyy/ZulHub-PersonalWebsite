@@ -12,13 +12,13 @@ const GLOBE_CONFIG: COBEOptions = {
   devicePixelRatio: 2,
   phi: 0,
   theta: 0.3,
-  dark: 0.9, // Increased dark value for even darker appearance
-  diffuse: 0.1, // Reduced diffuse further for less light scatter
+  dark: 0.9,
+  diffuse: 0.1,
   mapSamples: 16000,
-  mapBrightness: 1, // Reduced brightness further
-  baseColor: [0.5, 0.5, 0.5], // Even darker base color
-  markerColor: [0.9, 0.9, 0.9], // Changed to a warmer gold color [238, 162, 54]
-  glowColor: [0.15, 0.15, 0.15], // Darker glow
+  mapBrightness: 1.2,
+  baseColor: [0.55, 0.55, 0.55],
+  markerColor: [0.9, 0.9, 0.9],
+  glowColor: [0.25, 0.25, 0.25],
   markers: [
     // Jakarta, Indonesia coordinates
     { location: [-6.2088, 106.8456], size: 0.12 },
@@ -35,28 +35,43 @@ export function Globe({
   let phi = 0;
   let width = 0;
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const pointerInteracting = useRef(null);
-  const pointerInteractionMovement = useRef(0);
+  const pointerInteracting = useRef<number | null>(null);
+  const previousMousePosition = useRef<number | null>(null);
   const [r, setR] = useState(0);
+  const lastPhi = useRef(phi);
 
-  const updatePointerInteraction = (value: any) => {
+  const updatePointerInteraction = (value: number | null) => {
     pointerInteracting.current = value;
+    previousMousePosition.current = value;
     if (canvasRef.current) {
       canvasRef.current.style.cursor = value ? "grabbing" : "grab";
     }
   };
 
-  const updateMovement = (clientX: any) => {
-    if (pointerInteracting.current !== null) {
-      const delta = clientX - pointerInteracting.current;
-      pointerInteractionMovement.current = delta;
-      setR(delta / 200);
+  const updateMovement = (clientX: number) => {
+    if (
+      pointerInteracting.current !== null &&
+      previousMousePosition.current !== null
+    ) {
+      const delta = clientX - previousMousePosition.current;
+      const rotationFactor = 0.005;
+      const newR = delta * rotationFactor;
+
+      lastPhi.current += newR;
+      setR(newR);
+
+      previousMousePosition.current = clientX;
     }
   };
 
   const onRender = useCallback(
-    (state: Record<string, any>) => {
-      if (!pointerInteracting.current) phi += 0.005;
+    (state: Record<string, number>) => {
+      if (!pointerInteracting.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        phi += 0.002;
+      } else {
+        phi = lastPhi.current;
+      }
       state.phi = phi + r;
       state.width = width * 2;
       state.height = width * 2;
@@ -83,6 +98,7 @@ export function Globe({
 
     setTimeout(() => (canvasRef.current!.style.opacity = "1"));
     return () => globe.destroy();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -97,11 +113,7 @@ export function Globe({
           "size-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]"
         )}
         ref={canvasRef}
-        onPointerDown={(e) =>
-          updatePointerInteraction(
-            e.clientX - pointerInteractionMovement.current
-          )
-        }
+        onPointerDown={(e) => updatePointerInteraction(e.clientX)}
         onPointerUp={() => updatePointerInteraction(null)}
         onPointerOut={() => updatePointerInteraction(null)}
         onMouseMove={(e) => updateMovement(e.clientX)}

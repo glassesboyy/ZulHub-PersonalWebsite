@@ -6,6 +6,12 @@ import { StarBorder } from "@/components/ui/star-border";
 import { useTestimonials } from "@/hooks/testimonial-hooks";
 import { useEffect, useState } from "react";
 
+interface TestimonialItem {
+  quote: string;
+  name: string;
+  title: string;
+}
+
 export function TestimonialSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { testimonials, fetchTestimonials } = useTestimonials();
@@ -24,7 +30,7 @@ export function TestimonialSection() {
     }));
 
   // Split testimonials into three groups for different rows
-  const splitTestimonials = (testimonials: any[]) => {
+  const splitTestimonials = (testimonials: TestimonialItem[]) => {
     const length = testimonials.length;
     const third = Math.ceil(length / 3);
     return [

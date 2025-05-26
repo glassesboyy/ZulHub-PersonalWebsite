@@ -1,7 +1,9 @@
 "use client";
+
 import { BadgeFe } from "@/components/front/badge-fe";
 import { OrbitingCircles } from "@/components/front/orbiting-circles";
 import { useTechnologies } from "@/hooks/technology-hooks";
+import { Technology } from "@/types/technology";
 import { useEffect } from "react";
 import * as Si from "react-icons/si";
 
@@ -10,27 +12,33 @@ export function TechSection() {
 
   useEffect(() => {
     fetchTechnologies();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Dynamic distribution of technologies
-  const distributeTechnologies = (techs: any[]) => {
+  const distributeTechnologies = (techs: Technology[]) => {
     const total = techs.length;
 
-    // Calculate proportions for each circle
-    const outerCount = Math.ceil(total * 0.4); // 40% for outer circle
-    const middleCount = Math.ceil(total * 0.35); // 35% for middle circle
-    const innerCount = total - outerCount - middleCount; // Remaining for inner circle
+    const outerCount = Math.ceil(total * 0.4);
+    const middleCount = Math.ceil(total * 0.35);
+    const remainingCount = total - outerCount - middleCount;
 
     return {
       outer: techs.slice(0, outerCount),
       middle: techs.slice(outerCount, outerCount + middleCount),
-      inner: techs.slice(outerCount + middleCount),
+      inner: techs.slice(
+        outerCount + middleCount,
+        outerCount + middleCount + remainingCount
+      ),
     };
   };
 
   const { outer, middle, inner } = distributeTechnologies(technologies);
 
-  const renderTechIcon = (tech: any, size: number, opacityClass: string) => {
+  const renderTechIcon = (
+    tech: Technology,
+    size: number,
+    opacityClass: string
+  ) => {
     const IconComponent = Si[tech.icon as keyof typeof Si];
     return IconComponent ? (
       <div

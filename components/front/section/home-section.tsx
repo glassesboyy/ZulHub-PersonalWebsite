@@ -1,12 +1,13 @@
 "use client";
 
 import { StarBorder } from "@/components/ui/star-border";
+import { Profile } from "@/types/profiles";
 import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export function HomeSection() {
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {

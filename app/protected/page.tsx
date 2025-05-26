@@ -8,6 +8,12 @@ import { useProjects } from "@/hooks/project-hooks";
 import { useSocials } from "@/hooks/social-hooks";
 import { useTechnologies } from "@/hooks/technology-hooks";
 import { useTestimonials } from "@/hooks/testimonial-hooks";
+import { Certificate } from "@/types/certificate";
+import { Project } from "@/types/projects";
+import { RecapColumn } from "@/types/recap";
+import { Social } from "@/types/socials";
+import { Technology } from "@/types/technology";
+import { Testimonial } from "@/types/testimonials";
 import * as TablerIcons from "@tabler/icons-react";
 import { IconProps } from "@tabler/icons-react";
 import {
@@ -22,6 +28,43 @@ import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import * as Si from "react-icons/si";
 
+interface ProfileStats {
+  certificates: Certificate[];
+  projects: Project[];
+  technologies: Technology[];
+  socials: Social[];
+  testimonials: Testimonial[];
+}
+
+type RecapSection<T> = {
+  title: string;
+  data: T[];
+  columns: RecapColumn<T>[];
+  managePath: string;
+};
+
+type RecapSections = Array<
+  | RecapSection<Certificate>
+  | RecapSection<Project>
+  | RecapSection<Social>
+  | RecapSection<Technology>
+  | RecapSection<Testimonial>
+>;
+
+function renderRecapTable<T extends Record<string, unknown>>(
+  section: RecapSection<T>
+) {
+  return (
+    <RecapDataTable<T>
+      key={section.title}
+      title={section.title}
+      data={section.data}
+      columns={section.columns}
+      managePath={section.managePath}
+    />
+  );
+}
+
 export default function ProtectedPage() {
   const { certificates, fetchCertificates } = useCertificates();
   const { projects, fetchProjects } = useProjects();
@@ -29,7 +72,7 @@ export default function ProtectedPage() {
   const { technologies, fetchTechnologies } = useTechnologies();
   const { testimonials, fetchTestimonials } = useTestimonials();
   const { fetchProfiles } = useProfiles();
-  const [profileStats, setProfileStats] = useState<any>(null);
+  const [profileStats, setProfileStats] = useState<ProfileStats | null>(null);
 
   useEffect(() => {
     fetchCertificates();
@@ -38,6 +81,7 @@ export default function ProtectedPage() {
     fetchTechnologies();
     fetchTestimonials();
     loadProfileStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadProfileStats = async () => {
@@ -47,7 +91,7 @@ export default function ProtectedPage() {
     }
   };
 
-  const recapSections = [
+  const recapSections: RecapSections = [
     {
       title: "Certificates",
       data: certificates,
@@ -76,7 +120,7 @@ export default function ProtectedPage() {
             </div>
           ),
         },
-      ],
+      ] as RecapColumn<Certificate>[],
       managePath: "/protected/certificate",
     },
     {
@@ -118,7 +162,7 @@ export default function ProtectedPage() {
             </div>
           ),
         },
-      ],
+      ] as RecapColumn<Project>[],
       managePath: "/protected/project",
     },
     {
@@ -150,7 +194,7 @@ export default function ProtectedPage() {
             return IconComponent && <IconComponent size={20} />;
           },
         },
-      ],
+      ] as RecapColumn<Social>[],
       managePath: "/protected/social",
     },
     {
@@ -166,7 +210,7 @@ export default function ProtectedPage() {
             return IconComponent && <IconComponent size={20} />;
           },
         },
-      ],
+      ] as RecapColumn<Technology>[],
       managePath: "/protected/technology",
     },
     {
@@ -188,7 +232,7 @@ export default function ProtectedPage() {
             </div>
           ),
         },
-      ],
+      ] as RecapColumn<Testimonial>[],
       managePath: "/protected/testimonial",
     },
   ];
@@ -200,7 +244,7 @@ export default function ProtectedPage() {
           Dashboard Overview
         </h1>
         <p className="text-xxs xs:text-xs md:text-sm text-muted-foreground">
-          Here's a quick overview of all your data
+          Here&apos;s a quick overview of all your data
         </p>
       </div>
 
@@ -241,15 +285,30 @@ export default function ProtectedPage() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 xs:gap-4 md:gap-6">
-        {recapSections.map((section) => (
-          <RecapDataTable
-            key={section.title}
-            title={section.title}
-            data={section.data}
-            columns={section.columns}
-            managePath={section.managePath}
-          />
-        ))}
+        {recapSections.map((section) => {
+          if ("certificate_image" in (section.data[0] || {})) {
+            return renderRecapTable<Certificate>(
+              section as RecapSection<Certificate>
+            );
+          }
+          if ("project_image" in (section.data[0] || {})) {
+            return renderRecapTable<Project>(section as RecapSection<Project>);
+          }
+          if ("link" in (section.data[0] || {})) {
+            return renderRecapTable<Social>(section as RecapSection<Social>);
+          }
+          if (
+            "icon" in (section.data[0] || {}) &&
+            !("link" in (section.data[0] || {}))
+          ) {
+            return renderRecapTable<Technology>(
+              section as RecapSection<Technology>
+            );
+          }
+          return renderRecapTable<Testimonial>(
+            section as RecapSection<Testimonial>
+          );
+        })}
       </div>
     </div>
   );

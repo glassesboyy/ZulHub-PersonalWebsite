@@ -23,8 +23,8 @@ export default async function ResetPassword(props: {
       <div className="space-y-8 rounded-lg border bg-card p-8">
         <div className="space-y-2">
           <p className="text-muted-foreground">
-            Enter your new password below. Make sure it's secure and you'll
-            remember it.
+            Enter your new password below. Make sure it&apos;s secure and
+            you&apos;ll remember it.
           </p>
         </div>
 

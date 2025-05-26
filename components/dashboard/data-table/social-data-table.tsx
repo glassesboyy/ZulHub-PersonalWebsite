@@ -42,11 +42,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { useRouter } from "next/navigation";
 import * as React from "react";
-const { useRouter } = require("next/navigation");
 
-// Add this type helper
-type TablerIconComponent = keyof typeof TablerIcons;
 type IconKey = keyof typeof TablerIcons;
 
 interface SocialDataTableProps {
@@ -128,7 +126,7 @@ export function SocialDataTable({
     },
     {
       accessorKey: "description",
-      header: ({ column }) => (
+      header: () => (
         <div className="text-xxs xs:text-xs md:text-sm">Description</div>
       ),
       cell: ({ row }) => (
@@ -139,9 +137,7 @@ export function SocialDataTable({
     },
     {
       accessorKey: "link",
-      header: ({ column }) => (
-        <div className="text-xxs xs:text-xs md:text-sm">Link</div>
-      ),
+      header: () => <div className="text-xxs xs:text-xs md:text-sm">Link</div>,
       cell: ({ row }) => (
         <Button
           variant="link"
@@ -156,9 +152,7 @@ export function SocialDataTable({
     },
     {
       accessorKey: "icon",
-      header: ({ column }) => (
-        <div className="text-xxs xs:text-xs md:text-sm">Icon</div>
-      ),
+      header: () => <div className="text-xxs xs:text-xs md:text-sm">Icon</div>,
       cell: ({ row }) => {
         const IconComponent = TablerIcons[
           row.original.icon as IconKey
@@ -172,7 +166,7 @@ export function SocialDataTable({
     },
     {
       id: "actions",
-      header: ({ column }) => (
+      header: () => (
         <div className="text-xxs xs:text-xs md:text-sm">Actions</div>
       ),
       cell: ({ row }) => {
@@ -246,14 +240,13 @@ export function SocialDataTable({
               Are you sure?
             </AlertDialogTitle>
             <AlertDialogDescription className="text-xxs xs:text-xs md:text-sm">
-              This action will permanently delete{" "}
-              {table.getFilteredSelectedRowModel().rows.length} selected
-              social(s). This action cannot be undone.
+              This action will permanently delete this social. This action
+              cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleBulkDelete}>
+            <AlertDialogAction onClick={handleSingleDelete}>
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
