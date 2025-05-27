@@ -9,7 +9,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Surya Zulfikar | Frontend Developer & AI Automation Engineer",
+  title: "Zul Hub | Personal Website",
 };
 
 const geistSans = Geist({
