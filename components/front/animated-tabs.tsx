@@ -29,7 +29,7 @@ const defaultTabs: Tab[] = [
             src="https://images.unsplash.com/photo-1493552152660-f915ab47ae9d?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Tab 1"
             fill
-            className="rounded-lg object-cover shadow-[0_0_20px_rgba(0,0,0,0.2)]"
+            className="rounded-md object-cover shadow-[0_0_20px_rgba(0,0,0,0.2)]"
           />
         </div>
 
@@ -55,7 +55,7 @@ const defaultTabs: Tab[] = [
             src="https://images.unsplash.com/photo-1506543730435-e2c1d4553a84?q=80&w=2362&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Tab 2"
             fill
-            className="rounded-lg object-cover shadow-[0_0_20px_rgba(0,0,0,0.2)]"
+            className="rounded-md object-cover shadow-[0_0_20px_rgba(0,0,0,0.2)]"
           />
         </div>
         <div className="flex flex-col gap-y-2">
@@ -80,7 +80,7 @@ const defaultTabs: Tab[] = [
             src="https://images.unsplash.com/photo-1522428938647-2baa7c899f2f?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Tab 3"
             fill
-            className="rounded-lg object-cover shadow-[0_0_20px_rgba(0,0,0,0.2)]"
+            className="rounded-md object-cover shadow-[0_0_20px_rgba(0,0,0,0.2)]"
           />
         </div>
         <div className="flex flex-col gap-y-2">
@@ -110,19 +110,19 @@ const AnimatedTabs = ({
     <div className={cn("w-full max-w-3xl flex flex-col gap-y-3", className)}>
       {/* Tab buttons */}
       <div className="flex justify-center">
-        <div className="w-fit flex gap-3 flex-wrap bg-background/90 border border-primary/10 hover:border-primary/20 backdrop-blur-sm p-1.5 rounded-xl transition-all duration-300">
+        <div className="w-fit flex gap-3 flex-wrap bg-background/90 border border-primary/10 hover:border-primary/20 backdrop-blur-sm p-1.5 rounded-md transition-all duration-300">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "relative px-4 py-1 text-xs tracking-wider rounded-lg text-foreground/80 outline-none group"
+                "relative px-4 py-1 text-xs tracking-wider rounded-md text-foreground/80 outline-none group"
               )}
             >
               {activeTab === tab.id && (
                 <motion.div
                   layoutId="active-tab"
-                  className="absolute inset-0 bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10 !rounded-lg"
+                  className="absolute inset-0 bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10 !rounded-md"
                   transition={{ type: "spring", duration: 0.5, bounce: 0.2 }}
                 />
               )}
@@ -157,7 +157,7 @@ const AnimatedTabs = ({
       </div>
 
       {/* Content area */}
-      <div className="px-1 py-2 bg-gradient-to-b from-background/90 to-muted/40 border border-primary/10 hover:border-primary/20 backdrop-blur-sm rounded-xl h-[420px] transition-all duration-300">
+      <div className="px-1 py-2 bg-gradient-to-b from-background/90 to-muted/40 border border-primary/10 hover:border-primary/20 backdrop-blur-sm rounded-md h-[420px] transition-all duration-300">
         {tabs.map(
           (tab) =>
             activeTab === tab.id && (

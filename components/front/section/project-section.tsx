@@ -44,7 +44,7 @@ const ProjectContent = ({ project }: { project: Project }) => (
   <>
     {/* Main container - Add relative and z-index */}
     <div className="relative z-10 flex flex-col gap-2">
-      <div className="relative h-[280px] w-full flex-shrink-0 overflow-hidden rounded-xl ring-1 ring-border/10 hover-scale">
+      <div className="relative h-[280px] w-full flex-shrink-0 overflow-hidden rounded-md ring-1 ring-border/10 hover-scale">
         <Image
           src={project.project_image}
           alt={project.name}
@@ -100,7 +100,7 @@ const ProjectContent = ({ project }: { project: Project }) => (
             <Link
               href={project.link}
               target="_blank"
-              className="relative z-20 py-2 px-4 rounded-lg bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10 text-foreground hover:text-primary text-xs inline-flex items-center gap-2 group transition-all duration-300"
+              className="relative z-20 py-2 px-4 rounded-md bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10 text-foreground hover:text-primary text-xs inline-flex items-center gap-2 group transition-all duration-300"
             >
               View Project
               <span className="transform transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary">
