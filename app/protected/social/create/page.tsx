@@ -41,7 +41,7 @@ export default function CreateSocialPage() {
       data.name,
       data.description,
       data.link,
-      data.icon
+      data.icon,
     );
     if (success) {
       router.push("/protected/social");

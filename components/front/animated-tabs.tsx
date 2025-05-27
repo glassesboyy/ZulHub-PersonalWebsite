@@ -116,7 +116,7 @@ const AnimatedTabs = ({
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "relative px-4 py-1 text-xs tracking-wider rounded-md text-foreground/80 outline-none group"
+                "relative px-4 py-1 text-xs tracking-wider rounded-md text-foreground/80 outline-none group",
               )}
             >
               {activeTab === tab.id && (
@@ -180,7 +180,7 @@ const AnimatedTabs = ({
               >
                 {tab.content}
               </motion.div>
-            )
+            ),
         )}
       </div>
     </div>

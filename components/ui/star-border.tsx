@@ -29,14 +29,14 @@ export function StarBorder<T extends ElementType = "button">({
     <Component
       className={cn(
         "relative inline-block py-[1px] overflow-hidden rounded-[4px]",
-        className
+        className,
       )}
       {...props}
     >
       <div
         className={cn(
           "absolute w-[300%] h-[50%] bottom-[-11px] right-[-250%] rounded-full animate-star-movement-bottom z-0",
-          "opacity-20 dark:opacity-70"
+          "opacity-20 dark:opacity-70",
         )}
         style={{
           background: `radial-gradient(circle, ${defaultColor}, transparent 10%)`,
@@ -46,7 +46,7 @@ export function StarBorder<T extends ElementType = "button">({
       <div
         className={cn(
           "absolute w-[300%] h-[50%] top-[-10px] left-[-250%] rounded-full animate-star-movement-top z-0",
-          "opacity-20 dark:opacity-70"
+          "opacity-20 dark:opacity-70",
         )}
         style={{
           background: `radial-gradient(circle, ${defaultColor}, transparent 10%)`,
@@ -68,7 +68,7 @@ export function StarBorder<T extends ElementType = "button">({
             "text-secondary-foreground dark:text-secondary",
           ],
           // Size variations
-          size === "sm" ? "text-xxs py-2 px-3" : "text-base py-4 px-6"
+          size === "sm" ? "text-xxs py-2 px-3" : "text-base py-4 px-6",
         )}
       >
         {children}

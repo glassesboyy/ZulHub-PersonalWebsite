@@ -31,7 +31,7 @@ export default function TestimonialDetailPage({
 
     const success = await toggleApproval(
       testimonial.id,
-      testimonial.is_approved
+      testimonial.is_approved,
     );
     if (success) {
       router.push("/protected/testimonial");

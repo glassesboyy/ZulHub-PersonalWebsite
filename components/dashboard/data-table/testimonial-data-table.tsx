@@ -59,14 +59,14 @@ export function TestimonialDataTable({
   const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [rowSelection, setRowSelection] = React.useState({});
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
-    null
+    null,
   );
   const [bulkDeleteIds, setBulkDeleteIds] = React.useState<number[] | null>(
-    null
+    null,
   );
 
   const handleSingleDelete = async () => {
@@ -299,7 +299,7 @@ export function TestimonialDataTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -314,7 +314,7 @@ export function TestimonialDataTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

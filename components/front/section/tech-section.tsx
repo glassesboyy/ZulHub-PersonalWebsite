@@ -27,7 +27,7 @@ export function TechSection() {
       middle: techs.slice(outerCount, outerCount + middleCount),
       inner: techs.slice(
         outerCount + middleCount,
-        outerCount + middleCount + remainingCount
+        outerCount + middleCount + remainingCount,
       ),
     };
   };
@@ -37,7 +37,7 @@ export function TechSection() {
   const renderTechIcon = (
     tech: Technology,
     size: number,
-    opacityClass: string
+    opacityClass: string,
   ) => {
     const IconComponent = Si[tech.icon as keyof typeof Si];
     return IconComponent ? (

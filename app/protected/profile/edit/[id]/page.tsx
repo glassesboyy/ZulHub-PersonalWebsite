@@ -72,7 +72,7 @@ export default function EditProfilePage({
       data.tagline,
       data.bio,
       data.cvFile,
-      data.avatarFile
+      data.avatarFile,
     );
     if (success) {
       router.push("/protected/profile");

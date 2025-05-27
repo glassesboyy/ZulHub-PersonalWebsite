@@ -59,14 +59,14 @@ export function ProjectDataTable({
   const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [rowSelection, setRowSelection] = React.useState({});
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
-    null
+    null,
   );
   const [bulkDeleteIds, setBulkDeleteIds] = React.useState<number[] | null>(
-    null
+    null,
   );
 
   const handleSingleDelete = async () => {
@@ -152,7 +152,7 @@ export function ProjectDataTable({
       cell: ({ row }) => (
         <div
           className={`px-2 xs:px-4 py-1 w-fit rounded-full text-center text-xxxs xs:text-xxs md:text-xs uppercase font-medium tracking-widest text-white ${getStatusColor(
-            row.original.status
+            row.original.status,
           )}`}
         >
           {row.original.status}
@@ -321,7 +321,7 @@ export function ProjectDataTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -336,7 +336,7 @@ export function ProjectDataTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

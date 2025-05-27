@@ -36,7 +36,7 @@ export function useSocials() {
         .from("profiles")
         .select("id")
         .limit(1);
-      
+
       const profile_id = profiles?.[0]?.id;
 
       const { error } = await supabase

@@ -16,13 +16,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             "min-h-[80px] py-2 text-base md:text-sm": size === "default",
             "min-h-[60px] py-1 text-sm md:text-xs": size === "sm",
           },
-          className
+          className,
         )}
         ref={ref}
         {...props}
       />
     );
-  }
+  },
 );
 Textarea.displayName = "Textarea";
 

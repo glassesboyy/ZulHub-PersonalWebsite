@@ -88,7 +88,7 @@ export default function EditProjectPage({
       data.status,
       data.imageFile as File | null,
       data.technologies || [],
-      data.link // Add this
+      data.link, // Add this
     );
 
     if (success) {
@@ -234,7 +234,7 @@ export default function EditProjectPage({
                     <ComboboxTechnologies
                       technologies={technologies}
                       selectedTechnologies={technologies.filter((tech) =>
-                        field.value?.includes(tech.id)
+                        field.value?.includes(tech.id),
                       )}
                       onSelect={(tech) => {
                         const currentIds = field.value || [];
@@ -245,7 +245,7 @@ export default function EditProjectPage({
                       onRemove={(techId) => {
                         const currentIds = field.value || [];
                         field.onChange(
-                          currentIds.filter((id) => id !== techId)
+                          currentIds.filter((id) => id !== techId),
                         );
                       }}
                     />

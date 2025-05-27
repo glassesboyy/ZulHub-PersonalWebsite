@@ -64,7 +64,7 @@ export default function EditCertificatePage({
       data.title,
       data.issuer,
       data.year,
-      data.certificateImage || null
+      data.certificateImage || null,
     );
     if (success) {
       router.push("/protected/certificate");

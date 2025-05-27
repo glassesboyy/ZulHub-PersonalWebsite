@@ -56,7 +56,7 @@ export default function EditTechnologyPage({
     const success = await updateTechnology(
       resolvedParams.id,
       data.name,
-      data.icon
+      data.icon,
     );
     if (success) {
       router.push("/protected/technology");

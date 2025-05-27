@@ -129,7 +129,7 @@ export function CertificateModal({
                   window.open(
                     certificate.certificate_image,
                     "_blank",
-                    "noopener,noreferrer"
+                    "noopener,noreferrer",
                   )
                 }
                 className="text-xs relative overflow-hidden group"

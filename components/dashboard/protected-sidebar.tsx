@@ -100,7 +100,7 @@ export function ProtectedSidebar() {
                       <SidebarMenuButton
                         onClick={() =>
                           setOpenSubmenu(
-                            openSubmenu === item.title ? null : item.title
+                            openSubmenu === item.title ? null : item.title,
                           )
                         }
                         isActive={openSubmenu === item.title}

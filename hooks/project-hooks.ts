@@ -12,12 +12,14 @@ export function useProjects() {
     try {
       const { data, error } = await supabase
         .from("projects")
-        .select(`
+        .select(
+          `
           *,
           technologies:project_tech(
             technology:technologies(*)
           )
-        `)
+        `,
+        )
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -25,10 +27,9 @@ export function useProjects() {
         return;
       }
 
-      // Transform the nested data structure
-      const transformedData = data?.map(project => ({
+      const transformedData = data?.map((project) => ({
         ...project,
-        technologies: project.technologies?.map((t: any) => t.technology) || []
+        technologies: project.technologies?.map((t: any) => t.technology) || [],
       }));
 
       setProjects(transformedData || []);
@@ -132,12 +133,10 @@ export function useProjects() {
       const project = await fetchProjectById(id.toString());
       if (!project) return false;
 
-      // Extract filename dari URL
       const imageUrl = project.project_image;
       const fileName = imageUrl.split("/").pop();
       const filePath = `projects/${fileName}`;
 
-      // Hapus file dari storage
       const { error: storageError } = await supabase.storage
         .from("project-image")
         .remove([filePath]);
@@ -252,7 +251,6 @@ export function useProjects() {
         return null;
       }
 
-      // Transform the nested data structure
       if (data) {
         data.technologies =
           data.technologies?.map((t: any) => t.technology) || [];
@@ -288,12 +286,11 @@ export function useProjects() {
     link: string,
   ) => {
     try {
-      // Ambil profile ID yang aktif
       const { data: profiles } = await supabase
         .from("profiles")
         .select("id")
         .limit(1);
-      
+
       const profile_id = profiles?.[0]?.id;
 
       const imageUrl = await uploadImage(imageFile);
@@ -306,23 +303,23 @@ export function useProjects() {
         return false;
       }
 
-      // Insert project with profile_id
       const { data: project, error: projectError } = await supabase
         .from("projects")
-        .insert([{ 
-          name, 
-          description, 
-          status, 
-          project_image: imageUrl, 
-          link,
-          profile_id 
-        }])
+        .insert([
+          {
+            name,
+            description,
+            status,
+            project_image: imageUrl,
+            link,
+            profile_id,
+          },
+        ])
         .select()
         .single();
 
       if (projectError) throw projectError;
 
-      // Insert project technologies
       if (techIds.length > 0) {
         const techData = techIds.map((techId) => ({
           project_id: project.id,
@@ -354,15 +351,15 @@ export function useProjects() {
 
   const deleteFile = async (url: string) => {
     try {
-      const fileName = url.split('/').pop();
+      const fileName = url.split("/").pop();
       const filePath = `projects/${fileName}`;
-      
+
       const { error } = await supabase.storage
-        .from('project-image')
+        .from("project-image")
         .remove([filePath]);
 
       if (error) {
-        console.error('Error deleting file:', error.message);
+        console.error("Error deleting file:", error.message);
         return false;
       }
       return true;
@@ -379,20 +376,15 @@ export function useProjects() {
     status: string,
     imageFile: File | null,
     techIds: number[],
-    link: string, // Add this parameter
+    link: string,
   ) => {
     try {
-      let updateData: any = { name, description, status, link }; // Add link
+      let updateData: any = { name, description, status, link };
 
       if (imageFile) {
-        // Fetch current project to get current image URL
         const currentProject = await fetchProjectById(id);
         if (!currentProject) return false;
-
-        // Delete old image file
         await deleteFile(currentProject.project_image);
-
-        // Upload new image file
         const imageUrl = await uploadImage(imageFile);
         if (!imageUrl) {
           toast({
@@ -405,7 +397,6 @@ export function useProjects() {
         updateData.project_image = imageUrl;
       }
 
-      // Update project
       const { error: projectError } = await supabase
         .from("projects")
         .update(updateData)
@@ -413,7 +404,6 @@ export function useProjects() {
 
       if (projectError) throw projectError;
 
-      // Delete existing tech relationships
       const { error: deleteError } = await supabase
         .from("project_tech")
         .delete()
@@ -421,7 +411,6 @@ export function useProjects() {
 
       if (deleteError) throw deleteError;
 
-      // Insert new tech relationships
       if (techIds.length > 0) {
         const techData = techIds.map((techId) => ({
           project_id: parseInt(id),

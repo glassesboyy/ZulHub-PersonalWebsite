@@ -77,7 +77,7 @@ export default function EditTestimonialPage({
       data.email,
       data.relation,
       data.message,
-      data.isApproved
+      data.isApproved,
     );
     if (success) {
       router.push("/protected/testimonial");

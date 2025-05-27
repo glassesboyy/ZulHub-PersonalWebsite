@@ -61,14 +61,14 @@ export function SocialDataTable({
   const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [rowSelection, setRowSelection] = React.useState({});
   const [singleDeleteId, setSingleDeleteId] = React.useState<number | null>(
-    null
+    null,
   );
   const [bulkDeleteIds, setBulkDeleteIds] = React.useState<number[] | null>(
-    null
+    null,
   );
 
   const handleBulkDelete = async () => {
@@ -308,7 +308,7 @@ export function SocialDataTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -323,7 +323,7 @@ export function SocialDataTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

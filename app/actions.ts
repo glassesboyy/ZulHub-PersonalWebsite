@@ -31,14 +31,16 @@ export const signInAction = async (formData: FormData) => {
 
 export async function resetPasswordAction(formData: FormData) {
   const supabase = await createClient();
-  
+
   // Verify user is authenticated first
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
   if (!session) {
     return encodedRedirect(
       "error",
       "/sign-in",
-      "You must be logged in to reset your password"
+      "You must be logged in to reset your password",
     );
   }
 
@@ -49,7 +51,7 @@ export async function resetPasswordAction(formData: FormData) {
     return encodedRedirect(
       "error",
       "/protected/profile/reset-password",
-      "Password and confirm password are required"
+      "Password and confirm password are required",
     );
   }
 
@@ -57,7 +59,7 @@ export async function resetPasswordAction(formData: FormData) {
     return encodedRedirect(
       "error",
       "/protected/profile/reset-password",
-      "Passwords do not match"
+      "Passwords do not match",
     );
   }
 
@@ -69,7 +71,7 @@ export async function resetPasswordAction(formData: FormData) {
     return encodedRedirect(
       "error",
       "/protected/profile/reset-password",
-      "Password update failed"
+      "Password update failed",
     );
   }
 

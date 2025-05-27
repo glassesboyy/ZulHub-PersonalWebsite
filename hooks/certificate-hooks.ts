@@ -41,9 +41,7 @@ export function useCertificates() {
 
       const {
         data: { publicUrl },
-      } = supabase.storage
-        .from("certificate-image")
-        .getPublicUrl(filePath);
+      } = supabase.storage.from("certificate-image").getPublicUrl(filePath);
 
       return publicUrl;
     } catch (error) {
@@ -54,15 +52,15 @@ export function useCertificates() {
 
   const deleteFile = async (url: string) => {
     try {
-      const fileName = url.split('/').pop();
+      const fileName = url.split("/").pop();
       const filePath = `certificates/${fileName}`;
-      
+
       const { error } = await supabase.storage
-        .from('certificate-image')
+        .from("certificate-image")
         .remove([filePath]);
 
       if (error) {
-        console.error('Error deleting file:', error.message);
+        console.error("Error deleting file:", error.message);
         return false;
       }
       return true;
@@ -73,10 +71,10 @@ export function useCertificates() {
   };
 
   const createCertificate = async (
-    title: string, 
-    issuer: string, 
-    year: string, 
-    imageFile: File
+    title: string,
+    issuer: string,
+    year: string,
+    imageFile: File,
   ) => {
     try {
       // Ambil profile ID yang aktif
@@ -84,7 +82,7 @@ export function useCertificates() {
         .from("profiles")
         .select("id")
         .limit(1);
-      
+
       const profile_id = profiles?.[0]?.id;
 
       const imageUrl = await uploadImage(imageFile);
@@ -97,15 +95,15 @@ export function useCertificates() {
         return false;
       }
 
-      const { error } = await supabase
-        .from("certificates")
-        .insert([{ 
-          title, 
-          issuer, 
-          year, 
+      const { error } = await supabase.from("certificates").insert([
+        {
+          title,
+          issuer,
+          year,
           certificate_image: imageUrl,
-          profile_id
-        }]);
+          profile_id,
+        },
+      ]);
 
       if (error) {
         toast({
@@ -142,7 +140,6 @@ export function useCertificates() {
       let updateData: any = { title, issuer, year };
 
       if (imageFile) {
-
         const currentCertificate = await fetchCertificateById(id);
         if (!currentCertificate) return false;
 

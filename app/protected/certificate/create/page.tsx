@@ -50,7 +50,7 @@ export default function CreateCertificatePage() {
       data.title,
       data.issuer,
       data.year,
-      data.certificateImage
+      data.certificateImage,
     );
     if (success) {
       router.push("/protected/certificate");

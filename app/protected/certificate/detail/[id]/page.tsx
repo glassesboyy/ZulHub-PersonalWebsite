@@ -120,7 +120,7 @@ export default function CertificateDetailPage({
                   window.open(
                     certificate?.certificate_image,
                     "_blank",
-                    "noopener,noreferrer"
+                    "noopener,noreferrer",
                   )
                 }
               >

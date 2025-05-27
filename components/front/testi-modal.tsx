@@ -62,7 +62,7 @@ export function TestiModal({ open, onOpenChange }: TestiModalProps) {
       data.name,
       data.email,
       data.relation,
-      data.message
+      data.message,
     );
     if (success) {
       setIsSuccess(true);
@@ -84,7 +84,7 @@ export function TestiModal({ open, onOpenChange }: TestiModalProps) {
           "transition-all duration-700",
           !isSuccess
             ? "border border-primary/10 hover:brightness-110 hover:border-primary/20"
-            : "border border-primary/10"
+            : "border border-primary/10",
         )}
       >
         {!isSuccess ? (

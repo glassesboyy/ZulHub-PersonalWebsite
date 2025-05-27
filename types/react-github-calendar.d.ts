@@ -1,6 +1,6 @@
-import { Props as ActivityCalendarProps } from 'react-activity-calendar';
+import { Props as ActivityCalendarProps } from "react-activity-calendar";
 
-declare module 'react-github-calendar' {
+declare module "react-github-calendar" {
   export type Activity = {
     date: string;
     count: number;
@@ -8,7 +8,7 @@ declare module 'react-github-calendar' {
   };
 
   export type Year = number | "last";
-  
+
   export type GitHubCalendarProps = {
     username: string;
     style?: React.CSSProperties;

@@ -12,7 +12,8 @@ export function useProfiles() {
     try {
       const { data: rawData, error } = await supabase
         .from("profiles")
-        .select(`
+        .select(
+          `
           *,
           certificates(*),
           projects(
@@ -24,21 +25,22 @@ export function useProfiles() {
           socials(*),
           technologies(*),
           testimonials(*)
-        `)
+        `,
+        )
         .limit(1);
-      
+
       if (error) {
         console.error("Error fetching profile:", error.message);
         return [];
       }
 
-      // Transform projects data structure
-      const transformedData = rawData?.map(profile => ({
+      const transformedData = rawData?.map((profile) => ({
         ...profile,
         projects: profile.projects?.map((project: any) => ({
           ...project,
-          technologies: project.technologies?.map((t: any) => t.technology) || []
-        }))
+          technologies:
+            project.technologies?.map((t: any) => t.technology) || [],
+        })),
       }));
 
       setProfiles(transformedData || []);
@@ -101,15 +103,16 @@ export function useProfiles() {
     }
   };
 
-  const deleteFile = async (url: string, bucket: 'cv-file' | 'avatar-image') => {
+  const deleteFile = async (
+    url: string,
+    bucket: "cv-file" | "avatar-image",
+  ) => {
     try {
-      const filePath = url.split('/').pop();
-      const folder = bucket === 'cv-file' ? 'cvs' : 'avatars';
+      const filePath = url.split("/").pop();
+      const folder = bucket === "cv-file" ? "cvs" : "avatars";
       const path = `${folder}/${filePath}`;
-      
-      const { error } = await supabase.storage
-        .from(bucket)
-        .remove([path]);
+
+      const { error } = await supabase.storage.from(bucket).remove([path]);
 
       if (error) {
         console.error(`Error deleting file from ${bucket}:`, error.message);
@@ -133,23 +136,18 @@ export function useProfiles() {
     try {
       let updateData: any = { full_name, tagline, bio };
 
-      // Fetch current profile to get current file URLs
       const currentProfile = await fetchProfileById(id);
       if (!currentProfile) return false;
 
       if (cvFile) {
-        // Delete old CV file
-        await deleteFile(currentProfile.cv, 'cv-file');
-        // Upload new CV file
+        await deleteFile(currentProfile.cv, "cv-file");
         const cvUrl = await uploadCV(cvFile);
         if (!cvUrl) return false;
         updateData.cv = cvUrl;
       }
 
       if (avatarFile) {
-        // Delete old avatar file
-        await deleteFile(currentProfile.avatar_url, 'avatar-image');
-        // Upload new avatar file
+        await deleteFile(currentProfile.avatar_url, "avatar-image");
         const avatarUrl = await uploadAvatar(avatarFile);
         if (!avatarUrl) return false;
         updateData.avatar_url = avatarUrl;
@@ -188,7 +186,8 @@ export function useProfiles() {
     try {
       const { data, error } = await supabase
         .from("profiles")
-        .select(`
+        .select(
+          `
           *,
           certificates(*),
           projects(
@@ -199,7 +198,8 @@ export function useProfiles() {
           ),
           socials(*),
           testimonials(*)
-        `)
+        `,
+        )
         .eq("id", id)
         .single();
 
@@ -208,14 +208,14 @@ export function useProfiles() {
         return null;
       }
 
-      // Transform projects data structure
       if (data) {
         const transformedData = {
           ...data,
           projects: data.projects?.map((project: any) => ({
             ...project,
-            technologies: project.technologies?.map((t: any) => t.technology) || []
-          }))
+            technologies:
+              project.technologies?.map((t: any) => t.technology) || [],
+          })),
         };
         return transformedData;
       }

@@ -52,7 +52,7 @@ type RecapSections = Array<
 >;
 
 function renderRecapTable<T extends Record<string, unknown>>(
-  section: RecapSection<T>
+  section: RecapSection<T>,
 ) {
   return (
     <RecapDataTable<T>
@@ -288,7 +288,7 @@ export default function ProtectedPage() {
         {recapSections.map((section) => {
           if ("certificate_image" in (section.data[0] || {})) {
             return renderRecapTable<Certificate>(
-              section as RecapSection<Certificate>
+              section as RecapSection<Certificate>,
             );
           }
           if ("project_image" in (section.data[0] || {})) {
@@ -302,11 +302,11 @@ export default function ProtectedPage() {
             !("link" in (section.data[0] || {}))
           ) {
             return renderRecapTable<Technology>(
-              section as RecapSection<Technology>
+              section as RecapSection<Technology>,
             );
           }
           return renderRecapTable<Testimonial>(
-            section as RecapSection<Testimonial>
+            section as RecapSection<Testimonial>,
           );
         })}
       </div>

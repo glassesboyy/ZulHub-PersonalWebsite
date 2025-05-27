@@ -21,7 +21,7 @@ declare module "cobe" {
 
   export default function createGlobe(
     canvas: HTMLCanvasElement | null,
-    options: COBEOptions
+    options: COBEOptions,
   ): {
     destroy: () => void;
   };

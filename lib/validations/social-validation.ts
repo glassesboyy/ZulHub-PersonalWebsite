@@ -18,7 +18,7 @@ const socialSchema = z.object({
     .min(1, "Icon name is required")
     .regex(
       /^Icon[A-Za-z]+$/,
-      "Invalid icon name format. Must start with 'Icon' followed by letters (e.g., IconBrandGithub)"
+      "Invalid icon name format. Must start with 'Icon' followed by letters (e.g., IconBrandGithub)",
     ),
 });
 

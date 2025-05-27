@@ -51,7 +51,7 @@ export default function CreateTestimonialPage() {
       data.name,
       data.email,
       data.relation,
-      data.message
+      data.message,
     );
     if (success) {
       router.push("/protected/testimonial");

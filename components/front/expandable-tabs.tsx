@@ -84,7 +84,7 @@ export function ExpandableTabs({
         "flex flex-wrap items-center rounded-[4px] gap-1 border border-border/40 p-1",
         "bg-gradient-to-b from-background/90 to-muted/90",
         "dark:from-background dark:to-muted/70 dark:border-border",
-        className
+        className,
       )}
     >
       {tabs.map((tab, index) => {
@@ -108,7 +108,7 @@ export function ExpandableTabs({
               "transition-colors duration-300",
               selected === index
                 ? cn("bg-muted", activeColor)
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground",
             )}
           >
             <Icon size={14} className="flex-shrink-0" />
