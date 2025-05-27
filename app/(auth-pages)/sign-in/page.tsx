@@ -13,8 +13,8 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
           Access For The OG Only
         </h1>
         <p className="text-xxs text-white/50">
-          You ain't Glassesboyy? Then what you doin' here, bro? This spot ain’t
-          for you dip out before you get caught 👁️👄👁️
+          You ain&apos;t Glassesboyy? Then what you doin&apos; here, bro? This
+          spot ain&apos;t for you dip out before you get caught 👁️👄👁️
         </p>
       </div>
       <form className="space-y-4">
