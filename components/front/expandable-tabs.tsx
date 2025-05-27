@@ -83,7 +83,7 @@ export function ExpandableTabs({
       className={cn(
         "flex flex-wrap items-center rounded-[4px] gap-1 border border-border/40 p-1",
         "bg-gradient-to-b from-background/90 to-muted/90",
-        "dark:from-background dark:to-muted dark:border-border",
+        "dark:from-background dark:to-muted/70 dark:border-border",
         className
       )}
     >
@@ -104,7 +104,7 @@ export function ExpandableTabs({
             transition={transition}
             className={cn(
               "relative flex items-center rounded-[4px] tracking-widest px-3 py-1.5",
-              "text-xxs font-[Audiowide]",
+              "text-xxs font-[Audiowide] uppercase",
               "transition-colors duration-300",
               selected === index
                 ? cn("bg-muted", activeColor)

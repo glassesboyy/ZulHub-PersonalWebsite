@@ -84,8 +84,8 @@ export function AboutSection() {
         <div className="relative group">
           <Spotlight className="-top-32 left-0 md:left-12 md:-top-20 z-10 from-primary/20 via-primary/10 to-primary/5" />
           <div className="relative w-full aspect-square max-w-sm mx-auto">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/0 backdrop-blur-sm group-hover:from-primary/30 transition-all duration-500" />
-            <div className="absolute inset-1 rounded-2xl overflow-hidden border border-primary/10 group-hover:border-primary/20 transition-all duration-500">
+            <div className="absolute inset-0 rounded-md bg-gradient-to-br from-primary/20 to-primary/0 backdrop-blur-sm group-hover:from-primary/30 transition-all duration-500" />
+            <div className="absolute inset-1 rounded-md overflow-hidden border border-primary/10 group-hover:border-primary/20 transition-all duration-500">
               <Image
                 src={profile.avatar_url}
                 alt={profile.full_name}

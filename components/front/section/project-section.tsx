@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { useProjects } from "@/hooks/project-hooks";
 import { Project } from "@/types/projects";
 import Image from "next/image";
@@ -97,16 +98,14 @@ const ProjectContent = ({ project }: { project: Project }) => (
             <h3 className="text-xs font-medium text-foreground/60">
               Project Link:
             </h3>
-            <Link
-              href={project.link}
-              target="_blank"
-              className="relative z-20 py-2 px-4 rounded-md bg-gradient-to-t from-background/90 to-muted/90 border border-primary/10 text-foreground hover:text-primary text-xs inline-flex items-center gap-2 group transition-all duration-300"
-            >
-              View Project
-              <span className="transform transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary">
-                →
-              </span>
-            </Link>
+            <Button variant="gradient" size="sm" className="group" asChild>
+              <Link href={project.link} target="_blank">
+                View Project
+                <span className="transform transition-all duration-300 group-hover:translate-x-1">
+                  →
+                </span>
+              </Link>
+            </Button>
           </div>
         )}
       </div>

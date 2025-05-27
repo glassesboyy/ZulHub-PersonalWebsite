@@ -198,7 +198,7 @@ export function TestiModal({ open, onOpenChange }: TestiModalProps) {
 
                 <div className="flex justify-center pt-2">
                   <Button variant="gradient" type="submit" size={"sm"}>
-                    SUBMIT MESSAGE
+                    Submit Message
                   </Button>
                 </div>
               </form>

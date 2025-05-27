@@ -50,13 +50,13 @@ export function ContactSection() {
               key={social.id}
               variant="ghost"
               size="icon"
-              className="relative rounded-sm p-1 group hover:bg-primary/10 
+              className="relative rounded-md p-1 group hover:bg-primary/10 
                         transition-all duration-300 ease-in-out
-                        before:absolute before:inset-0 before:rounded-sm
+                        before:absolute before:inset-0 before:rounded-md
                         before:border before:border-primary/10 before:scale-100
                         hover:before:scale-150 hover:before:opacity-0
                         before:transition-all before:duration-500 before:ease-in-out
-                        after:absolute after:inset-0 after:rounded-sm
+                        after:absolute after:inset-0 after:rounded-md
                         after:border after:border-primary/10 after:scale-100
                         hover:after:scale-125 hover:after:opacity-0
                         after:transition-all after:duration-500 after:ease-in-out
@@ -81,7 +81,7 @@ export function ContactSection() {
 
       {/* Globe Section - Centered */}
       <div className="flex justify-center -mt-10">
-        <div className="relative flex items-center justify-center overflow-hidden rounded-lg bg-background/50 backdrop-blur-sm w-full h-[520px]">
+        <div className="relative flex items-center justify-center overflow-hidden rounded-md bg-background/50 backdrop-blur-sm w-full h-[520px]">
           <Globe className="scale-90" />
           <div className="pointer-events-none absolute inset-0 h-full bg-[radial-gradient(circle_at_50%_200%,rgba(0,0,0,0.2),rgba(255,255,255,0))]" />
         </div>

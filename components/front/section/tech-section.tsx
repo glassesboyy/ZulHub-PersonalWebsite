@@ -70,7 +70,7 @@ export function TechSection() {
       </div>
 
       {/* Orbiting Circles Section */}
-      <div className="relative flex h-[420px] w-full flex-col items-center justify-center overflow-hidden">
+      <div className="relative flex h-[420px] w-full flex-col items-center justify-center overflow-hidden mt-4">
         {/* Outer circle */}
         <OrbitingCircles
           iconSize={40}
@@ -93,7 +93,7 @@ export function TechSection() {
       </div>
 
       {/* Curved Background Section */}
-      <div className="relative -mt-32 h-96 w-full overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]">
+      <div className="relative -mt-36 h-96 w-full overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]">
         <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,hsl(var(--foreground-2)),transparent_90%)] before:opacity-20" />
         <div className="absolute -left-1/2 top-1/2 aspect-[1/0.7] z-10 w-[200%] rounded-[100%] border-t border-border/40 bg-background dark:bg-muted" />
       </div>

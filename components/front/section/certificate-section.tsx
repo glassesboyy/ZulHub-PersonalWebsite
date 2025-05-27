@@ -1,19 +1,29 @@
 "use client";
 
 import { BadgeFe } from "@/components/front/badge-fe";
+import { CertificateModal } from "@/components/front/certificate-modal";
 import { Spotlight } from "@/components/front/spotlight";
 import { Tilt } from "@/components/front/tilt";
 import { Button } from "@/components/ui/button";
 import { useCertificates } from "@/hooks/certificate-hooks";
 import { Certificate } from "@/types/certificate";
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image"; // Add this import
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const ITEMS_PER_PAGE = 6;
 
-const CertificateCard = ({ certificate }: { certificate: Certificate }) => (
-  <div className="w-full flex flex-col gap-2 border border-primary/10 rounded-lg p-2 bg-background/50 backdrop-blur-sm hover:border-primary/20 transition-all duration-300">
+const CertificateCard = ({
+  certificate,
+  onClick,
+}: {
+  certificate: Certificate;
+  onClick: () => void;
+}) => (
+  <div
+    onClick={onClick}
+    className="w-full flex flex-col gap-2 border border-primary/10 rounded-md p-2 bg-background/50 backdrop-blur-sm hover:border-primary/20 transition-all duration-300 cursor-pointer"
+  >
     {/* Image with Tilt */}
     <Tilt
       rotationFactor={4}
@@ -24,7 +34,7 @@ const CertificateCard = ({ certificate }: { certificate: Certificate }) => (
         damping: 4.1,
         mass: 0.2,
       }}
-      className="group relative rounded-lg bg-background/90 border border-primary/10 hover:border-primary/30 overflow-hidden"
+      className="group relative rounded-md bg-background/90 border border-primary/10 hover:border-primary/30 overflow-hidden"
     >
       <Spotlight
         className="z-10 from-primary/20 via-primary/10 to-primary/5 blur-2xl"
@@ -66,7 +76,7 @@ const CertificateCard = ({ certificate }: { certificate: Certificate }) => (
           mass: 0.2,
         }}
       />
-      <div className="px-3 pt-3 pb-2 flex flex-col gap-4 bg-gradient-to-b from-background/90 to-muted/90 rounded-lg transition-all duration-300">
+      <div className="px-3 pt-3 pb-2 flex flex-col gap-4 bg-gradient-to-b from-background/90 to-muted/90 rounded-md transition-all duration-300">
         <h3 className="text-xs font-[audioWide] uppercase tracking-wide text-primary/80 truncate">
           {certificate.title}
         </h3>
@@ -131,6 +141,9 @@ const CertificateSection = () => {
   const { certificates, fetchCertificates } = useCertificates();
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCertificate, setSelectedCertificate] =
+    useState<Certificate | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const loadCertificates = async () => {
@@ -212,7 +225,13 @@ const CertificateSection = () => {
                   delay: 0.1,
                 }}
               >
-                <CertificateCard certificate={cert} />
+                <CertificateCard
+                  certificate={cert}
+                  onClick={() => {
+                    setSelectedCertificate(cert);
+                    setIsModalOpen(true);
+                  }}
+                />
               </motion.div>
             ))}
           </motion.div>
@@ -240,6 +259,15 @@ const CertificateSection = () => {
         <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,hsl(var(--foreground-2)),transparent_90%)] before:opacity-20" />
         <div className="absolute -left-1/2 top-1/2 aspect-[1/0.7] z-10 w-[200%] rounded-[100%] border-t border-border/40 bg-background dark:bg-muted" />
       </div>
+
+      <CertificateModal
+        certificate={selectedCertificate}
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedCertificate(null);
+        }}
+      />
     </div>
   );
 };
