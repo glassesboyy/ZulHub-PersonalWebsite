@@ -4,7 +4,11 @@ import { HomeSection } from "@/components/front/section/home-section";
 export default function Home() {
   return (
     <Template>
-      <HomeSection />
+      <div className="w-full overflow-hidden px-2">
+        <div className="mx-auto w-full max-w-3xl">
+          <HomeSection />
+        </div>
+      </div>
     </Template>
   );
 }

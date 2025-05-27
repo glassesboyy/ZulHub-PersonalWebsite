@@ -1,44 +1,58 @@
 import { signInAction } from "@/app/actions";
 import { FormMessage, Message } from "@/components/dashboard/form-message";
-import { SubmitButton } from "@/components/dashboard/submit-button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
 
 export default async function Login(props: { searchParams: Promise<Message> }) {
   const searchParams = await props.searchParams;
   return (
-    <form className="flex-1 flex flex-col min-w-64">
-      <h1 className="text-2xl font-medium">Sign in</h1>
-      <p className="text-sm text-foreground">
-        Don&apos;t have an account?{" "}
-        <Link className="text-foreground font-medium underline" href="/sign-up">
-          Sign up
-        </Link>
-      </p>
-      <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-        <Label htmlFor="email">Email</Label>
-        <Input name="email" placeholder="you@example.com" required />
-        <div className="flex justify-between items-center">
-          <Label htmlFor="password">Password</Label>
-          <Link
-            className="text-xs text-foreground underline"
-            href="/forgot-password"
-          >
-            Forgot Password?
-          </Link>
-        </div>
-        <Input
-          type="password"
-          name="password"
-          placeholder="Your password"
-          required
-        />
-        <SubmitButton pendingText="Signing In..." formAction={signInAction}>
-          Sign in
-        </SubmitButton>
-        <FormMessage message={searchParams} />
+    <div className="space-y-6">
+      <div className="space-y-2 text-center">
+        <h1 className="text-xl font-[Audiowide] tracking-widest text-white uppercase">
+          GlassesBoyy Only
+        </h1>
+        <p className="text-xxs text-white/50">
+          You ain't Glassesboyy? Then what you doin' here, bro? This spot ain’t
+          for you — dip out before you get caught 😤
+        </p>
       </div>
-    </form>
+      <form className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="email" className="text-white text-xs">
+            Email
+          </Label>
+          <Input
+            name="email"
+            required
+            className="bg-background/50 border-border/40 text-white"
+          />
+        </div>
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <Label htmlFor="password" className="text-white text-xs">
+              Password
+            </Label>
+          </div>
+          <Input
+            type="password"
+            name="password"
+            required
+            className="bg-background/50 border-border/40 text-white"
+          />
+        </div>
+        <div className="flex justify-center pt-2">
+          <Button
+            variant="gradient"
+            formAction={signInAction}
+            type="submit"
+            size={"sm"}
+          >
+            ACCESS DASHBOARD
+          </Button>
+        </div>
+        <FormMessage message={searchParams} />
+      </form>
+    </div>
   );
 }
