@@ -25,20 +25,20 @@ export function HomeSection() {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center items-center pt-6 px-4 z-10 relative">
-      <BadgeFe label="Glassesboyy Personal Web" className="my-1" />
-      <h1 className="xs:text-2xl md:text-3xl tracking-widest uppercase font-bold text-white font-[Audiowide] text-center">
+    <div className="flex flex-col justify-center items-center pt-6 z-10 relative">
+      <BadgeFe label="Glassesboyy Personal Web" className="my-2" />
+      <h1 className="text-4xl tracking-widest uppercase font-bold text-white font-[Audiowide] text-center">
         {profile?.full_name}
       </h1>
-      <p className="xs:text-xxs md:text-xs text-white text-center font-[Montserrat] tracking-wide font-light mb-8">
+      <p className="text-lg text-white/80 text-center font-[Montserrat] tracking mb-2 font-light max-w-2xl">
         {profile?.tagline}
       </p>
-      <div className="flex gap-4 flex-col xs:flex-col sm:flex-row">
+      <div className="flex gap-6 flex-col xs:flex-col sm:flex-row">
         <StarBorder
           as={Link}
-          href="/public/contact"
           size="sm"
-          className="tracking-wide"
+          href="/public/contact"
+          className="tracking-wide text-base"
         >
           GET IN TOUCH
         </StarBorder>
@@ -46,9 +46,9 @@ export function HomeSection() {
           as="a"
           href={profile?.cv || "#"}
           target="_blank"
-          rel="noopener noreferrer"
           size="sm"
-          className="tracking-wide"
+          rel="noopener noreferrer"
+          className="tracking-wide text-base"
           onClick={(e) => {
             if (!profile?.cv) {
               e.preventDefault();

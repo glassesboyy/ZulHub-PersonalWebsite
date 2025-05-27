@@ -73,8 +73,8 @@ export function TechSection() {
       <div className="relative flex h-[420px] w-full flex-col items-center justify-center overflow-hidden">
         {/* Outer circle */}
         <OrbitingCircles
-          iconSize={35}
-          radius={150}
+          iconSize={40}
+          radius={170}
           duration={30}
           className="z-10"
         >
@@ -82,18 +82,18 @@ export function TechSection() {
         </OrbitingCircles>
 
         {/* Middle circle */}
-        <OrbitingCircles iconSize={25} radius={100} duration={25} reverse>
+        <OrbitingCircles iconSize={30} radius={115} duration={25} reverse>
           {middle.map((tech) => renderTechIcon(tech, 27, "text-foreground/60"))}
         </OrbitingCircles>
 
         {/* Inner circle */}
-        <OrbitingCircles iconSize={20} radius={50} duration={20}>
+        <OrbitingCircles iconSize={25} radius={60} duration={20}>
           {inner.map((tech) => renderTechIcon(tech, 20, "text-foreground/40"))}
         </OrbitingCircles>
       </div>
 
       {/* Curved Background Section */}
-      <div className="relative -mt-40 h-96 w-full overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]">
+      <div className="relative -mt-32 h-96 w-full overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]">
         <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,hsl(var(--foreground-2)),transparent_90%)] before:opacity-20" />
         <div className="absolute -left-1/2 top-1/2 aspect-[1/0.7] z-10 w-[200%] rounded-[100%] border-t border-border/40 bg-background dark:bg-muted" />
       </div>

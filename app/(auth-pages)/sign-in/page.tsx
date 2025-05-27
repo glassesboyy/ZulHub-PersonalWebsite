@@ -9,12 +9,12 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
   return (
     <div className="space-y-6">
       <div className="space-y-2 text-center">
-        <h1 className="text-xl font-[Audiowide] tracking-widest text-white uppercase">
-          GlassesBoyy Only
+        <h1 className="text-xl font-[Audiowide] tracking-wide text-white uppercase">
+          Access For The OG Only
         </h1>
         <p className="text-xxs text-white/50">
           You ain't Glassesboyy? Then what you doin' here, bro? This spot ain’t
-          for you — dip out before you get caught 😤
+          for you dip out before you get caught 👁️👄👁️
         </p>
       </div>
       <form className="space-y-4">

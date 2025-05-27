@@ -9,11 +9,30 @@ import { motion } from "framer-motion";
 import { Album, Bolt, Folders, Star } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { ThemeInput } from "react-activity-calendar";
+import GitHubCalendar from "react-github-calendar";
 
 export function AboutSection() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { fetchProfiles } = useProfiles();
+
+  const colorTheme: ThemeInput = {
+    light: [
+      "var(--color-calendar-graph-day-bg)",
+      "var(--color-calendar-graph-day-L1-bg)",
+      "var(--color-calendar-graph-day-L2-bg)",
+      "var(--color-calendar-graph-day-L3-bg)",
+      "var(--color-calendar-graph-day-L4-bg)",
+    ],
+    dark: [
+      "var(--color-calendar-graph-day-bg)",
+      "var(--color-calendar-graph-day-L1-bg)",
+      "var(--color-calendar-graph-day-L2-bg)",
+      "var(--color-calendar-graph-day-L3-bg)",
+      "var(--color-calendar-graph-day-L4-bg)",
+    ],
+  };
 
   useEffect(() => {
     async function loadProfile() {
@@ -127,6 +146,41 @@ export function AboutSection() {
           icon={<Star className="w-7 h-7" />}
           variant="fancy"
         />
+      </div>
+
+      {/* GitHub Calendar */}
+      <div className="max-w-fit mx-auto mt-4 xs:p-2 md:p-1 relative z-30">
+        <div className="bg-background rounded-md p-4 bg-gradient-to-br from-black/70 via-primary/5 to-black/70 backdrop-blur-sm border border-white/10 ">
+          <div
+            className="scrollbar-hide"
+            style={{
+              overflowX: "auto",
+              overflowY: "hidden",
+              maxWidth: "100%",
+            }}
+          >
+            <div
+              style={{
+                minWidth: "max-content",
+                width: "fit-content",
+              }}
+            >
+              <GitHubCalendar
+                username="glassesboyy"
+                blockSize={15}
+                blockMargin={4}
+                fontSize={10}
+                hideMonthLabels
+                hideColorLegend
+                hideTotalCount
+                style={{
+                  color: "var(--color-calendar-text)",
+                }}
+                theme={colorTheme}
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Curved Background Section */}
