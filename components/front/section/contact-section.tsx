@@ -16,6 +16,10 @@ export function ContactSection() {
     fetchSocials();
   }, [fetchSocials]);
 
+  const handleSocialClick = (link: string) => {
+    window.open(link, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <>
       {/* Header Section */}
@@ -36,7 +40,7 @@ export function ContactSection() {
       </div>
 
       {/* Social Media Docks */}
-      <div className="flex items-center justify-center gap-1 w-full relative z-10">
+      <div className="flex items-center justify-center gap-1 w-full relative z-20">
         {socials.map((social) => {
           const IconComponent = TablerIcons[
             social.icon as IconKey
@@ -50,6 +54,7 @@ export function ContactSection() {
               key={social.id}
               variant="ghost"
               size="icon"
+              onClick={() => handleSocialClick(social.link)}
               className="relative rounded-md p-1 group hover:bg-primary/10 
                         transition-all duration-300 ease-in-out
                         before:absolute before:inset-0 before:rounded-md
@@ -60,7 +65,8 @@ export function ContactSection() {
                         after:border after:border-primary/10 after:scale-100
                         hover:after:scale-125 hover:after:opacity-0
                         after:transition-all after:duration-500 after:ease-in-out
-                        hover:transform hover:scale-110"
+                        hover:transform hover:scale-110
+                        cursor-pointer"
             >
               <IconComponent
                 size={30}
@@ -80,7 +86,7 @@ export function ContactSection() {
       </div>
 
       {/* Globe Section - Centered */}
-      <div className="flex justify-center -mt-10">
+      <div className="flex justify-center -mt-10 relative z-10">
         <div className="relative flex items-center justify-center overflow-hidden rounded-md bg-background/50 backdrop-blur-sm w-full h-[520px]">
           <Globe className="scale-90" />
           <div className="pointer-events-none absolute inset-0 h-full bg-[radial-gradient(circle_at_50%_200%,rgba(0,0,0,0.2),rgba(255,255,255,0))]" />

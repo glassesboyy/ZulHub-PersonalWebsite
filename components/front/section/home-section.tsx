@@ -34,7 +34,7 @@ export function HomeSection() {
 
       {/* Content Section */}
       <div className="z-30 flex flex-col items-center justify-center">
-        <BadgeFe label="Glassesboyy Personal Web" className="my-2" />
+        <BadgeFe label="Personal Website" className="my-2" />
         <h1 className="text-4xl tracking-widest uppercase font-bold text-white font-[Audiowide] text-center">
           {profile?.full_name}
         </h1>

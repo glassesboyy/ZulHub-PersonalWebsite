@@ -48,7 +48,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
             type="submit"
             size={"sm"}
           >
-            Access Dahboard
+            Access Dashboard
           </Button>
         </div>
         <FormMessage message={searchParams} />
