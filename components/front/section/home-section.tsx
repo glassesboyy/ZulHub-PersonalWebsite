@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 
 export function HomeSection() {
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -19,10 +20,19 @@ export function HomeSection() {
         .limit(1)
         .single();
       setProfile(data);
+      setIsLoading(false);
     };
 
     fetchProfile();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-sm text-foreground/60">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col justify-center items-center relative min-h-screen">

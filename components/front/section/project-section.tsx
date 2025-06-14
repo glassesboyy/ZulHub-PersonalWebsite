@@ -161,7 +161,11 @@ const ProjectSection = () => {
   }, [projects]);
 
   if (isLoading) {
-    return <div>Loading projects...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <p className="text-sm text-foreground/60">Loading Projects...</p>
+      </div>
+    );
   }
 
   return (

@@ -48,7 +48,7 @@ export function AboutSection() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <p className="text-sm text-foreground/60">Loading profile...</p>
+        <p className="text-sm text-foreground/60">Loading Profile...</p>
       </div>
     );
   }

@@ -4,14 +4,19 @@ import { BadgeFe } from "@/components/front/badge-fe";
 import { OrbitingCircles } from "@/components/front/orbiting-circles";
 import { useTechnologies } from "@/hooks/technology-hooks";
 import { Technology } from "@/types/technology";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as Si from "react-icons/si";
 
 export function TechSection() {
+  const [isLoading, setIsLoading] = useState(true);
   const { technologies, fetchTechnologies } = useTechnologies();
 
   useEffect(() => {
-    fetchTechnologies();
+    const loadTechnologies = async () => {
+      await fetchTechnologies();
+      setIsLoading(false);
+    };
+    loadTechnologies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -27,7 +32,7 @@ export function TechSection() {
       middle: techs.slice(outerCount, outerCount + middleCount),
       inner: techs.slice(
         outerCount + middleCount,
-        outerCount + middleCount + remainingCount,
+        outerCount + middleCount + remainingCount
       ),
     };
   };
@@ -37,7 +42,7 @@ export function TechSection() {
   const renderTechIcon = (
     tech: Technology,
     size: number,
-    opacityClass: string,
+    opacityClass: string
   ) => {
     const IconComponent = Si[tech.icon as keyof typeof Si];
     return IconComponent ? (
@@ -49,6 +54,14 @@ export function TechSection() {
       </div>
     ) : null;
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <p className="text-sm text-foreground/60">Loading Technologies...</p>
+      </div>
+    );
+  }
 
   return (
     <>

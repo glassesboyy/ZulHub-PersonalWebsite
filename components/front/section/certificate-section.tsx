@@ -167,8 +167,8 @@ const CertificateSection = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[200px]">
-        <p className="text-sm text-foreground/60">Loading certificates...</p>
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <p className="text-sm text-foreground/60">Loading Certificates...</p>
       </div>
     );
   }

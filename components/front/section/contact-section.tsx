@@ -5,20 +5,35 @@ import { Globe } from "@/components/front/globe";
 import { Button } from "@/components/ui/button";
 import { useSocials } from "@/hooks/social-hooks";
 import * as TablerIcons from "@tabler/icons-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type IconKey = keyof typeof TablerIcons;
 
 export function ContactSection() {
+  const [isLoading, setIsLoading] = useState(true);
   const { socials, fetchSocials } = useSocials();
 
   useEffect(() => {
-    fetchSocials();
+    const loadSocials = async () => {
+      await fetchSocials();
+      setIsLoading(false);
+    };
+    loadSocials();
   }, [fetchSocials]);
 
   const handleSocialClick = (link: string) => {
     window.open(link, "_blank", "noopener,noreferrer");
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <p className="text-sm text-foreground/60">
+          Loading Contact Information...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>

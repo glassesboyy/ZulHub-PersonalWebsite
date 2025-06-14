@@ -14,10 +14,15 @@ interface TestimonialItem {
 
 export function TestimonialSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { testimonials, fetchTestimonials } = useTestimonials();
 
   useEffect(() => {
-    fetchTestimonials();
+    const loadTestimonials = async () => {
+      await fetchTestimonials();
+      setIsLoading(false);
+    };
+    loadTestimonials();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -41,6 +46,14 @@ export function TestimonialSection() {
   };
 
   const [row1, row2, row3] = splitTestimonials(approvedTestimonials);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <p className="text-sm text-foreground/60">Loading Testimonials...</p>
+      </div>
+    );
+  }
 
   return (
     <>
