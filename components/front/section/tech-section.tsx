@@ -2,6 +2,7 @@
 
 import { BadgeFe } from "@/components/front/badge-fe";
 import { OrbitingCircles } from "@/components/front/orbiting-circles";
+import { Spinner } from "@/components/front/spinner";
 import { useTechnologies } from "@/hooks/technology-hooks";
 import { Technology } from "@/types/technology";
 import { useEffect, useState } from "react";
@@ -57,8 +58,9 @@ export function TechSection() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <p className="text-sm text-foreground/60">Loading Technologies...</p>
+      <div className="flex flex-col items-center justify-center min-h-[50vh]">
+        <Spinner variant="infinite" size={28} />
+        <p className="text-xs text-foreground/60">Loading Technologies...</p>
       </div>
     );
   }

@@ -1,6 +1,7 @@
 "use client";
 
 import { BadgeFe } from "@/components/front/badge-fe";
+import { Spinner } from "@/components/front/spinner";
 import { StarBorder } from "@/components/ui/star-border";
 import { Profile } from "@/types/profiles";
 import { createClient } from "@/utils/supabase/client";
@@ -28,8 +29,9 @@ export function HomeSection() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-sm text-foreground/60">Loading...</p>
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <Spinner variant="infinite" size={28} />
+        <p className="text-xs text-foreground/60">Loading...</p>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 "use client";
 
+import { Spinner } from "@/components/front/spinner";
 import { Button } from "@/components/ui/button";
 import { useProjects } from "@/hooks/project-hooks";
 import { Project } from "@/types/projects";
@@ -162,8 +163,9 @@ const ProjectSection = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <p className="text-sm text-foreground/60">Loading Projects...</p>
+      <div className="flex flex-col items-center justify-center min-h-[50vh]">
+        <Spinner variant="infinite" size={28} />
+        <p className="text-xs text-foreground/60">Loading Projects...</p>
       </div>
     );
   }

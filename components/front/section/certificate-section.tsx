@@ -2,6 +2,7 @@
 
 import { BadgeFe } from "@/components/front/badge-fe";
 import { CertificateModal } from "@/components/front/certificate-modal";
+import { Spinner } from "@/components/front/spinner";
 import { Spotlight } from "@/components/front/spotlight";
 import { Tilt } from "@/components/front/tilt";
 import { Button } from "@/components/ui/button";
@@ -167,8 +168,9 @@ const CertificateSection = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <p className="text-sm text-foreground/60">Loading Certificates...</p>
+      <div className="flex flex-col items-center justify-center min-h-[50vh]">
+        <Spinner variant="infinite" size={28} />
+        <p className="text-xs text-foreground/60">Loading Certificates...</p>
       </div>
     );
   }

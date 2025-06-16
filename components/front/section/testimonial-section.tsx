@@ -1,6 +1,7 @@
 "use client";
 import { BadgeFe } from "@/components/front/badge-fe";
 import { InfiniteMovingCards } from "@/components/front/infinite-moving-cards";
+import { Spinner } from "@/components/front/spinner";
 import { TestiModal } from "@/components/front/testi-modal";
 import { StarBorder } from "@/components/ui/star-border";
 import { useTestimonials } from "@/hooks/testimonial-hooks";
@@ -49,8 +50,9 @@ export function TestimonialSection() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <p className="text-sm text-foreground/60">Loading Testimonials...</p>
+      <div className="flex flex-col items-center justify-center min-h-[50vh]">
+        <Spinner variant="infinite" size={28} />
+        <p className="text-xs text-foreground/60">Loading Testimonials...</p>
       </div>
     );
   }
