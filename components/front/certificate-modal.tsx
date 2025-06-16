@@ -29,10 +29,10 @@ export function CertificateModal({
   return (
     <div className="p-1">
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-2xl bg-background/95 backdrop-blur-xl border-primary/10">
+        <DialogContent className="max-w-[95vw] sm:max-w-md md:max-w-lg lg:max-w-2xl bg-background/95 backdrop-blur-xl border-primary/10 p-3 sm:p-6">
           {/* Decorative Corner Elements */}
-          <div className="absolute top-0 left-0 w-20 h-20 -translate-x-1/2 -translate-y-1/2 bg-primary/5 rounded-full blur-xl" />
-          <div className="absolute top-0 right-0 w-20 h-20 translate-x-1/2 -translate-y-1/2 bg-primary/5 rounded-full blur-xl" />
+          <div className="absolute top-0 left-0 w-12 h-12 sm:w-20 sm:h-20 -translate-x-1/2 -translate-y-1/2 bg-primary/5 rounded-full blur-xl" />
+          <div className="absolute top-0 right-0 w-12 h-12 sm:w-20 sm:h-20 translate-x-1/2 -translate-y-1/2 bg-primary/5 rounded-full blur-xl" />
           <div className="absolute -z-10 inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
 
           {/* Top Decorative Line */}
@@ -40,10 +40,10 @@ export function CertificateModal({
 
           <DialogHeader className="relative">
             {/* Decorative Badge */}
-            <div className="absolute -top-1 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-background/80 rounded-full border border-primary/20 flex items-center justify-center">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+            <div className="absolute -top-1 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 sm:w-12 sm:h-12 bg-background/80 rounded-full border border-primary/20 flex items-center justify-center">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
                 <svg
-                  className="w-4 h-4 text-primary/60"
+                  className="w-3 h-3 sm:w-4 sm:h-4 text-primary/60"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -58,23 +58,23 @@ export function CertificateModal({
               </div>
             </div>
 
-            <DialogTitle className="font-[audioWide] text-xl uppercase tracking-widest text-center text-primary/80 pt-6">
+            <DialogTitle className="font-[audioWide] text-sm sm:text-lg md:text-xl uppercase tracking-wide sm:tracking-widest text-center text-primary/80 pt-4 sm:pt-6 px-2">
               {certificate.title}
             </DialogTitle>
 
             {/* Decorative Separator */}
-            <div className="relative h-[1.5px] w-80 mx-auto overflow-hidden">
+            <div className="relative h-[1.5px] w-40 sm:w-60 md:w-80 mx-auto overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent blur-sm" />
             </div>
           </DialogHeader>
 
-          <div className="relative">
+          <div className="relative mt-2 sm:mt-4">
             {/* Corner Accents for Image Container */}
-            <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-primary/30" />
-            <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-primary/30" />
-            <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-primary/30" />
-            <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-primary/30" />
+            <div className="absolute -top-1 -left-1 w-3 h-3 sm:w-4 sm:h-4 border-t-2 border-l-2 border-primary/30" />
+            <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 border-t-2 border-r-2 border-primary/30" />
+            <div className="absolute -bottom-1 -left-1 w-3 h-3 sm:w-4 sm:h-4 border-b-2 border-l-2 border-primary/30" />
+            <div className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 border-b-2 border-r-2 border-primary/30" />
 
             <Tilt
               rotationFactor={2}
@@ -97,42 +97,44 @@ export function CertificateModal({
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
-                className="relative aspect-[16/9]"
+                className="relative aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9]"
               >
                 <Image
                   src={certificate.certificate_image}
                   alt={certificate.title}
                   fill
-                  className="object-contain p-2"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
+                  className="object-contain p-1 sm:p-2"
+                  sizes="(max-width: 640px) 95vw, (max-width: 768px) 80vw, (max-width: 1200px) 60vw, 50vw"
                   priority
                 />
               </motion.div>
             </Tilt>
           </div>
 
-          <div className="relative flex justify-between items-center gap-2 mt-2">
+          <div className="relative flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-2 mt-3 sm:mt-2">
             {/* Left side - Issuer and Year with decoration */}
-            <div className="flex items-center gap-2">
-              <div className="text-primary/60 text-xs">
-                <span>{certificate.issuer}</span>
-                <span className="mx-2">•</span>
-                <span>{certificate.year}</span>
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <div className="text-primary/60 text-xs sm:text-sm">
+                <span className="block sm:inline">{certificate.issuer}</span>
+                <span className="hidden sm:inline mx-2">•</span>
+                <span className="block sm:inline text-xs">
+                  {certificate.year}
+                </span>
               </div>
             </div>
 
             {/* Right side - Action Buttons */}
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <Button
                 variant="gradient"
                 onClick={() =>
                   window.open(
                     certificate.certificate_image,
                     "_blank",
-                    "noopener,noreferrer",
+                    "noopener,noreferrer"
                   )
                 }
-                className="text-xs relative overflow-hidden group"
+                className="text-xs sm:text-sm relative overflow-hidden group w-full sm:w-auto"
               >
                 <span className="relative z-10">View Full Image</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
@@ -140,7 +142,7 @@ export function CertificateModal({
               <Button
                 variant="outline"
                 onClick={onClose}
-                className="text-xs relative overflow-hidden group"
+                className="text-xs sm:text-sm relative overflow-hidden group w-full sm:w-auto"
               >
                 <span className="relative z-10">Close</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />

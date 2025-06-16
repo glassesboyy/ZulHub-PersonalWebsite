@@ -106,7 +106,7 @@ export function AboutSection() {
           <div>
             {" "}
             {/* Changed from space-y-1 to space-y-4 */}
-            <h2 className="text-3xl font-[Audiowide] uppercase text-primary/80 xs:p-2 md:p-1">
+            <h2 className="text-3xl text-center font-[Audiowide] uppercase text-primary/80 xs:p-2 md:p-1">
               {profile.full_name}
             </h2>
             {/* Added Separator */}

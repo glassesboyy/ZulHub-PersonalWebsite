@@ -101,7 +101,7 @@ export function ContactSection() {
       </div>
 
       {/* Globe Section - Centered */}
-      <div className="flex justify-center -mt-10 relative z-10">
+      <div className="flex justify-center -mt-8 relative z-10">
         <div className="relative flex items-center justify-center overflow-hidden rounded-md bg-background/50 backdrop-blur-sm w-full h-[520px]">
           <Globe className="scale-90" />
           <div className="pointer-events-none absolute inset-0 h-full bg-[radial-gradient(circle_at_50%_200%,rgba(0,0,0,0.2),rgba(255,255,255,0))]" />
