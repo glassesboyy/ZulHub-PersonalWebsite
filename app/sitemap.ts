@@ -1,20 +1,20 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = 'https://zulhub.vercel.app'
+  
   return [
     {
-      url: 'https://zulhub.vercel.app',
+      url: baseUrl,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 1,
     },
     {
-      url: 'https://zulhub.vercel.app/public',
+      url: `${baseUrl}/public`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
     },
-    // Tambahkan halaman public lainnya jika ada
-    // Contoh: blog posts, portfolio items, contact page, about page, dll
   ]
 }

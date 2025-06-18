@@ -7,12 +7,10 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Zul Hub | Personal Website",
   description:
-    "Surya Zulfikar Personal Website, Front-End Developer | Enthusiast in N8N AI Automation. GET IN TOUCH · DOWNLOAD CV.",
+    "Surya Zulfikar Personal Website. Front-End Developer | Enthusiast in N8N AI Automation.",
   keywords: [
     "Zul Hub",
     "Zul Hub Personal Website",
-    "Teguh Surya Zulfikar",
-    "Teguh Surya Zulfikar Personal Website",
     "Surya Zulfikar",
     "Surya Zulfikar Personal Website",
     "Glassesboyy",
@@ -105,11 +103,7 @@ export default async function RootLayout({
               "@context": "https://schema.org",
               "@type": "Person",
               name: "Surya Zulfikar",
-              alternateName: [
-                "Teguh Surya Zulfikar",
-                "Glassesboyy",
-                "Surya Zulfikar",
-              ],
+              alternateName: ["Glassesboyy", "Surya Zulfikar"],
               url: "https://zulhub.vercel.app",
               jobTitle: "Front-End Developer",
               worksFor: {

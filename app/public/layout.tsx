@@ -1,4 +1,11 @@
 import { MainNav } from "@/components/front/section/main-nav";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Zul Hub | Personal Website",
+  description:
+    "Surya Zulfikar Personal Website. Front-End Developer | Enthusiast in N8N AI Automation.",
+};
 
 export default function PublicLayout({
   children,

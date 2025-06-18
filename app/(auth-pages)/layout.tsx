@@ -1,3 +1,14 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Authentication | Zul Hub",
+  description: "Authentication to access dashboard",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export default async function Layout({
   children,
 }: {
