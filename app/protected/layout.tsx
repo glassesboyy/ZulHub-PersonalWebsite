@@ -4,6 +4,8 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  title: "Dashboard - Zul Hub",
+  description: "Private dashboard for managing website content",
   robots: {
     index: false,
     follow: false,

@@ -1,6 +1,5 @@
 "use client";
 
-import type { Metadata } from "next";
 import { RecapDataTable } from "@/components/dashboard/data-table/recap-data-table";
 import { StatsCard } from "@/components/dashboard/statistic";
 import { useCertificates } from "@/hooks/certificate-hooks";
@@ -28,15 +27,6 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import * as Si from "react-icons/si";
-
-export const metadata: Metadata = {
-  title: "Dashboard - Zul Hub",
-  description: "Private dashboard for managing website content",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
 
 interface ProfileStats {
   certificates: Certificate[];
