@@ -1,6 +1,14 @@
 import { ProtectedSidebar } from "@/components/dashboard/protected-sidebar";
 import { ThemeSwitcher } from "@/components/dashboard/theme-switcher";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function ProtectedLayout({
   children,

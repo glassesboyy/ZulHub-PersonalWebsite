@@ -1,5 +1,6 @@
 "use client";
 
+import type { Metadata } from "next";
 import { RecapDataTable } from "@/components/dashboard/data-table/recap-data-table";
 import { StatsCard } from "@/components/dashboard/statistic";
 import { useCertificates } from "@/hooks/certificate-hooks";
@@ -28,6 +29,15 @@ import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import * as Si from "react-icons/si";
 
+export const metadata: Metadata = {
+  title: "Dashboard - Zul Hub",
+  description: "Private dashboard for managing website content",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 interface ProfileStats {
   certificates: Certificate[];
   projects: Project[];
@@ -52,7 +62,7 @@ type RecapSections = Array<
 >;
 
 function renderRecapTable<T extends Record<string, unknown>>(
-  section: RecapSection<T>,
+  section: RecapSection<T>
 ) {
   return (
     <RecapDataTable<T>
@@ -288,7 +298,7 @@ export default function ProtectedPage() {
         {recapSections.map((section) => {
           if ("certificate_image" in (section.data[0] || {})) {
             return renderRecapTable<Certificate>(
-              section as RecapSection<Certificate>,
+              section as RecapSection<Certificate>
             );
           }
           if ("project_image" in (section.data[0] || {})) {
@@ -302,11 +312,11 @@ export default function ProtectedPage() {
             !("link" in (section.data[0] || {}))
           ) {
             return renderRecapTable<Technology>(
-              section as RecapSection<Technology>,
+              section as RecapSection<Technology>
             );
           }
           return renderRecapTable<Testimonial>(
-            section as RecapSection<Testimonial>,
+            section as RecapSection<Testimonial>
           );
         })}
       </div>

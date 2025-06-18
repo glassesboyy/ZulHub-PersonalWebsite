@@ -4,10 +4,6 @@ import type { Metadata } from "next";
 import { Audiowide, Geist, Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
-
 export const metadata: Metadata = {
   title: "Zul Hub | Personal Website",
   description:
@@ -15,9 +11,34 @@ export const metadata: Metadata = {
   keywords: [
     "Zul Hub",
     "Surya Zulfikar",
+    "Glassesboyy",
     "Front-End Developer",
+    "Frontend Developer",
+    "Web Developer",
     "AI Automation",
+    "N8N Automation",
     "Personal Website",
+    "Portfolio",
+    "React Developer",
+    "Next.js Developer",
+    "JavaScript Developer",
+    "TypeScript Developer",
+    "Supabase Developer",
+    "Full Stack Developer",
+    "UI/UX Developer",
+    "Web Development",
+    "Software Engineer",
+    "Programmer",
+    "Indonesia Developer",
+    "Freelancer",
+    "Tech Enthusiast",
+    "Code",
+    "Programming",
+    "Web Design",
+    "Responsive Design",
+    "Modern Web Development",
+    "CV Download",
+    "Contact Developer",
   ],
   authors: [{ name: "Surya Zulfikar" }],
   creator: "Surya Zulfikar",
@@ -25,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Zul Hub | Personal Website",
     description:
-      "Glassesboyy Personal Web. Surya Zulfikar. Front-End Developer | Enthusiast in N8N AI Automation.",
+      "Surya Zulfikar Personal Website. Front-End Developer | Enthusiast in N8N AI Automation.",
     url: "https://zulhub.vercel.app",
     siteName: "Zul Hub",
     type: "website",

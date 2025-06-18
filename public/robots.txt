@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /protected
+Disallow: /sign-in
+Disallow: /sign-up
 
 Sitemap: https://zulhub.vercel.app/sitemap.xml

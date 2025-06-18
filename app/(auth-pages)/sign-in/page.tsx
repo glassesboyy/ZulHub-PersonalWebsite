@@ -3,6 +3,16 @@ import { FormMessage, Message } from "@/components/dashboard/form-message";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign In - Zul Hub",
+  description: "Sign in to access dashboard",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function Login(props: { searchParams: Promise<Message> }) {
   const searchParams = await props.searchParams;

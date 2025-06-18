@@ -8,6 +8,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 1,
     },
-    // Tambahkan halaman lain sesuai kebutuhan
+    {
+      url: 'https://zulhub.vercel.app/public',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    // Tambahkan halaman public lainnya jika ada
+    // Contoh: blog posts, portfolio items, contact page, about page, dll
   ]
 }
