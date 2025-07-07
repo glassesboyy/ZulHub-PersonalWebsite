@@ -80,10 +80,7 @@ export function ProtectedSidebar() {
     <Sidebar className="border-r bg-gradient-to-b from-background to-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <SidebarHeader className="px-6 py-4">
         <div className="flex items-center gap-2 justify-center">
-          <div className="h-7 w-7 rounded-lg p-1 bg-background border border-primary flex items-center justify-center">
-            <Star className="h-full w-full text-primary" />
-          </div>
-          <h2 className="text-xl font-bold tracking-tight">Admin Panel</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Admin Panel</h2>
         </div>
       </SidebarHeader>
       <SidebarContent className="px-4">
@@ -100,7 +97,7 @@ export function ProtectedSidebar() {
                       <SidebarMenuButton
                         onClick={() =>
                           setOpenSubmenu(
-                            openSubmenu === item.title ? null : item.title,
+                            openSubmenu === item.title ? null : item.title
                           )
                         }
                         isActive={openSubmenu === item.title}
@@ -162,7 +159,7 @@ export function ProtectedSidebar() {
               <SidebarMenuButton
                 type="submit"
                 tooltip="Sign Out"
-                className="group gap-4 bg-destructive text-destructive-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                className="group gap-4 py-5 bg-destructive text-destructive-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
               >
                 <LogOut className="transition-transform duration-200 group-hover:scale-110" />
                 <span>Sign Out</span>
